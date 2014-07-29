@@ -1,0 +1,83 @@
+<%
+	
+import org.exoplatform.webui.form.UIFormInputBase;
+
+def rcontext = _ctx.getRequestContext() ;
+def jsManager = rcontext.getJavascriptManager();
+jsManager.require("SHARED/portalControl", "portalControl");
+
+    
+%>
+
+	<div class="listAddonCenter" id="$uicomponent.id">
+	<div class="CaptionItem clearfix">
+		<% 
+			if (uicomponent.getTotalItem() == 0) {
+		%>
+		<div style="height: 20px; text-align: center; font-size: 13px; background: white; padding: 10px; margin: 5px;">
+			<%= _ctx.appRes("UICLVConfig.label.content-not-found") %>
+		</div>
+		<%
+			} else {
+			
+			def count = 0;
+			List children = uicomponent.getChildren() ;
+	
+			for(component in children) {
+
+				if(count== 0){
+
+		%>
+				
+					<div class="row-fluid">
+				
+		<% 
+				
+				}
+
+				if(component.isRendered()){
+				
+					uicomponent.renderChild(component);				
+				}
+				
+				if(count != 0 && count%3 == 2){ 
+
+		%>
+					
+					</div> <!-- end row-fluid-->
+					<div class="row-fluid">		
+				<% } 
+				
+				count = count +1; 
+				
+			} // end loop
+		%>
+
+			<script type="text/javascript">
+
+				jQuery('.media').hover(function(){
+			
+					jQuery(this).find('img').hide();
+					jQuery(this).find('.contentHover').animate({top:'0px'},{queue:false,duration:300}).show();
+				},function(){
+					jQuery(this).find('img').show();
+					jQuery(this).find('.contentHover').animate({top:'185px'},{queue:false,duration:300});
+				}
+
+				);
+</script>			
+		
+	<%		
+		}
+	%>			
+	</div>
+
+
+	<% if(uicomponent.isShowMore()) { %>
+		<div class="boxLoadMore">
+  <% }else{ %>
+		<div class="boxLoadMore hide">
+	<% } %>
+		<a class="btn" href="<%=uicomponent.event("ShowMore")%>">Show More </a>
+	</div>
+</div>

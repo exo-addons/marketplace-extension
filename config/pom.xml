@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>add-on-center</artifactId>
+    <groupId>org.exoplatform.addons.add-on-center</groupId>
+    <version>1.0.x-SNAPSHOT</version>
+  </parent>
+  <artifactId>add-on-center-config</artifactId>
+  <packaging>jar</packaging>
+  <name>Add-on Center - Config</name>
+  <description>Add-on Center - Extension Configuration JAR</description>
+</project>

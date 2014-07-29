@@ -1,0 +1,69 @@
+<%
+ import org.exoplatform.webui.form.UIFormInputSet;
+ import org.exoplatform.webui.form.UIFormInputBase;
+ import org.exoplatform.webui.form.input.UIUploadInput;
+%>
+<%
+ def rcontext = _ctx.getRequestContext() ;
+ def jsManager = rcontext.getJavascriptManager();
+ jsManager.require("SHARED/portalControl", "portalControl");
+%>
+<%uiform.begin()%>
+<div class="addonSearchToolbar" id="$uicomponent.id">
+ <div class="uiGrayLightBox">
+  <div class="clearfix">
+   <%   
+    List children = uicomponent.getChildren() ;
+    for(component in children) {
+    if(component.isRendered()){
+    fieldName = component.getName(); 
+    String isTextArea = "";
+   %> 
+   <div class="uiSearchForm uiSearchInput pull-left">
+    <% if(component instanceof UIFormInputBase && component.isEditable()) { %>
+     <% uicomponent.renderChild(component.getClass()) %>
+    <% }%>
+   </div>
+   <%   } // end if
+    } // end for
+   %>
+		<button type="button" onclick="location.href='/portal/intranet/create-addon'" class="btn btn-primary pull-right">Add New Add-on</button>
+		<% if(uicomponent.getBtnBackToAddonsVisible()){ %>
+   		<button type="button" onclick="<%=uicomponent.event("Sort","az")%>" class="btn btn-primary pull-right">Back To Add-ons</button>   
+		<% } %>   
+   <% for(action in uicomponent.getActions()) {
+    String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+    if (!actionLabel.equals("Sort") && !actionLabel.equals("Remove")){ 
+    String link = uicomponent.event(action);
+    String typeAction= "btn btn-primary hide";
+   %>
+   <div onclick="$link" id="btnDoSearch" class="$typeAction" style="margin-right: 5px;">
+    $actionLabel
+   </div>
+   <%  } //end if
+    } // end for
+   %>
+   <% if(uicomponent.isMyAddonsVisible()){ %>
+   <a class="<%= uicomponent.getStyleFilterSelected("myaddons")%>" href="<%=uicomponent.event("Sort","myaddons")%>"> My Add-ons</a>
+   <% } %>	
+   <a class="<%= uicomponent.getStyleFilterSelected("az")%>" href="<%=uicomponent.event("Sort","az")%>"> A <i class="uiIconMiniArrowRight uiIconLightGray"></i> Z</a>
+   <a class="<%= uicomponent.getStyleFilterSelected("za")%>" href="<%=uicomponent.event("Sort","za")%>"> Z  <i class="uiIconMiniArrowRight uiIconLightGray"></i> A</a>
+   
+  </div>
+ </div> 
+</div>
+<script>
+jQuery('document').ready(function(){
+
+    jQuery('#keywordInput').keypress(function(e){
+        if(e.which == 13){//Enter key pressed
+            jQuery('#btnDoSearch').click();//Trigger search button click event
+						return false;
+        }
+
+
+    });
+
+});
+</script>
+<%uiform.end()%>

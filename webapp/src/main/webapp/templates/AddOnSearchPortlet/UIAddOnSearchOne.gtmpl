@@ -1,0 +1,50 @@
+<%
+	
+	import org.exoplatform.webui.form.UIFormInputBase;
+	
+	def rcontext = _ctx.getRequestContext() ;
+	def jsManager = rcontext.getJavascriptManager();
+	jsManager.require("SHARED/portalControl", "portalControl");
+	
+    
+%>
+<% 
+	def viewNode = uicomponent.getNode();
+	def itemName = uicomponent.getStrProperty("exo:title");
+	def itemLink = uicomponent.getURL();
+	def imgSrc = uicomponent.getImageCover();	
+	def itemDownloadUrl = uicomponent.getStrProperty("exo:downloadUrl");		
+	def itemDescription = uicomponent.getStrProperty("exo:description");		
+	def itemEmail = uicomponent.getStrProperty("exo:email");
+	def itemEditLink = null;
+	def canEdit = uicomponent.canEdit();
+	def itemAuthor = uicomponent.getStrProperty("exo:author");
+%>
+
+
+<div id="$uicomponent.id" class="NormalNews span4">
+	<div class="media"> 
+		<img  alt="$imgSrc" src="$imgSrc" />
+
+		<div class="contentHover">
+				<div class="addonsDescription" onclick="location.href='<%= itemLink%>'">
+				  <p>$itemDescription</p>
+				</div>	
+				<div class="actionButton">
+				  <button class="btn btn-primary" onclick="window.open('<%= itemDownloadUrl %>','blank');">Dowload</button>
+					<% if(canEdit){ %>
+					<button class="btn btn-primary" onclick="<%=uicomponent.event("Edit")%>"><i class="uiIconEdit"></i></btn>
+					<% } %>
+			</div>
+	</div>	
+
+
+	</div>
+	<div class="content">
+		<h4><a class="TitleContentNormalNews" href="<%= itemLink%>"><%= itemName %></a></h4>
+		<p><%= itemAuthor%></p>
+	</div>
+
+</div>	
+
+

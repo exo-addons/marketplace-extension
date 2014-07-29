@@ -1,0 +1,25 @@
+<!--Addon navigation-->
+<div class="addonSearchToolbar">
+  <div class="uiGrayLightBox">
+    <div class="clearfix"><button class="btn btn-primary pull-left" onclick="location.href='/portal/intranet/add-ons'" type="button">Back to Add-ons</button></div>
+  </div>
+</div>
+<!--END Addon navigation-->
+
+<div class="UIAddOnPortlet" id="$uicomponent.id">
+
+	<%
+	    def rcontext = _ctx.getRequestContext() ;
+	    def jsManager = rcontext.getJavascriptManager();
+	    jsManager.require("SHARED/portalControl", "portalControl");
+    	
+		List children = uicomponent.getChildren() ;
+		for(component in children) {
+		%>
+		<%	
+			if(component.isRendered()){
+				uicomponent.renderChild(component.getClass()) ; 
+			}
+		}
+	%>
+</div>

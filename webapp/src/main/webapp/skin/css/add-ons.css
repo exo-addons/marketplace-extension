@@ -1,0 +1,288 @@
+/* Form Create Addon */
+.uiUploadInput {
+  display: inline-block;
+  vertical-align: top;
+  min-width: 238px;
+}
+.uiUploadInput + .actionIcon {
+  margin-left: 5px;
+}
+.form-horizontal .control-group .controls .checkbox .uiCheckbox {
+  margin: 0 0 0 -19px;
+  float: left;
+}
+.form-action {
+  margin: 20px 0 50px;
+}
+/* Admin Addon Searbar*/
+.addonSearchToolbar {
+  margin: 20px 60px;
+}
+.addonSearchToolbar .btnFilter {
+  margin-left: 10px;
+  float: left;
+}
+.addonSearchToolbar .btnFilter.active {
+  box-shadow: 0 1px 2px 0 #FFFFFF;
+  padding: 3px 4px;
+}
+.addonSearchToolbar .btn-primary {
+  margin-left: 10px;
+}
+/* Admin List Addon */
+.listAddonCenter {
+  margin: 0 60px 20px;
+}
+.listAddonCenter .CaptionItem .row-fluid {
+  margin-bottom: 20px;
+}
+.listAddonCenter .NormalNews {
+  padding: 15px 10px 15px 15px;
+  border: 1px solid #cfcfcf;
+  background-color: #ffffff;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  float: left;
+}
+.listAddonCenter .NormalNews .media {
+  margin-bottom: 15px;
+  margin-top: 0;
+}
+.listAddonCenter .NormalNews .action {
+  text-align: right;
+}
+.listAddonCenter .NormalNews .action .UIForm {
+  display: inline-block;
+  margin-right: 5px;
+}
+.listAddonCenter .NormalNews .pull-left {
+  width: 120px;
+}
+.listAddonCenter .NormalNews .pull-left img {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  width: 120px;
+  height: 120px;
+}
+.listAddonCenter .NormalNews .media-body .title {
+  margin: -3px 0 5px;
+}
+.listAddonCenter .NormalNews .media-body .title a {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 22px;
+}
+.listAddonCenter .NormalNews .media-body .Summary {
+  max-height: 98px;
+  overflow: hidden;
+}
+.listAddonCenter .NormalNews .editAddon {
+  display: none;
+  width: 45px;
+  height: 45px;
+  background: url('images/bgCornerAddonBox.png') no-repeat 0 0 transparent;
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  -webkit-border-top-right-radius: 2px;
+  -moz-border-radius-topright: 2px;
+  border-top-right-radius: 2px;
+}
+
+.listAddonCenter .NormalNews:hover {
+  position: relative;
+/*
+  border-color: #94b0df;
+  -webkit-box-shadow: 0 0 5px 0 rgba(19, 75, 159, 0.25);
+  -moz-box-shadow: 0 0 5px 0 rgba(19, 75, 159, 0.25);
+  box-shadow: 0 0 5px 0 rgba(19, 75, 159, 0.25);
+*/
+}
+
+.listAddonCenter .NormalNews:hover .editAddon {
+  display: block;
+}
+.listAddonCenter .boxLoadMore {
+  background: none;
+  padding-left: 0;
+}
+.boxLoadMore .showMore {
+  border-color: #c7c7c7;
+  padding: 0;
+}
+.boxLoadMore .showMore a {
+  display: block;
+  padding: 3px;
+}
+.boxLoadMore .showMore a:hover {
+  -webkit-box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2) inset;
+  -moz-box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2) inset;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2) inset;
+}
+.boxLoadMore .btn {
+  display: block;
+}
+/* Admin Detail Addon */
+.detailAddonBox .editAddon {
+  display: none;
+  width: 45px;
+  height: 45px;
+  background: url('images/bgCornerAddonBox.png') no-repeat 0 0 transparent;
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  -webkit-border-top-right-radius: 2px;
+  -moz-border-radius-topright: 2px;
+  border-top-right-radius: 2px;
+}
+.detailAddonBox:hover {
+  position: relative;
+  border-color: #94b0df;
+  -webkit-box-shadow: 0 0 5px 0 rgba(19, 75, 159, 0.25);
+  -moz-box-shadow: 0 0 5px 0 rgba(19, 75, 159, 0.25);
+  box-shadow: 0 0 5px 0 rgba(19, 75, 159, 0.25);
+}
+.detailAddonBox:hover .editAddon {
+  display: block;
+}
+.boxViewImageAddon .image {
+  display: block;
+  background-color: #3b3b3b;
+}
+.boxViewImageAddon .image > i {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -8px;
+  margin-left: -8px;
+  background-image: url("/eXoResources/skin/images/Icons/uiIconsWhite.png") !important;
+}
+.boxViewImageAddon .image:hover {
+  position: relative;
+}
+.boxViewImageAddon .image:hover > i {
+  display: block;
+}
+.boxViewImageAddon .image:hover img {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+.boxViewImageAddon .imageMain {
+  display: block;
+  margin-bottom: 6px;
+}
+.boxViewImageAddon .imageMain img {
+  width: 280px;
+  border: 1px solid #dddddd;
+}
+.boxViewImageAddon .image img {
+  width: 136px;
+  height: 136px;
+  border: 1px solid #dddddd;
+}
+.boxViewImageAddon.inPopup .image img {
+  width: 105px;
+  height: 105px;
+}
+.UIPluginTemplateOneScr {
+  margin: 0 60px 20px!important;
+}
+.UIPluginTemplateOneScr .media .pull-left {
+  margin-right: 40px;
+  width: 282px;
+}
+.AddOnGallery {
+  margin-left: -6px;
+}
+.AddOnGallery .AddOnImg {
+  float: left;
+  margin-left: 6px;
+  margin-bottom: 6px;
+}
+.detailInfoAddon .btn {
+  margin-top: 10px;
+}
+.detailInfoAddon h4 {
+  color: #2F5E92;
+  margin: 0 0 10px;
+}
+.detailInfoAddon .btn {
+  color: #fff;
+}
+/* Form Create */
+.formCreateAddon {
+  margin-left: 60px;
+  margin-right: 60px;
+}
+.formCreateAddon .title {
+  padding-bottom: 15px;
+  padding-top: 15px;
+  text-align: center;
+}
+.form-horizontal textarea {
+  padding: 3px 6px;
+}
+.searchResultBox {
+  margin-left: 60px;
+  margin-right: 60px;
+}
+
+/* ================== A.Hieu======================= */
+.listAddonCenter .NormalNews {
+    background: none repeat scroll 0 0 #EBEBEB;
+    border: 1px solid #C7C7C7;
+    border-radius: 3px;
+    float: left;
+    padding: 15px;
+}
+
+.listAddonCenter .NormalNews .contentHover{
+ position: absolute;
+ top: 185px;
+}
+
+.listAddonCenter .NormalNews .media .contentHover .uiIconEdit{
+ background-image: url("/eXoResources/skin/images/Icons/uiIconsWhite.png");
+}
+
+.listAddonCenter .NormalNews .media .contentHover{
+ background: white;
+ padding: 19px;
+width: 90%;
+}
+
+.listAddonCenter .NormalNews .media .contentHover .addonsDescription{
+ height: 103px;
+font-size: 14px;
+overflow: hidden;
+word-wrap: break-word;
+margin-bottom: 12px;
+cursor: pointer;
+}
+
+.listAddonCenter .NormalNews .media{
+ height: 180px;
+ border: 1px solid white;
+ border-radius: 5px;
+ overflow: hidden;
+position: relative;
+}
+
+.listAddonCenter .NormalNews .media img{
+ width: 100%;
+}
+
+.listAddonCenter .NormalNews .content h4{
+ font-size: 16px;
+margin-bottom: 3px;
+}
+
+.listAddonCenter .NormalNews .content p{
+margin: 0px;
+font-size: 14px;
+}

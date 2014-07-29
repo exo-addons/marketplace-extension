@@ -1,0 +1,144 @@
+<%
+	import org.exoplatform.webui.form.UIFormInputSet;
+	import org.exoplatform.webui.form.UIFormInputBase;
+	import org.exoplatform.webui.form.input.UIUploadInput;
+	
+	def rcontext = _ctx.getRequestContext() ;
+	def jsManager = rcontext.getJavascriptManager();
+	jsManager.require("SHARED/portalControl", "portalControl");
+	
+	def List<String> galleryImages = uicomponent.getImageGallery();
+	
+%>
+<%uiform.begin()%>
+<input type="hidden" name="listImgRemoved" id="listImgRemoved">
+<div class="UIAddOnSearchEdit" id="$uicomponent.id">
+	
+	<%
+		
+		for(formInput in uicomponent.getChildren()) { 
+		
+	%>
+	
+	<div class="UITabContent FormContact form-horizontal" id="UITabContent" style="padding-top: 10px;">
+		
+		<%  	
+			List children = formInput.getChildren() ;
+			def imageCount = 1;
+			for(component in children) {
+			
+			if(component.isRendered() ){
+				
+				def fieldName = component.getName(); 
+        def label = _ctx.appRes("UIAddOnSearchPortlet.UIExtensionForm." + fieldName); 
+        if ( fieldName.startsWith("img")){
+					 label= _ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.img_0') + " " + imageCount;
+           imageCount++;
+        }
+ 
+				def txtVal = uicomponent.getInputValue(fieldName);								
+			
+		%>	
+		<div class="control-group">
+			
+			<%if(component instanceof UIFormInputBase && !fieldName.equals(uicomponent.getId()) && !fieldName.equals("hosted")) { %>
+			
+			<label class="control-label" >
+				<%if(fieldName != null && fieldName.length() > 0) {%>
+				
+				$label 
+				
+				<%}%>
+				
+			</label>
+			
+			<% if(component instanceof UIFormInputBase && component.isEditable()) { %>
+			
+			<div class="controls">
+				<%
+					if(txtVal != null)
+					component.setValue(txtVal);
+					uicomponent.renderField(component); 
+					
+				%>
+				<% if(fieldName == "img0") { %>
+				<a class="actionIcon" href="<%=uicomponent.event("AddUIUpload")%>"> 
+				<i class="uiIconPlus uiIconLightGray"></i>
+				</a>
+				<% } %>
+				
+				<%  if (component instanceof UIUploadInput && fieldName != "img0") { %>
+					<a class="actionIcon" href="<%=uicomponent.event("RemoveUIUpload",component.getId())%>">
+						<i class="uiIconMinus uiIconLightGray"></i>
+					</a>
+				<% } %>
+			</div>
+			<%
+			}	
+			} else if(fieldName.equals("hosted")){
+					def isHosted = uicomponent.isHosted();	
+					if(isHosted != null){
+						component.setValue(isHosted);									
+					}
+			%>
+					<div class="controls"> <!-- class hide -->
+						<label class="checkbox">
+							<% uicomponent.renderField(component) %> $label
+						</label>
+					</div>			
+			<% 	}	%>		
+		</div>
+		<%
+			
+			} // end renderable
+			
+			} // end loop for child 
+		%>
+		
+	</div>
+	
+	<%  } // end loop for child %>
+	
+</div>
+<div class="media">
+	<div class="boxViewImageAddon inPopup">
+		<div class="AddOnGallery ClearFix">
+			<%		
+				// show gallery image here
+				for (int i=0;i<galleryImages.size();i++) {
+				aImg = (String) galleryImages.get(i);
+			%>
+			
+			<div class="AddOnImg">
+				<a class="thumb image" href="<%=uicomponent.event("RemoveImage",i.toString())%>">
+				<img class="ImgLarge" src="<%=aImg%>" />
+				<i class="uiIconDelete uiIconWhite"></i>
+				</a>
+			</div>
+			
+			<% 	}	%>						
+		</div>
+	</div>
+</div>
+<div class="uiAction uiActionBorder">
+	<% for(action in uicomponent.getActions()) {
+		
+		String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+		if (!actionLabel.equals("AddUIUpload") && !actionLabel.equals("RemoveUIUpload")  && !actionLabel.equals("RemoveImage") ){ 
+			String link = uicomponent.event(action);
+			String typeAction= "btn btn-primary btn-large";
+			if (actionLabel.equals("Cancel")){ 
+				typeAction = "btn btn-large";
+			}
+	%>
+	
+		<div onclick="$link" class="$typeAction" style="margin-right: 5px;">
+			$actionLabel
+		</div>
+	<%	
+		}
+	}
+	%>
+</div>
+
+<%uiform.end()%>

@@ -1,0 +1,112 @@
+<nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.5" xmlns:mix="http://www.jcp.org/jcr/mix/1.5" xmlns:jcr="http://www.jcp.org/jcr/1.5" >
+
+  <nodeType name="exo:addon" isMixin="false" hasOrderableChildNodes="false" primaryItemName="" >
+    <supertypes>
+      <supertype>exo:webContent</supertype>
+    </supertypes>
+
+    <propertyDefinitions>
+      <propertyDefinition name="exo:summary" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="jcr:primaryType" requiredType="Name" autoCreated="true" mandatory="true" onParentVersion="COMPUTE" protected="true" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="jcr:created" requiredType="Date" autoCreated="true" mandatory="false" onParentVersion="INITIALIZE" protected="true" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="exo:description" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="exo:title" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="exo:license" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="exo:hosted" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="exo:author" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="exo:email" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="exo:downloadUrl" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="exo:documentUrl" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="exo:sourceUrl" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="jcr:uuid" requiredType="String" autoCreated="true" mandatory="true" onParentVersion="INITIALIZE" protected="true" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="jcr:mixinTypes" requiredType="Name" autoCreated="false" mandatory="false" onParentVersion="COMPUTE" protected="true" multiple="true" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="exo:sendConfirmEmail" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="exo:version" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="exo:compatibility" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+    </propertyDefinitions>
+
+    <childNodeDefinitions>
+      <childNodeDefinition name="*" defaultPrimaryType="nt:unstructured" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="true" >
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+
+      <childNodeDefinition name="*" defaultPrimaryType="nt:unstructured" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="true" >
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+
+      <childNodeDefinition name="js" defaultPrimaryType="exo:jsFolder" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="false" >
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+
+      <childNodeDefinition name="css" defaultPrimaryType="exo:cssFolder" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="false" >
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+
+      <childNodeDefinition name="medias" defaultPrimaryType="exo:multimediaFolder" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="false" >
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+
+    </childNodeDefinitions>
+
+  </nodeType>
+</nodeTypes>
