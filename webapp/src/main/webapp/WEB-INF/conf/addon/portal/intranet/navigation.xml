@@ -8,14 +8,14 @@
     <node>
 	  <uri>add-ons</uri>
 	  <name>add-ons</name>
-	  <label>eXo Market Place</label>
+	  <label>#{addon.navigation.search.node}</label>
 	  <page-reference>portal::intranet::search-addon</page-reference>
     </node>
 
 	  <node>
 	    <uri>create-addon</uri>
 	    <name>create-addon</name>
-	    <label>Share your add-on</label>
+	    <label>#{addon.navigation.create.node}</label>
 	    <visibility>HIDDEN</visibility>
 	    <page-reference>portal::intranet::create-addon</page-reference>
     </node>
@@ -23,7 +23,7 @@
 	  <node>
 	    <uri>addon-detail</uri>
 	    <name>addon-detail</name>
-	    <label>Add-on Detail</label>
+	    <label>#{addon.navigation.detail.node}</label>
 	    <visibility>HIDDEN</visibility>
 	    <page-reference>portal::intranet::addon-detail</page-reference>
     </node> 
