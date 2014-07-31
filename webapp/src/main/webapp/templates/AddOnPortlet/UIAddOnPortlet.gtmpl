@@ -1,7 +1,7 @@
 <!--Addon navigation-->
 <div class="addonSearchToolbar">
   <div class="uiGrayLightBox">
-    <div class="clearfix"><button class="btn btn-primary pull-left" onclick="location.href='/portal/intranet/add-ons'" type="button">Back to Add-ons</button></div>
+    <div class="clearfix"><button class="btn btn-primary pull-left" onclick="location.href='/portal/intranet/add-ons'" type="button"><%=_ctx.appRes('UIAddOnPortlet.UIExtensionForm.backToList')%></button></div>
   </div>
 </div>
 <!--END Addon navigation-->

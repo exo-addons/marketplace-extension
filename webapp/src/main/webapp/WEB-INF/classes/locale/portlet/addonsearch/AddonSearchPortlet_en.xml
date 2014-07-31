@@ -20,46 +20,48 @@
 
 -->
 <bundle>
-<UIPopupWindow>
-	<title>
-		<UIAddOnSearchEdit>Edit Your Addon</UIAddOnSearchEdit>
-	</title>
-</UIPopupWindow>
-      <UIAddOnSearchPortlet> 
-       <UIExtensionForm>
-          <title>Title</title>
-          <email>Contact Email</email>
-          <author>Author</author>
-          <addOnName>Add-on Name</addOnName>
-          <description>Description</description>
-          <version>Version</version>
-          <license>License</license>
-          <compatibility>Compatibility</compatibility>
-          <sourceUrl>Source Code</sourceUrl>
-          <documentUrl>Documentation</documentUrl>
-          <downloadUrl>Download</downloadUrl>
-          <img_0>Upload Screenshots</img_0>
-          <img>Image</img>
-          <hosted>I wish my add-on to be hosted on the eXo Add-on repository on Github</hosted>
-       </UIExtensionForm>
+	<UIPopupWindow>
+		<title>
+			<UIAddOnSearchEdit>Edit Your Addon</UIAddOnSearchEdit>
+		</title>
+	</UIPopupWindow>
+  <UIAddOnSearchPortlet> 
+			<UIExtensionForm>
+			   <title>Title</title>
+			   <email>Contact Email</email>
+			   <author>Author</author>
+			   <addOnName>Add-on Name</addOnName>
+			   <description>Description</description>
+			   <version>Version</version>
+			   <license>License</license>
+			   <compatibility>Compatibility</compatibility>
+			   <sourceUrl>Source Code</sourceUrl>
+			   <documentUrl>Documentation</documentUrl>
+			   <downloadUrl>Download</downloadUrl>
+			   <img_0>Upload Screenshots</img_0>
+			   <img>Image</img>
+			   <hosted>I wish my add-on to be hosted on the eXo Add-on repository on Github</hosted>
+			   <addNew>Add New Add-on</addNew>
+			   <myAddOn>My Add-ons</myAddOn>
+			</UIExtensionForm>
 	    <msg>
-			<save-successful>Your add-on has been successfully submited. An eXoer will contact you soon before publication.</save-successful>
-			<save-unsuccessful>There is problem when saving your resource</save-unsuccessful>
-			<invalid>Please fill the mandatory fields!</invalid>
-			<invalidImage>Please upload image files only!</invalidImage>
-			<invalidemail>The email field is not correct!</invalidemail>
-			<malformurl>The download url is not correct!</malformurl>
-		</msg>
-		<label>
-			<wizardSteps>Steps</wizardSteps>
-			<click>Click</click>
-			<here>here</here>
-			<submit>to submit your Add-On</submit>
-			<notestep2>Note: The first image uploaded will be used as the add-on introduction image. </notestep2>
-		</label>
-		<tab>
-		    <step1>Step 1: Your Add-on Details</step1>
-		    <step2>Step 2: Your Add-on Gallery</step2>
-		</tab>
+				<save-successful>Your add-on has been successfully submitted. An eXoer will contact you soon before publication.</save-successful>
+				<save-unsuccessful>There is problem when saving your resource</save-unsuccessful>
+				<invalid>Please fill the mandatory fields!</invalid>
+				<invalidImage>Please upload image files only!</invalidImage>
+				<invalidemail>The email field is not correct!</invalidemail>
+				<malformurl>The download url is not correct!</malformurl>
+		  </msg>
+			<label>
+				<wizardSteps>Steps</wizardSteps>
+				<click>Click</click>
+				<here>here</here>
+				<submit>to submit your Add-On</submit>
+				<notestep2>Note: The first image uploaded will be used as the add-on introduction image. </notestep2>
+			</label>
+			<tab>
+			    <step1>Step 1: Your Add-on Details</step1>
+			    <step2>Step 2: Your Add-on Gallery</step2>
+			</tab>
 </UIAddOnSearchPortlet>
 </bundle>

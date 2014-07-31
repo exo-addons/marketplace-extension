@@ -27,7 +27,7 @@
    <%   } // end if
     } // end for
    %>
-		<button type="button" onclick="location.href='/portal/intranet/create-addon'" class="btn btn-primary pull-right">Add New Add-on</button>
+		<button type="button" onclick="location.href='/portal/intranet/create-addon'" class="btn btn-primary pull-right"><%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.addNew')%></button>
 		<% if(uicomponent.getBtnBackToAddonsVisible()){ %>
    		<button type="button" onclick="<%=uicomponent.event("Sort","az")%>" class="btn btn-primary pull-right">Back To Add-ons</button>   
 		<% } %>   
@@ -44,7 +44,7 @@
     } // end for
    %>
    <% if(uicomponent.isMyAddonsVisible()){ %>
-   <a class="<%= uicomponent.getStyleFilterSelected("myaddons")%>" href="<%=uicomponent.event("Sort","myaddons")%>"> My Add-ons</a>
+   <a class="<%= uicomponent.getStyleFilterSelected("myaddons")%>" href="<%=uicomponent.event("Sort","myaddons")%>"><%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.myAddOn')%></a>
    <% } %>	
    <a class="<%= uicomponent.getStyleFilterSelected("az")%>" href="<%=uicomponent.event("Sort","az")%>"> A <i class="uiIconMiniArrowRight uiIconLightGray"></i> Z</a>
    <a class="<%= uicomponent.getStyleFilterSelected("za")%>" href="<%=uicomponent.event("Sort","za")%>"> Z  <i class="uiIconMiniArrowRight uiIconLightGray"></i> A</a>
