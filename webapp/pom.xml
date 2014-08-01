@@ -10,6 +10,9 @@
   <packaging>war</packaging>
   <name>Add-on center - Webapp</name>
   <description>Add-on center - A portlet or any webapp</description>
+  <build>
+    <finalName>add-on-center-webapp</finalName>
+  </build>
   <dependencies>
     <dependency>
       <groupId>org.gatein.portal</groupId>

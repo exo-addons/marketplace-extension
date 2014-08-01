@@ -28,10 +28,10 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
+import org.exoplatform.addon.service.AddOnService;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-
 import org.exoplatform.services.jcr.impl.core.query.QueryImpl;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -70,7 +70,7 @@ public class UIAddOnSearchResult extends UIContainer {
 
   private String              keyword        = "";
 
-  private final static String ADDONS_FOLDER  = "/Contributions/";
+  //private final static String ADDONS_FOLDER  = "/Contributions/";
   
   public void processRender(WebuiRequestContext context) throws Exception {
     if (REFRESH)
@@ -158,10 +158,10 @@ public class UIAddOnSearchResult extends UIContainer {
 
   private void resetChild() throws RepositoryException {
     if (this.getData().size() > 0) {
-      this.removeChild(UIAddOnSearchOne.class);
-     /* for (Node aNode : this.getData()) {
-        this.removeChildById(aNode.getUUID());
-      }*/
+      for (Node aNode : this.getData()) {
+        //this.removeChildById(aNode.getUUID());
+        this.removeChild(UIAddOnSearchOne.class);
+      }
     }
 
   }
@@ -227,7 +227,7 @@ public class UIAddOnSearchResult extends UIContainer {
     String sqlQuery = "";
     // create query
     String sqlStatement = " SELECT * FROM exo:addon WHERE publication:currentState='published' AND  NOT (jcr:mixinTypes = 'exo:restoreLocation') AND jcr:path like '%"
-        + ADDONS_FOLDER + "%' ";
+        + AddOnService.getAddOnHomePath() + "%' ";
     sqlQuery = sqlStatement + this.getSQLCondition() + this.getSQLOrder();
     this.getDBResource(sqlQuery);
 
@@ -284,7 +284,7 @@ public class UIAddOnSearchResult extends UIContainer {
   public void getTotalDBResources() throws Exception {
 
     String sqlQuery = "SELECT exo:name FROM exo:addon WHERE  publication:currentState='published' AND NOT (jcr:mixinTypes = 'exo:restoreLocation') AND jcr:path like '%"
-        + ADDONS_FOLDER + "%' ";
+        + AddOnService.getAddOnHomePath() + "%' ";
     sqlQuery += this.getSQLCondition();
     QueryResult result = this.excSQL(sqlQuery, false);
     int count = (int) result.getRows().getSize();

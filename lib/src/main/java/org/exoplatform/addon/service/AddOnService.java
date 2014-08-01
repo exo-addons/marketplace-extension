@@ -342,6 +342,22 @@ public class AddOnService {
 		return portalContainerConfig.getRestContextName(portalName);
 	}
 
+	public static String getAddOnHomePath() throws Exception{
+	  String preference_item_path = Utils.getPortletPreference(PREFERENCE_ITEM_PATH);
+    if(preference_item_path == null)
+      preference_item_path = "web contents/Contributions";
+    
+    String siteName = Utils.getPortletPreference(PREFERENCE_SITE);
+    if(siteName == null)
+      siteName = Util.getPortalRequestContext().getSiteName();
+    
+    SessionProvider sessionProvider = WCMCoreUtils.getUserSessionProvider();
+    
+    LivePortalManagerService livePortalManagerService = WCMCoreUtils.getService(LivePortalManagerService.class);
+    Node dummyNode = livePortalManagerService.getLivePortal(sessionProvider, siteName);
+    String homePath = dummyNode.getPath() + "/" + preference_item_path + "/";
+    return homePath;
+	}
 	
 	public static Node createCommunityFolder() throws Exception {
 		String preference_item_path = Utils.getPortletPreference(PREFERENCE_ITEM_PATH);
