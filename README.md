@@ -25,9 +25,9 @@ This addon allows set-up place and site to store the data of add-ons. If you don
 There are 2 ways to set-up this add-on:
 * Update "AddOnPortlet" Portlet preference in file file add-on-center-webapp.war/WEB-INF/portlet.xml before starting tomcat
 * After started tomat, go to Create New Addon page, edit this page, edit "AddOnPortlet" portlet preference. The configuration fields are:
-adminEmail: the Administrator email address will recevice notifications email.
-fromEmail: sender email address.
-fromName: email sender name.
-emailsubject: email subject.
-folderPath: place to store Add-ons data (you should keep it by default).
+adminEmail: the Administrator email address will recevice notifications email.<br>
+fromEmail: sender email address.<br>
+fromName: email sender name.<br>
+emailsubject: email subject.<br>
+folderPath: place to store Add-ons data (you should keep it by default).<br>
 siteName: Portal site to store Addons data (you should keep it by default).
