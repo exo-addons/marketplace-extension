@@ -1,0 +1,150 @@
+<%
+// Generate template for nodetype automatically
+%>
+<div class="UIForm FormLayout FormScrollLayout">
+  <% uiform.begin();
+     /* start render action*/
+     if (uiform.isShowActionsOnTop()) uiform.processRenderAction();
+     /* end render action*/
+  %> 
+    <div class="HorizontalLayout">
+
+      <table class="UIFormGrid">
+
+        <tr>
+          <%
+            String[] fieldProperty; 
+          %>
+          <td class="FieldLabel"><%=_ctx.appRes("exo_addon.dialog.label.name")%></td>
+          <td class="FieldComponent">
+          <%
+            String[] fieldName = ["jcrPath=/node", "editable=if-null", "validate=empty,name"];
+            uicomponent.addTextField("name", fieldName);
+          %>
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("exo_addon.dialog.label.exo_summary")%></td>
+          <td class="FieldComponent">
+        <%
+            fieldProperty = ["jcrPath=/node/exo:summary"];
+            uicomponent.addTextField("/node/exo_summary", fieldProperty);
+        %>
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("exo_addon.dialog.label.exo_description")%></td>
+          <td class="FieldComponent">
+        <%
+            fieldProperty = ["jcrPath=/node/exo:description", "validate=empty"];
+            uicomponent.addTextField("/node/exo_description", fieldProperty);
+        %>
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("exo_addon.dialog.label.exo_title")%></td>
+          <td class="FieldComponent">
+        <%
+            fieldProperty = ["jcrPath=/node/exo:title", "validate=empty"];
+            uicomponent.addTextField("/node/exo_title", fieldProperty);
+        %>
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("exo_addon.dialog.label.exo_license")%></td>
+          <td class="FieldComponent">
+        <%
+            fieldProperty = ["jcrPath=/node/exo:license"];
+            uicomponent.addTextField("/node/exo_license", fieldProperty);
+        %>
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("exo_addon.dialog.label.exo_hosted")%></td>
+          <td class="FieldComponent">
+        <%
+            fieldProperty = ["jcrPath=/node/exo:hosted", "options=true,false"];
+            uicomponent.addSelectBoxField("/node/exo_hosted", fieldProperty);
+        %>
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("exo_addon.dialog.label.exo_author")%></td>
+          <td class="FieldComponent">
+        <%
+            fieldProperty = ["jcrPath=/node/exo:author"];
+            uicomponent.addTextField("/node/exo_author", fieldProperty);
+        %>
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("exo_addon.dialog.label.exo_email")%></td>
+          <td class="FieldComponent">
+        <%
+            fieldProperty = ["jcrPath=/node/exo:email", "validate=empty"];
+            uicomponent.addTextField("/node/exo_email", fieldProperty);
+        %>
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("exo_addon.dialog.label.exo_downloadUrl")%></td>
+          <td class="FieldComponent">
+        <%
+            fieldProperty = ["jcrPath=/node/exo:downloadUrl", "validate=empty"];
+            uicomponent.addTextField("/node/exo_downloadUrl", fieldProperty);
+        %>
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("exo_addon.dialog.label.exo_documentUrl")%></td>
+          <td class="FieldComponent">
+        <%
+            fieldProperty = ["jcrPath=/node/exo:documentUrl"];
+            uicomponent.addTextField("/node/exo_documentUrl", fieldProperty);
+        %>
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("exo_addon.dialog.label.exo_sourceUrl")%></td>
+          <td class="FieldComponent">
+        <%
+            fieldProperty = ["jcrPath=/node/exo:sourceUrl"];
+            uicomponent.addTextField("/node/exo_sourceUrl", fieldProperty);
+        %>
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("exo_addon.dialog.label.exo_sendConfirmEmail")%></td>
+          <td class="FieldComponent">
+        <%
+            fieldProperty = ["jcrPath=/node/exo:sendConfirmEmail", "options=true,false", "validate=empty"];
+            uicomponent.addSelectBoxField("/node/exo_sendConfirmEmail", fieldProperty);
+        %>
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("exo_addon.dialog.label.exo_compatibility")%></td>
+          <td class="FieldComponent">
+        <%
+            fieldProperty = ["jcrPath=/node/exo:compatibility"];
+            uicomponent.addTextField("/node/exo_compatibility", fieldProperty);
+        %>
+          </td>
+        </tr>
+        <tr>
+          <td class="FieldLabel"><%=_ctx.appRes("exo_addon.dialog.label.exo_version")%></td>
+          <td class="FieldComponent">
+        <%
+            fieldProperty = ["jcrPath=/node/exo:version"];
+            uicomponent.addTextField("/node/exo_version", fieldProperty);
+        %>
+          </td>
+        </tr>
+      </table>
+    </div>
+  <% /* start render action*/
+     if (!uiform.isShowActionsOnTop()) uiform.processRenderAction();
+     /* end render action*/
+     uiform.end();
+  %>
+</div>
