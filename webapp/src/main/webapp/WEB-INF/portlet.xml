@@ -101,6 +101,13 @@
       <short-title>Add-ons search portlet</short-title>
       <keywords>add-on-center-webapp</keywords> 
     </portlet-info>
+    <portlet-preferences>
+      <preference>
+          <name>folderPath</name>
+	      <value>web contents/Contributions/tuananh</value>
+	      <read-only>false</read-only>
+      </preference>
+    </portlet-preferences>    
   </portlet>   
   
 </portlet-app>
