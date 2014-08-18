@@ -104,7 +104,7 @@
     <portlet-preferences>
       <preference>
           <name>folderPath</name>
-	      <value>web contents/Contributions/tuananh</value>
+	      <value>web contents/Contributions</value>
 	      <read-only>false</read-only>
       </preference>
     </portlet-preferences>    
