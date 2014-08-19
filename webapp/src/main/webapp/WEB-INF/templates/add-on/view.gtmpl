@@ -41,7 +41,8 @@
 	
 	import java.util.ArrayList;
 	import java.util.Locale;
-	
+	import java.text.SimpleDateFormat;
+
 	import org.exoplatform.services.wcm.core.WCMConfigurationService;
 	import org.exoplatform.services.cms.relations.RelationsService;
 	
@@ -317,8 +318,15 @@
 	
 	}
 
+  /* get the full name by userName */
+  String fullName(def userName) {
+    def userHandler = uicomponent.getApplicationComponent(OrganizationService.class).userHandler
+    def user = userHandler.findUserByName(userName)
+    def name = user.fullName
+    return name?name:userName
+  }
 
-  /* get the full name from poster */
+  /* get the username from email */
   String getUsernameByEmail(def email) {
     def userHandler = uicomponent.getApplicationComponent(OrganizationService.class).userHandler
     Query queryEmail = new Query()
@@ -361,7 +369,207 @@
 
   System.out.println(avatarUrl);
 
+
+
+
+
+
+
+
+
+/* display comments of this post */
+void commentList(Node post) {
+  try {
+  def comments = uicomponent.getApplicationComponent(CommentsService.class).getComments(post, null)
+  def formatter =  new SimpleDateFormat("'on' MMM d, yyyy 'at' h:mm a")
+  def viewer = _ctx.getRequestContext().getRemoteUser()
+
+  if (comments) {
+  def plural=""
+  if (comments.size > 1) plural = "s"
+  %>
+  <h5 class="title">${comments.size} comment${plural}</h5>
+  <div class="commentList">
+      <div>
+          <%
+          int i=0;
+
+          for (comment in comments) {
+            try {
+              def rem = ((i++)%2 == 0)?"even":"odd"
+              def commentor = comment.getProperty("exo:commentor").string
+              def commentorAvatar = getAvatarUrl(commentor)
+              def commentorName = fullName(commentor)
+              def commentContent = comment.getProperty("exo:commentContent").string
+              def commentDate = formatter.format(comment.getProperty("exo:commentDate").date.time)
+              def isOwner = (commentor == viewer)
+              %>
+
+
+              <div class="commentItem" id="comment-${comment.name}">
+
+                  <div class="commmentLeft">
+                      <a class="avatarXSmall" href="/portal/intranet/profile/$commentor" rel="tooltip" data-placement="bottom" data-original-title="$commentorName">
+                          <img alt="$commentorName" src="$commentorAvatar">
+                      </a>
+                  </div><!--end commentLeft-->
+                  <div class="commentRight">
+                      <div class="author">
+                          <a href="/portal/intranet/profile/$commentor">$commentorName</a>
+                          <span class="dateTime">$commentDate</span>
+                      </div>
+                      <p class="contentComment"></p><p class="ContentBlock">$commentContent</p><p></p>
+                  </div><!--end commentRight-->
+
+              </div><!--end commentItem-->
+
+              <%
+
+            } catch (Exception e) {
+              print e
+              continue; //skip broken comments
+            }
+          } // end loop on comments
+          %>
+      </div>
+  </div> <!--end commentlist-->
+  <%
+  } // end if comments
+  else {
+    %>
+    <h5 class="title">Comments</h5>
+    <%
+  }
+  } catch (Exception e) {
+    print e // don't say anything
+  }
+} // end comment list
+
+
+
+
+/* render the comment form */
+void commentForm(Node post) {
+
+  try {
+    //def post = uicomponent.originalNode
+    def uuid = post.getUUID()
+    def viewer = _ctx.getRequestContext().getRemoteUser()
+    def fme = fullName(viewer)
+    def avt = getAvatarUrl(viewer)
+    %>
+
+    <script type="text/javascript">
+        //<![CDATA[
+
+        var jq = jQuery.noConflict();
+
+        jq(function() {
+          jq("#btn-$uuid").click(function(event) {
+            event.preventDefault();
+
+            var aform = jq("#commentform-$uuid");
+            var comment = aform.find( 'input[name="comment"]' ).val();
+            var path = aform.find( 'input[name="jcrPath"]' ).val();
+            jq.ajax({
+              type: "POST",
+              url: "/rest/contents/comment/add",
+              data: { comment: comment, jcrPath:path},
+              success: function() {
+              jq('#respond-$uuid').html("<div id='message'></div>");
+              jq('#message').html('<div class="alert alert-success"><p>Your comment has been posted.</p></div>').hide().fadeIn(1500);
+            }
+            }); // end ajax
+            return false;
+          }); // end click on button
+
+        }); // end jq
+        //]]>
+    </script>
+
+    <div class="commentList inputContainer inputContainerShow" style="display: block;">
+
+
+        <div class="commentItem commentFormBox" id="respond-$uuid">
+
+            <div class="commmentLeft">
+                <a class="avatarXSmall" rel="tooltip" data-placement="bottom" href="/portal/intranet/profile/$viewer" data-original-title="$fme">
+                    <img src="$avt" alt="$fme">
+                </a>
+            </div><!--end commentLeft-->
+            <div class="commentRight">
+                <div class="commentInputBox ">
+                    <form class="form-inline" id="commentform-$uuid" name="commentform-$uuid">
+                        <input name="jcrPath" type="hidden" value="/repository/collaboration${post.path}"/>
+
+                        <input type="text" name="comment" id="comment-$uuid" placeholder="Your Comment Here…"  style="margin-bottom: 7px; height: 28px; resize: none; max-height: 28px;"  tabindex="0" />
+                        <input type="submit" value="Post Comment" class="btn btn-primary" rel="tooltip" data-placement="bottom" id="btn-$uuid" data-original-title="Comment" />
+                    </form>
+                </div>
+            </div><!--end commentRight-->
+        </div> <!--end commentItem-->
+    </div><!--end commentlist-->
+
+    <%
+  } catch (Exception e) {
+    print e
+  }
+} // end comment form
+
+
+
+
+
+
 %>
+
+
+
+
+<script type="text/javascript" src="/eXoResources/javascript/jquery-1.7.1.js"></script>
+<link href="/add-on-center-webapp/skin/css/jquery.fancybox-1.3.4.css" rel="stylesheet">
+<script src="/add-on-center-webapp/javascript/exo/add-on/jquery.fancybox-1.3.4.pack.js">
+</script>
+<link href="/add-on-center-webapp/skin/css/add-ons.css" rel="stylesheet">
+
+
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+	
+	  jQuery(".thumb").fancybox({
+
+      openEffect  : 'elastic', // 'elastic', 'fade' or 'none'
+      openSpeed   : 250,
+      openEasing  : 'swing',
+      openOpacity : true,
+      openMethod  : 'zoomIn',
+
+      // Closing fancyBox
+      closeEffect  : 'elastic', // 'elastic', 'fade' or 'none'
+      closeSpeed   : 250,
+      closeEasing  : 'swing',
+      closeOpacity : true,
+      closeMethod  : 'zoomOut',
+
+      // Changing next gallery item
+      nextEffect : 'fade', // 'elastic', 'fade' or 'none'
+      nextSpeed  : 250,
+      nextEasing : 'swing',
+      nextMethod : 'changeIn',
+
+      // Changing previous gallery item
+      prevEffect : 'fade', // 'elastic', 'fade' or 'none'
+      prevSpeed  : 250,
+      prevEasing : 'swing',
+      prevMethod : 'changeOut',
+	  });
+
+  });
+</script>
+		
+
+		
+		
 
 <!--Addon navigation-->
 <div class="addonSearchToolbar">
@@ -601,47 +809,13 @@
 			}
 		%>
 		
-		<script type="text/javascript" src="/eXoResources/javascript/jquery-1.7.1.js"></script>
-		<link href="/add-on-center-webapp/skin/css/jquery.fancybox-1.3.4.css" rel="stylesheet">
-		<script src="/add-on-center-webapp/javascript/exo/add-on/jquery.fancybox-1.3.4.pack.js">
-		</script>
-		<link href="/add-on-center-webapp/skin/css/add-ons.css" rel="stylesheet">
-		
-		
-		<script type="text/javascript">
-			jQuery(document).ready(function(){
-				
-				jQuery(".thumb").fancybox({
-
-	openEffect  : 'elastic', // 'elastic', 'fade' or 'none'
-		openSpeed   : 250,
-		openEasing  : 'swing',
-		openOpacity : true,
-		openMethod  : 'zoomIn',
-
-		// Closing fancyBox
-		closeEffect  : 'elastic', // 'elastic', 'fade' or 'none'
-		closeSpeed   : 250,
-		closeEasing  : 'swing',
-		closeOpacity : true,
-		closeMethod  : 'zoomOut',
-
-		// Changing next gallery item
-		nextEffect : 'fade', // 'elastic', 'fade' or 'none'
-		nextSpeed  : 250,
-		nextEasing : 'swing',
-		nextMethod : 'changeIn',
-
-		// Changing previous gallery item
-		prevEffect : 'fade', // 'elastic', 'fade' or 'none'
-		prevSpeed  : 250,
-		prevEasing : 'swing',
-		prevMethod : 'changeOut',
 
 
-				});
+   <!--Addon comment-->
+  <div class="UIPluginTemplateOneScr uiBox">
+      <% commentList(post)%>
+      <% commentForm(post) %>
+  </div>
+  <!--END Addon comment-->
 
-			});
-		</script>
-		
-
+  
