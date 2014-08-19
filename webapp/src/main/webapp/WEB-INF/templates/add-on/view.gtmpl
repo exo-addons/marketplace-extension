@@ -21,6 +21,14 @@
 	import org.exoplatform.webui.event.Event;
 	import org.exoplatform.webui.event.EventListener;
 	import org.exoplatform.webui.form.UIForm;
+
+  import org.exoplatform.services.organization.OrganizationService;
+  import org.exoplatform.services.organization.UserHandler;
+  import org.exoplatform.services.wcm.core.NodeLocation;
+  import org.exoplatform.services.cms.comments.CommentsService;
+  import org.exoplatform.social.core.manager.IdentityManager;
+  import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvider;
+  import org.exoplatform.services.organization.Query
 	
 	import javax.jcr.Node;
 	import javax.jcr.NodeIterator;
@@ -308,7 +316,51 @@
 	} catch(Exception e) {
 	
 	}
-	
+
+
+  /* get the full name from poster */
+  String getUsernameByEmail(def email) {
+    def userHandler = uicomponent.getApplicationComponent(OrganizationService.class).userHandler
+    Query queryEmail = new Query()
+    queryEmail.setEmail(email)
+    def userList = userHandler.findUsersByQuery(queryEmail).load(0, 1)
+    if (userList != null && userList.length > 0) {
+      def user = userList[0]
+      return user.getUserName()
+    }else{
+      return null;
+    }
+  }
+
+  /* get the url of the avatar */
+  String getAvatarUrl(def username) {
+    String avatar = "/social-resources/skin/images/ShareImages/UserAvtDefault.png";
+    try {
+      def identityManager = uicomponent.getApplicationComponent(IdentityManager.class)
+      def userIdentity = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, username)
+      def userProfile = userIdentity.getProfile()
+
+      if(null != userProfile.getAvatarUrl() && userProfile.getAvatarUrl().length() >0){
+        avatar = userProfile.getAvatarUrl();
+      }
+    } catch (Exception e) {
+      //print e.message
+    }
+    return avatar
+  }
+
+  def post = uicomponent.originalNode;
+
+
+	def viewer = _ctx.getRequestContext().getRemoteUser();
+
+  def authorEmail = post.getProperty("exo:email").string
+
+  def authorUserName = getUsernameByEmail(authorEmail)
+  def avatarUrl = getAvatarUrl(authorUserName)
+
+  System.out.println(avatarUrl);
+
 %>
 
 <!--Addon navigation-->
@@ -506,7 +558,19 @@
 							<p class="Title">
 								<h4 style="margin: 0;">Release</h4>
 							</p>
-							<p> <span> Author: </span><%=author%> </p>
+							<p>
+                    <span> Author: </span>
+                    <% if(authorUserName!=null){%>
+
+                          <a class="avatarXSmall" href="/portal/intranet/profile/$authorUserName" rel="author" data-placement="bottom" data-original-title="$author">
+                              <img alt="$author" src="$avatarUrl">
+                          </a>
+                          <a href="/portal/intranet/profile/$authorUserName">$author</a>
+                      
+                    <%}else{%>
+                      <%=author%> 
+                    <%}%>
+              </p>
 							<% if (license != null) { %>
 							<p> <span> License: </span><%=license%></p>
 							<% } %>

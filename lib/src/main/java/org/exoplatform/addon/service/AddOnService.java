@@ -69,6 +69,11 @@ public class AddOnService {
   public final static String PREFERENCE_ITEM_PATH  = "folderPath";
   /** The Constant PREFERENCE_ITEM_PATH. */
   public final static String PREFERENCE_SITE    = "siteName";
+  
+  public final static String  MIX_VOTEABLE_NODE_TYPE = "mix:votable";
+  public final static String  MIX_COMMENTABLE_NODE_TYPE = "mix:commentable";
+  public final static String  EXO_PRIVILEGEABLE_NODE_TYPE = "exo:privilegeable";
+  
 	
 	private static final Log log = ExoLogger.getLogger(AddOnService.class);
 	public static String imgPathBase = "/rest/jcr/repository/collaboration";
@@ -322,6 +327,11 @@ public class AddOnService {
 		jsContent.setProperty("jcr:mimeType", "text/plain");
 		jsContent.setProperty("jcr:encoding", "UTF-8");
 		jsContent.setProperty("jcr:lastModified", new Date().getTime());
+
+		//add mixin to allow comment and vote
+		currentNode.addMixin(MIX_COMMENTABLE_NODE_TYPE);
+		currentNode.addMixin(MIX_VOTEABLE_NODE_TYPE);
+		
 		homeNode.getSession().save();
 
 		return currentNode;
@@ -383,7 +393,7 @@ public class AddOnService {
 			Session session = dummyNode.getSession();
 			Node cmNode = dummyNode.addNode(preference_item_path,"nt:unstructured");
 			cmNode.setProperty("exo:title", folderName);
-			cmNode.addMixin("exo:privilegeable");
+			cmNode.addMixin(EXO_PRIVILEGEABLE_NODE_TYPE);
       Map<String, String[]> permissions = new HashMap<String, String[]>();
       permissions.put("*:/platform/administrators", PermissionType.ALL);
       permissions.put("*:/platform/users", new String[]{PermissionType.READ,PermissionType.ADD_NODE,PermissionType.SET_PROPERTY});

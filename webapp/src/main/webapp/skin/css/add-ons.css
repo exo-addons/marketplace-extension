@@ -286,3 +286,17 @@ margin-bottom: 3px;
 margin: 0px;
 font-size: 14px;
 }
+
+.avatarXSmall img {
+    border-radius: 2px;
+    height: 36px;
+    width: 36px;
+}
+
+.author a {
+    color: #2f5e92;
+    font-family: "Helvetica Neue Bold",Helvetica,Lucida,Arial,sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+    word-wrap: break-word;
+}
