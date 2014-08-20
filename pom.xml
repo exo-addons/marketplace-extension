@@ -8,7 +8,7 @@
     <version>4</version>
     <relativePath />
   </parent>
-  <groupId>org.exoplatform.addons.add-on-center</groupId>
+  <groupId>org.exoplatform.addons.marketplace-extension</groupId>
   <artifactId>add-on-center</artifactId>
   <version>1.0.x-SNAPSHOT</version>
   <packaging>pom</packaging>

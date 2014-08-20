@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>add-on-center</artifactId>
-    <groupId>org.exoplatform.addons.add-on-center</groupId>
+    <groupId>org.exoplatform.addons.marketplace-extension</groupId>
     <version>1.0.x-SNAPSHOT</version>
   </parent>
   <artifactId>add-on-center-bundle</artifactId>
