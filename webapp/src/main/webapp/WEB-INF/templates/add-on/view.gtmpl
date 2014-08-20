@@ -476,8 +476,10 @@ void commentForm(Node post) {
               url: "/rest/contents/comment/add",
               data: { comment: comment, jcrPath:path},
               success: function() {
-              jq('#respond-$uuid').html("<div id='message'></div>");
-              jq('#message').html('<div class="alert alert-success"><p>Your comment has been posted.</p></div>').hide().fadeIn(1500);
+              //jq('#respond-$uuid').html("<div id='message'></div>");
+              jq('#message').html('<div class="alert alert-success"><p>Your comment has been posted.</p></div>').fadeIn(3000).fadeOut(3000);
+              jq('#comment-$uuid').val('');
+              fillComment();
             }
             }); // end ajax
             return false;
@@ -489,7 +491,7 @@ void commentForm(Node post) {
 
     <div class="commentList inputContainer inputContainerShow" style="display: block;">
 
-
+        <div id='message' style="display:none"></div>
         <div class="commentItem commentFormBox" id="respond-$uuid">
 
             <div class="commmentLeft">
@@ -565,6 +567,62 @@ void commentForm(Node post) {
 	  });
 
   });
+
+  function getREST(url){         
+    return jQuery.ajax({
+      type: "GET",
+      url: url,
+      dataType: 'json',
+      async: false
+    });
+  }
+
+  function fillComment(){
+    var url = "/rest/private/addonservice/all-comment?jcrPath=/repository/collaboration${post.path}"
+    jQuery.getJSON( url, function( data ) {
+      HTMLdata =  "" + 
+        "<h5 class='title'>"+ data.length + "&nbsp Comments </h5>" +
+          "<div class='commentList'>" +
+            "<div>";
+
+      for(i=0; i<data.length; i++){ 
+
+        commentId = data[i].id; 
+        canDelete = data[i].canDelete; 
+        commentorFullname = data[i].commentorFullname; 
+        commentorUsername = data[i].commentorUsername; 
+        commentorAvataUrl = data[i].commentorAvataUrl; 
+        commentDetail = data[i].commentDetail; 
+        createDate = data[i].createDate;
+                
+
+        HTMLdata +=  "<div class='commentItem' id='comment-" + commentId + "'>" +
+
+                  "<div class='commmentLeft'>" + 
+                      "<a class='avatarXSmall' href='/portal/intranet/profile/" + commentorUsername + "' rel='tooltip' data-placement='bottom' data-original-title='" + commentorFullname + "'>" +
+                          "<img alt='" + commentorFullname + "' src='" + commentorAvataUrl + "'>" +
+                      "</a>" +
+                  "</div><!--end commentLeft-->" +
+                  "<div class='commentRight'>" +
+                      "<div class='author'>" +
+                          "<a href='/portal/intranet/profile/" + commentorUsername + "'>" + commentorFullname + "</a>" +
+                          "<span class='dateTime'>" + createDate + "</span>" +
+                      "</div>" +
+                      "<p class='contentComment'></p><p class='ContentBlock'>" + commentDetail + "</p><p></p>" +
+                  "</div><!--end commentRight-->" +
+              "</div><!--end commentItem-->" ;
+
+      }
+      HTMLdata +=  "</div>"+
+              "</div> <!--end commentlist-->";
+      jQuery("#listComment").html(HTMLdata);
+    });
+    
+  }
+  jQuery(document).ready(function(){
+    fillComment();
+  });
+
 </script>
 		
 
@@ -813,7 +871,8 @@ void commentForm(Node post) {
 
    <!--Addon comment-->
   <div class="UIPluginTemplateOneScr uiBox">
-      <% commentList(post)%>
+      <div id="listComment"></div>  
+      <% /*commentList(post)*/%>
       <% commentForm(post) %>
   </div>
   <!--END Addon comment-->
