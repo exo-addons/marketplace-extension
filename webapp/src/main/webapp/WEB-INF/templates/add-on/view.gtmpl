@@ -491,7 +491,6 @@ void commentForm(Node post) {
 
     <div class="commentList inputContainer inputContainerShow" style="display: block;">
 
-        <div id='message' style="display:none"></div>
         <div class="commentItem commentFormBox" id="respond-$uuid">
 
             <div class="commmentLeft">
@@ -580,10 +579,8 @@ void commentForm(Node post) {
   function fillComment(){
     var url = "/rest/private/addonservice/all-comment?jcrPath=/repository/collaboration${post.path}"
     jQuery.getJSON( url, function( data ) {
-      HTMLdata =  "" + 
-        "<h5 class='title'>"+ data.length + "&nbsp Comments </h5>" +
-          "<div class='commentList'>" +
-            "<div>";
+      jQuery("#comment-title").html(data.length + "&nbsp Comment(s)");
+      HTMLdata =  "";
 
       for(i=0; i<data.length; i++){ 
 
@@ -613,8 +610,7 @@ void commentForm(Node post) {
               "</div><!--end commentItem-->" ;
 
       }
-      HTMLdata +=  "</div>"+
-              "</div> <!--end commentlist-->";
+
       jQuery("#listComment").html(HTMLdata);
     });
     
@@ -812,6 +808,7 @@ void commentForm(Node post) {
 							</div>
 							<% } %>
 						</div>
+
 					</div>
 					
 					<div class="media-body">
@@ -871,7 +868,13 @@ void commentForm(Node post) {
 
    <!--Addon comment-->
   <div class="UIPluginTemplateOneScr uiBox">
-      <div id="listComment"></div>  
+      <h5 class='title' id='comment-title'>Comment(s)</h5>
+      <div class='commentList'>
+        <div id='message' style="display:none"></div>
+        <div>
+          <div id="listComment"></div>
+        </div>
+      </div>
       <% /*commentList(post)*/%>
       <% commentForm(post) %>
   </div>
