@@ -286,7 +286,6 @@ margin-bottom: 3px;
 margin: 0px;
 font-size: 14px;
 }
-
 .avatarXSmall img {
     border-radius: 2px;
     height: 36px;
@@ -311,10 +310,6 @@ font-size: 14px;
     .commentList .commentItem .commmentLeft {
     float: left;
     }
-    .commentRight {
-    margin-left: 45px;
-    paddin-top: 7px
-    }
     .author a+span {
     margin-left: 10px;
     color: #999;
@@ -324,6 +319,13 @@ font-size: 14px;
     }
     .commentList .commentItem .ContentBlock {
     word-wrap: break-word;
+    }
+
+    .avatarLargeAddon img {
+        border-radius: 4px;
+        height: 80px;
+        margin-right: 5px;
+        width: 80px;
     }
 
     /*comment form*/
@@ -337,15 +339,50 @@ font-size: 14px;
     .commentList .commentItem .commmentLeft {
         float: left;
     }
-    .commentRight {
-        margin-left: 45px;
-        padding-top: 7px;
-    }
-    .commentList .commentItem .commentInputBox {
-        padding: 3px 0 0;
+	.commmentLeft +   .commentRight {
+         margin-left: 85px;
     }
     .commentList .commentItem .commentInputBox .commentInput {
         margin-right: 112px;
     }
 
+	.commentContent + .commentFormBox {
+		margin-top:10px;
+	}
+    #listComment .commentBox {
+        margin-left: 85px;
+        padding: 10px 20px;
+        position: relative;
+    }
+    #listComment .commentBox  .arrowLeft {
+        background: url("/social-resources/skin/images/Activity/arrows.png") no-repeat scroll -21px 0;
+        display: block;
+        height: 16px;
+        left: -8px;
+        position: absolute;
+        top: 17px;
+        width: 8px;
+    }
+
+    #listComment .commentBox .commentInfo {
+        margin-bottom: 5px;
+    }
+
+    .UISingleContentViewerPortlet .UIPresentationContainer .title {
+     margin: 0;
+        padding: 8px 10px;
+    }
+
+    .comment-submit {
+        margin-left: 10px;
+    }
+    .input-area {
+        overflow: hidden;
+    }
+    .input-area  > input{
+	    height: 50px;
+        max-height: 50px;
+        resize: none;
+	    width: 100%;
+    }
 /*END style for comment*/

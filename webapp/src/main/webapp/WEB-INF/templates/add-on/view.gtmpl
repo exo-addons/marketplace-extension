@@ -367,86 +367,6 @@
   def authorUserName = getUsernameByEmail(authorEmail)
   def avatarUrl = getAvatarUrl(authorUserName)
 
-  System.out.println(avatarUrl);
-
-
-
-
-
-
-
-
-
-/* display comments of this post */
-void commentList(Node post) {
-  try {
-  def comments = uicomponent.getApplicationComponent(CommentsService.class).getComments(post, null)
-  def formatter =  new SimpleDateFormat("'on' MMM d, yyyy 'at' h:mm a")
-  def viewer = _ctx.getRequestContext().getRemoteUser()
-
-  if (comments) {
-  def plural=""
-  if (comments.size > 1) plural = "s"
-  %>
-  <h5 class="title">${comments.size} comment${plural}</h5>
-  <div class="commentList">
-      <div>
-          <%
-          int i=0;
-
-          for (comment in comments) {
-            try {
-              def rem = ((i++)%2 == 0)?"even":"odd"
-              def commentor = comment.getProperty("exo:commentor").string
-              def commentorAvatar = getAvatarUrl(commentor)
-              def commentorName = fullName(commentor)
-              def commentContent = comment.getProperty("exo:commentContent").string
-              def commentDate = formatter.format(comment.getProperty("exo:commentDate").date.time)
-              def isOwner = (commentor == viewer)
-              %>
-
-
-              <div class="commentItem" id="comment-${comment.name}">
-
-                  <div class="commmentLeft">
-                      <a class="avatarXSmall" href="/portal/intranet/profile/$commentor" rel="tooltip" data-placement="bottom" data-original-title="$commentorName">
-                          <img alt="$commentorName" src="$commentorAvatar">
-                      </a>
-                  </div><!--end commentLeft-->
-                  <div class="commentRight">
-                      <div class="author">
-                          <a href="/portal/intranet/profile/$commentor">$commentorName</a>
-                          <span class="dateTime">$commentDate</span>
-                      </div>
-                      <p class="contentComment"></p><p class="ContentBlock">$commentContent</p><p></p>
-                  </div><!--end commentRight-->
-
-              </div><!--end commentItem-->
-
-              <%
-
-            } catch (Exception e) {
-              print e
-              continue; //skip broken comments
-            }
-          } // end loop on comments
-          %>
-      </div>
-  </div> <!--end commentlist-->
-  <%
-  } // end if comments
-  else {
-    %>
-    <h5 class="title">Comments</h5>
-    <%
-  }
-  } catch (Exception e) {
-    print e // don't say anything
-  }
-} // end comment list
-
-
-
 
 /* render the comment form */
 void commentForm(Node post) {
@@ -470,6 +390,7 @@ void commentForm(Node post) {
 
             var aform = jq("#commentform-$uuid");
             var comment = aform.find( 'input[name="comment"]' ).val();
+            if(comment.trim() == "") return;
             var path = aform.find( 'input[name="jcrPath"]' ).val();
             jq.ajax({
               type: "POST",
@@ -489,27 +410,32 @@ void commentForm(Node post) {
         //]]>
     </script>
 
-    <div class="commentList inputContainer inputContainerShow" style="display: block;">
 
-        <div class="commentItem commentFormBox" id="respond-$uuid">
 
-            <div class="commmentLeft">
-                <a class="avatarXSmall" rel="tooltip" data-placement="bottom" href="/portal/intranet/profile/$viewer" data-original-title="$fme">
-                    <img src="$avt" alt="$fme">
-                </a>
-            </div><!--end commentLeft-->
-            <div class="commentRight">
-                <div class="commentInputBox ">
-                    <form class="form-inline" id="commentform-$uuid" name="commentform-$uuid">
-                        <input name="jcrPath" type="hidden" value="/repository/collaboration${post.path}"/>
-
-                        <input type="text" name="comment" id="comment-$uuid" placeholder="Your Comment Here…"  style="margin-bottom: 7px; height: 28px; resize: none; max-height: 28px;"  tabindex="0" />
-                        <input type="submit" value="Post Comment" class="btn btn-primary" rel="tooltip" data-placement="bottom" id="btn-$uuid" data-original-title="Comment" />
-                    </form>
-                </div>
-            </div><!--end commentRight-->
-        </div> <!--end commentItem-->
-    </div><!--end commentlist-->
+      <div style="display: block;" class="commentList inputContainer inputContainerShow">
+          <div class="commentItem commentFormBox" id="respond-$uuid">
+              <div class="commmentLeft">
+                  <a commentor="$fme" class="avatarMedium" data-placement="bottom" rel="tooltip" href="/portal/intranet/profile/$viewer" data-original-title="$fme">
+					          <img src="$avt" alt="$fme">
+				          </a>
+              </div><!--end commentLeft-->
+              <div class="commentRight">
+                  <div class="commentInputBox ">
+                      <form class="form-inline" id="commentform-$uuid" name="commentform-$uuid">
+						            <div class="pull-right comment-submit">
+							            <input type="submit" data-original-title="Comment" id="btn-$uuid" data-placement="bottom" rel="tooltip" class="btn btn-primary" value="Post Comment">
+						            </div>
+						            <div class="input-area">
+							            <input name="jcrPath" type="hidden" value="/repository/collaboration${post.path}"/>
+							            <input type="text" name="comment" id="comment-$uuid" placeholder="Your Comment Here…" style=" resize: none; max-height: 50px; height: 50px;" tabindex="0">
+						
+						            </div>
+						
+					            </form>
+                  </div>
+              </div><!--end commentRight-->
+          </div> <!--end commentFormBox-->
+      </div><!--end commentlist-->
 
     <%
   } catch (Exception e) {
@@ -645,22 +571,33 @@ void commentForm(Node post) {
         commentDetail = data[i].commentDetail; 
         createDate = data[i].createDate;
                 
-
-        HTMLdata +=  "<div class='commentItem' id='comment-" + commentId + "'>" +
-
-                  "<div class='commmentLeft'>" + 
-                      "<a class='avatarXSmall' href='/portal/intranet/profile/" + commentorUsername + "' rel='tooltip' data-placement='bottom' data-original-title='" + commentorFullname + "'>" +
-                          "<img alt='" + commentorFullname + "' src='" + commentorAvataUrl + "'>" +
-                      "</a>" +
-                  "</div><!--end commentLeft-->" +
-                  "<div class='commentRight'>" +
-                      "<div class='author'>" +
-                          "<a href='/portal/intranet/profile/" + commentorUsername + "'>" + commentorFullname + "</a>" +
-                          "<span class='dateTime'>" + createDate + "</span>" +
-                      "</div>" +
-                      "<p class='contentComment'></p><p class='ContentBlock'>" + commentDetail + "</p><p></p>" +
-                  "</div><!--end commentRight-->" +
-              "</div><!--end commentItem-->" ;
+        HTMLdata += "<div class='commentContainer commentItem clearfix' id='comment-" + commentId + "'>" +
+				            "<div class='avatarBox pull-left'>" +
+					            "<a commentor='"+ commentorFullname + "' class='avatarMedium' data-placement='bottom' rel='tooltip' href='/portal/intranet/profile/" + commentorUsername + "' data-original-title='" + commentorFullname + "'>" +
+						            "<img alt='" + commentorFullname + "' src='" + commentorAvataUrl + "'>" +
+					            "</a>" +
+				            "</div>" +
+				            "<div class='commentBox uiBox'>" +
+					            "<span class='arrowLeft'></span>" +
+					            "<div class='commentInfo'>" +
+						            "<strong><a href='/portal/intranet/profile/" + commentorUsername +"'>" + commentorFullname + "</a></strong> " +
+						            "<div class='pull-right'>" +
+                             createDate +
+							           " <a data-original-title='Edit this comment' class='actionIcon' href='javascript:void(0);' rel='tooltip' data-placement='bottom' title=''>" +
+							            "<i class='uiIconEdit uiIconLightGray'></i>" +
+							            "</a>" +
+					
+							            "<a data-original-title='Remove this comment' class='actionIcon' href='javascript:void(0);' rel='tooltip' data-placement='bottom' title=''>" +
+								            "<i class='uiIconTrash uiIconLightGray'></i>" +
+							            "</a>" +
+							
+						            "</div>" +
+					            "</div>" +
+					            "<div class='commentContent'>" +
+						                commentDetail +
+					            "</div>" +
+				            "</div>" +
+		            "</div>";
 
       }
 
@@ -898,16 +835,16 @@ void commentForm(Node post) {
 								<h4 style="margin: 0;">Release</h4>
 							</p>
 							<p>
-                    <span> Author: </span>
+                    
                     <% if(authorUserName!=null){%>
-
-                          <a class="avatarXSmall" href="/portal/intranet/profile/$authorUserName" rel="author" data-placement="bottom" data-original-title="$author">
+                          <a class="avatarLargeAddon" href="/portal/intranet/profile/$authorUserName" rel="author" data-placement="bottom" data-original-title="$author">
                               <img alt="$author" src="$avatarUrl">
                           </a>
-                          <a href="/portal/intranet/profile/$authorUserName">$author</a>
+                          <strong><a href="/portal/intranet/profile/$authorUserName">$author</a> </strong>
                       
                     <%}else{%>
-                      <%=author%> 
+                      <span> Author: </span>
+                      <strong><%=author%></strong>
                     <%}%>
               </p>
 							<% if (license != null) { %>
