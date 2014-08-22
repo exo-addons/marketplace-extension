@@ -19,6 +19,26 @@
 	def itemEditLink = null;
 	def canEdit = uicomponent.canEdit();
 	def itemAuthor = uicomponent.getStrProperty("exo:author");
+	  
+  Double voteRate=0.0;
+
+  if (viewNode.isNodeType("mix:votable")) {
+    if (viewNode.hasProperty("exo:votingRate"))
+        voteRate = new Double(viewNode.getProperty("exo:votingRate").getString());
+  }
+  Double modul = voteRate % 1.0;
+  Integer totalStar = 0;
+  if(modul >= 0.5){
+    totalStar = (Integer)(voteRate-modul+1);
+  }else{
+    totalStar = (Integer)(voteRate-modul);
+  }
+  
+  Integer totalVote = 0;
+  if (viewNode.isNodeType("mix:votable")) {
+    if (viewNode.hasProperty("exo:voteTotalOfLang"))
+        totalVote = new Double(viewNode.getProperty("exo:voteTotalOfLang").getString());
+  }
 %>
 
 
@@ -44,6 +64,21 @@
 		<h4><a class="TitleContentNormalNews" href="<%= itemLink%>"><%= itemName %></a></h4>
 		<p><%= itemAuthor%></p>
 	</div>
+	
+	<!--BEGIN VOTE-->
+  <div class="uiVote clearfix" rel="tooltip" data-toggle="tooltip" data-original-title="Avg. Rating: $voteRate  Votes: $totalVote">
+    <div class="avgRatingImages clearfix">
+      <% for(int i=1; i <= totalStar; i++){%>
+          <i rel="tooltip" class="voted"></i>
+      <%
+        }
+        for(int i=1; i <= 5-totalStar; i++){
+      %>
+          <i rel="tooltip" class="unvoted"></i>
+      <%}%>
+    </div>
+  </div>
+  <!--END VOTE-->
 
 </div>	
 
