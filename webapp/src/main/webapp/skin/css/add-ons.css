@@ -349,12 +349,12 @@ font-size: 14px;
 	.commentContent + .commentFormBox {
 		margin-top:10px;
 	}
-    #listComment .commentBox {
+    .listComment .commentBox {
         margin-left: 85px;
         padding: 10px 20px;
         position: relative;
     }
-    #listComment .commentBox  .arrowLeft {
+    .listComment .commentBox  .arrowLeft {
         background: url("/social-resources/skin/images/Activity/arrows.png") no-repeat scroll -21px 0;
         display: block;
         height: 16px;
@@ -364,7 +364,7 @@ font-size: 14px;
         width: 8px;
     }
 
-    #listComment .commentBox .commentInfo {
+    .listComment .commentBox .commentInfo {
         margin-bottom: 5px;
     }
 

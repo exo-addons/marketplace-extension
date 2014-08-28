@@ -359,6 +359,7 @@
 
   def post = uicomponent.originalNode;
 
+  def uuid = post.getUUID()
 
 	def viewer = _ctx.getRequestContext().getRemoteUser();
 
@@ -372,8 +373,7 @@
 void commentForm(Node post) {
 
   try {
-    //def post = uicomponent.originalNode
-    def uuid = post.getUUID()
+    uuid = post.getUUID()
     def viewer = _ctx.getRequestContext().getRemoteUser()
     def fme = fullName(viewer)
     def avt = getAvatarUrl(viewer)
@@ -398,7 +398,7 @@ void commentForm(Node post) {
               data: { comment: comment, jcrPath:path},
               success: function() {
               //jq('#respond-$uuid').html("<div id='message'></div>");
-              jq('#message').html('<div class="alert alert-success"><p>Your comment has been posted.</p></div>').fadeIn(3000).fadeOut(3000);
+              jq('#message-$uuid').html('<div class="alert alert-success"><p>Your comment has been posted.</p></div>').fadeIn(3000).fadeOut(3000);
               jq('#comment-$uuid').val('');
               fillComment();
             }
@@ -502,7 +502,7 @@ void commentForm(Node post) {
     });
   }
   
-  function fillVote(){
+  function fillVote_$uuid(){
     var url = "/rest/private/contents/vote/getVote?jcrPath=/repository/collaboration${post.path}";
     jQuery.ajax({
       type: "GET",
@@ -513,7 +513,7 @@ void commentForm(Node post) {
         totalVote = jQuery(data).find("total").text();
         voteData = "Avg. Rating: <span>" + rate + "</span> &nbsp" +
                    "Votes: <span>" + totalVote + "</span>";
-        jQuery("#voteSummary").html(voteData);
+        jQuery("#voteSummary-$uuid").html(voteData);
         
         //render voteStars
         rateInt = parseInt(rate + "");
@@ -528,37 +528,37 @@ void commentForm(Node post) {
         voteStartIndex=0;
         for(i=1; i<=totalVoteStar; i++){
           voteStartIndex +=1;
-          voteStarData += "<i class='voted' onclick='postVote("+ voteStartIndex + ")' data-original-title='Click here to vote' data-toggle='tooltip' rel='tooltip'></i>";
+          voteStarData += "<i class='voted' onclick='postVote_$uuid("+ voteStartIndex + ")' data-original-title='Click here to vote' data-toggle='tooltip' rel='tooltip'></i>";
         }
         for(i=1; i<= (5-totalVoteStar) ; i++){
           voteStartIndex +=1;
-          voteStarData += "<i class='unvoted' onclick='postVote("+ voteStartIndex + ")' data-original-title='Click here to vote' data-toggle='tooltip' rel='tooltip'></i>";
+          voteStarData += "<i class='unvoted' onclick='postVote_$uuid("+ voteStartIndex + ")' data-original-title='Click here to vote' data-toggle='tooltip' rel='tooltip'></i>";
         }
-        jQuery("#voteStarList").html(voteStarData);
+        jQuery("#voteStarList-$uuid").html(voteStarData);
       }
      });
   }
   
-  function postVote(voteValue){
+  function postVote_$uuid(voteValue){
     var url = "/rest/private/contents/vote/postVote?jcrPath=/repository/collaboration${post.path}&vote=" + voteValue + "&lang=en";
     jQuery.ajax({
       type: "GET",
       url: url,
       success: function( data ) {
-        fillVote();
+        fillVote_$uuid();
         if(voteValue ==1){
-          jQuery('#VoteMessage').html('<div class="alert alert-success"><p>Your Vote (' + voteValue + ' star) has been posted.</p></div>').fadeIn(2000).fadeOut(2000);
+          jQuery('#VoteMessage-$uuid').html('<div class="alert alert-success"><p>Your Vote (' + voteValue + ' star) has been posted.</p></div>').fadeIn(2000).fadeOut(2000);
         }else{
-          jQuery('#VoteMessage').html('<div class="alert alert-success"><p>Your Vote (' + voteValue + ' stars) has been posted.</p></div>').fadeIn(2000).fadeOut(2000);
+          jQuery('#VoteMessage-$uuid').html('<div class="alert alert-success"><p>Your Vote (' + voteValue + ' stars) has been posted.</p></div>').fadeIn(2000).fadeOut(2000);
         }
       }
      });
   }
 
-  function fillComment(){
+  function fillComment_$uuid(){
     var url = "/rest/private/addonservice/all-comment?jcrPath=/repository/collaboration${post.path}";
     jQuery.getJSON( url, function( data ) {
-      jQuery("#comment-title").html(data.length + "&nbsp Comment(s)");
+      jQuery("#comment-title-$uuid").html(data.length + "&nbsp Comment(s)");
       HTMLdata =  "";
 
       for(i=0; i<data.length; i++){ 
@@ -601,13 +601,13 @@ void commentForm(Node post) {
 
       }
 
-      jQuery("#listComment").html(HTMLdata);
+      jQuery("#listComment-$uuid").html(HTMLdata);
     });
     
   }
   jQuery(document).ready(function(){
-    fillComment();
-    fillVote();
+    fillComment_$uuid();
+    fillVote_$uuid();
   });
 
 </script>
@@ -801,11 +801,11 @@ void commentForm(Node post) {
 						</div>
           <!-- Begin vote-->
             <div class="uiVote clearfix" id="voteDetail">
-	            <div class="voteRatingInfo" id= "voteSummary">
+	            <div class="voteRatingInfo" id= "voteSummary-$uuid">
 			            Avg. Rating: <span>0.0</span>
 			            Votes: <span>0</span>
 	            </div>
-	            <div class="avgRatingImages clearfix" id="voteStarList">
+	            <div class="avgRatingImages clearfix" id="voteStarList-$uuid">
 		
 					            <i class="voted"></i>
 			
@@ -819,7 +819,7 @@ void commentForm(Node post) {
 			
 	            </div>
             </div>
-            <div id='VoteMessage' style="display:none"></div>
+            <div id='VoteMessage-$uuid' style="display:none"></div>
           <!-- End vote-->
 
 					</div>
@@ -881,11 +881,11 @@ void commentForm(Node post) {
 
    <!--Addon comment-->
   <div class="UIPluginTemplateOneScr uiBox">
-      <h5 class='title' id='comment-title'>Comment(s)</h5>
+      <h5 class='title' id='comment-title-$uuid'>Comment(s)</h5>
       <div class='commentList'>
-        <div id='message' style="display:none"></div>
+        <div id='message-$uuid' style="display:none"></div>
         <div>
-          <div id="listComment"></div>
+          <div id="listComment-$uuid" class="listComment"></div>
         </div>
       </div>
       <% /*commentList(post)*/%>
@@ -894,3 +894,4 @@ void commentForm(Node post) {
   <!--END Addon comment-->
 
   
+
