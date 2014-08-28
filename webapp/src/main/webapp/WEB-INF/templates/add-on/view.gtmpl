@@ -400,7 +400,7 @@ void commentForm(Node post) {
               //jq('#respond-$uuid').html("<div id='message'></div>");
               jq('#message-$uuid').html('<div class="alert alert-success"><p>Your comment has been posted.</p></div>').fadeIn(3000).fadeOut(3000);
               jq('#comment-$uuid').val('');
-              fillComment();
+              fillComment_$uuid();
             }
             }); // end ajax
             return false;
@@ -503,7 +503,7 @@ void commentForm(Node post) {
   }
   
   function fillVote_$uuid(){
-    var url = "/rest/private/contents/vote/getVote?jcrPath=/repository/collaboration${post.path}";
+    var url = "/rest/contents/vote/getVote?jcrPath=/repository/collaboration${post.path}";
     jQuery.ajax({
       type: "GET",
       url: url,
@@ -554,9 +554,20 @@ void commentForm(Node post) {
       }
      });
   }
-
+  function deleteComment_$uuid(commentId){
+    var url = "/rest/private/addonservice/delete-comment?jcrPath=/repository/collaboration${post.path}&commentId=" + commentId ;
+    jQuery.ajax({
+      type: "GET",
+      url: url,
+      success: function( data ) {
+        fillComment_$uuid();
+        jQuery('#message-$uuid').html('<div class="alert alert-success"><p>Your comment has been removed.</p></div>').fadeIn(2000).fadeOut(2000);
+        
+      }
+     });
+  }
   function fillComment_$uuid(){
-    var url = "/rest/private/addonservice/all-comment?jcrPath=/repository/collaboration${post.path}";
+    var url = "/rest/addonservice/all-comment?jcrPath=/repository/collaboration${post.path}";
     jQuery.getJSON( url, function( data ) {
       jQuery("#comment-title-$uuid").html(data.length + "&nbsp Comment(s)");
       HTMLdata =  "";
@@ -570,7 +581,7 @@ void commentForm(Node post) {
         commentorAvataUrl = data[i].commentorAvataUrl; 
         commentDetail = data[i].commentDetail; 
         createDate = data[i].createDate;
-                
+        deleteConfirm =  'Are you sure you want to delete this comment?';       
         HTMLdata += "<div class='commentContainer commentItem clearfix' id='comment-" + commentId + "'>" +
 				            "<div class='avatarBox pull-left'>" +
 					            "<a commentor='"+ commentorFullname + "' class='avatarMedium' data-placement='bottom' rel='tooltip' href='/portal/intranet/profile/" + commentorUsername + "' data-original-title='" + commentorFullname + "'>" +
@@ -583,11 +594,11 @@ void commentForm(Node post) {
 						            "<strong><a href='/portal/intranet/profile/" + commentorUsername +"'>" + commentorFullname + "</a></strong> " +
 						            "<div class='pull-right'>" +
                              createDate +
-							           " <a data-original-title='Edit this comment' class='actionIcon' href='javascript:void(0);' rel='tooltip' data-placement='bottom' title=''>" +
+							           " <a data-original-title='Edit this comment' class='actionIcon' href='javascript:void(0);' rel='tooltip' data-placement='bottom' title='' onclick='javascript:if(confirm(deleteConfirm))alert(1);'>" +
 							            "<i class='uiIconEdit uiIconLightGray'></i>" +
 							            "</a>" +
 					
-							            "<a data-original-title='Remove this comment' class='actionIcon' href='javascript:void(0);' rel='tooltip' data-placement='bottom' title=''>" +
+							            "<a data-original-title='Remove this comment' class='actionIcon' href='javascript:void(0);' rel='tooltip' data-placement='bottom' title='' onclick='javascript:if(confirm(deleteConfirm)) deleteComment_$uuid(" + commentId + ")'>" +
 								            "<i class='uiIconTrash uiIconLightGray'></i>" +
 							            "</a>" +
 							
