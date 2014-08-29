@@ -627,16 +627,19 @@ void commentForm(Node post) {
 					            "<div class='commentInfo'>" +
 						            "<strong><a href='/portal/intranet/profile/" + commentorUsername +"'>" + commentorFullname + "</a></strong> " +
 						            "<div class='pull-right'>" +
-                             createDate +
-							           " <a data-original-title='Edit this comment' class='actionIcon' href='javascript:void(0);' rel='tooltip' data-placement='bottom' title='' onclick='showUpdateCommentForm_$uuid(" + commentId +")'>" +
+                             createDate ;
+                         
+                        if(canDelete){
+						  HTMLdata += " <a data-original-title='Edit this comment' class='actionIcon' href='javascript:void(0);' rel='tooltip' data-placement='bottom' title='' onclick='showUpdateCommentForm_$uuid(" + commentId +")'>" +
 							            "<i class='uiIconEdit uiIconLightGray'></i>" +
 							            "</a>" +
 					
 							            "<a data-original-title='Remove this comment' class='actionIcon' href='javascript:void(0);' rel='tooltip' data-placement='bottom' title='' onclick='javascript:deleteComment_$uuid(" + commentId + ");return false;'>" +
 								            "<i class='uiIconTrash uiIconLightGray'></i>" +
-							            "</a>" +
+							            "</a>";
+                         }
 							
-						            "</div>" +
+						  HTMLdata +="</div>" +
 					            "</div>" +
 					            "<div class='commentContent' id='commentDetail_$uuid" + "_" + commentId + "'>" +
 						                commentDetail +
@@ -962,7 +965,4 @@ void commentForm(Node post) {
       <% commentForm(post) %>
   </div>
   <!--END Addon comment-->
-
-  
-
 
