@@ -22,6 +22,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -88,7 +89,46 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
     organizationIdentityProvider_ = (OrganizationIdentityProvider)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationIdentityProvider.class);
     userACL_= userACL;
   }
-  
+  @GET
+  @Path("/edit-comment")
+  @Produces("application/json")
+  public Response editComment(@Context SecurityContext sc,
+                              @Context UriInfo uriInfo, @QueryParam("jcrPath") String jcrPath, 
+                              @QueryParam("commentId") String commentId,
+                              @QueryParam("newComment") String newComment) throws Exception {
+    
+    
+    String viewUsername = getUserId(sc, uriInfo);
+    boolean viewerIsAdmin = checkInvokeUserPermission(viewUsername);
+    
+    if (jcrPath.contains("%20")) jcrPath = URLDecoder.decode(jcrPath, "UTF-8");
+    String[] path = jcrPath.split("/");
+    String repositoryName = path[1];
+    String workspaceName = path[2];
+    jcrPath = jcrPath.substring(repositoryName.length()+workspaceName.length()+2);
+    if (jcrPath.charAt(1)=='/') jcrPath.substring(1);
+    try {
+      Node content = getContent(workspaceName, jcrPath, null, false);
+
+      List<Node> comments = commentsService_.getComments(content, null);
+
+      for (Node comment:comments) {
+        String id = comment.getProperty("exo:name").getString();
+        String commentor = comment.getProperty("exo:commentor").getString();
+        
+        if(commentId.equals(id) && (commentor.equals(viewUsername) || viewerIsAdmin)){
+          commentsService_.updateComment(comment, newComment);
+          return Response.ok(true , MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+        }
+        
+      }
+
+    }catch (Exception e){
+        Response.serverError().build();
+    }
+    
+    return Response.ok(false , MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+  }
   
   @GET
   @Path("/delete-comment")
@@ -168,8 +208,9 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
           commentMessage.setCommentorFullname(comment.getProperty("exo:commentorFullName").getString());
         }*/
         
-        if (comment.hasProperty("exo:commentDate")) {
-          commentMessage.setCreateDate(DateFormat.getDateTimeInstance().format(comment.getProperty("exo:commentDate").getDate().getTime()));
+        if (comment.hasProperty("exo:dateCreated")) {
+          commentMessage.setCreateDate(DateFormat.getDateTimeInstance().format(comment.getProperty("exo:dateCreated").getDate().getTime()));
+          commentMessage.setCommentCreatedDate(comment.getProperty("exo:dateCreated").getDate().getTime());
         }
         Profile userProfile = getSocialProfile(commentMessage.getCommentorUsername());
         commentMessage.setCommentorAvataUrl(userProfile.getAvatarUrl());
@@ -182,6 +223,8 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
                
         listCommentMessages.add(commentMessage);
       }
+      Collections.sort(listCommentMessages);
+      
       DateFormat dateFormat = new SimpleDateFormat(IF_MODIFIED_SINCE_DATE_FORMAT);
       return Response.ok(listCommentMessages, MediaType.APPLICATION_JSON)
                      .header(LAST_MODIFIED_PROPERTY, dateFormat.format(new Date()))
@@ -288,16 +331,23 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
   }
   
   
-  public class CommentMessage{
+  public class CommentMessage implements Comparable<CommentMessage>{
     private String Id;
     private String commentorFullname;
     private String commentorUsername;
     private String commentorAvataUrl;
     private String commentDetail;
     private String createDate;
+    private  Date commentCreatedDate;
     private boolean canDelete;
 
     
+    public Date getCommentCreatedDate() {
+      return commentCreatedDate;
+    }
+    public void setCommentCreatedDate(Date commentCreatedDate) {
+      this.commentCreatedDate = commentCreatedDate;
+    }
     public boolean isCanDelete() {
       return canDelete;
     }
@@ -339,6 +389,10 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
     }
     public void setCreateDate(String createDate) {
       this.createDate = createDate;
+    }
+    @Override
+    public int compareTo(CommentMessage commentMessage) {
+      return this.commentCreatedDate.compareTo(commentMessage.getCommentCreatedDate());
     }
     
   }

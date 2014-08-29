@@ -554,25 +554,60 @@ void commentForm(Node post) {
       }
      });
   }
+
+  function showUpdateCommentForm_$uuid(commentId){
+    jQuery("#updateComment_$uuid" + "_" + commentId).show();
+    jQuery("#commentDetail_$uuid" + "_" + commentId).hide();
+  }
+  function hideUpdateCommentForm_$uuid(commentId){
+    //revert textbox change
+    jQuery("#txtUpdateComment_$uuid" + "_"  + commentId).val(jQuery("#txtUpdateComment_$uuid" + "_"  + commentId).data('default-value'));
+    jQuery("#updateComment_$uuid" + "_"  + commentId).hide();
+    jQuery("#commentDetail_$uuid" + "_"  + commentId).show();
+  }
+
   function deleteComment_$uuid(commentId){
+    deleteConfirm =  'Are you sure you want to delete this comment?'; 
+    if(!confirm(deleteConfirm)) return;
     var url = "/rest/private/addonservice/delete-comment?jcrPath=/repository/collaboration${post.path}&commentId=" + commentId ;
     jQuery.ajax({
       type: "GET",
       url: url,
       success: function( data ) {
         fillComment_$uuid();
-        jQuery('#message-$uuid').html('<div class="alert alert-success"><p>Your comment has been removed.</p></div>').fadeIn(2000).fadeOut(2000);
+        jQuery('#message-$uuid').html('<div class="alert alert-success"><p>Your comment has been removed.</p></div>').fadeIn(1500).fadeOut(1500);
         
       }
      });
+
+     return false;
   }
+
+  function updateComment_$uuid(commentId){
+    var newComment = jQuery("#txtUpdateComment_$uuid" + "_"  + commentId).val();
+    if(newComment.trim()=="") return;
+    
+    var url = "/rest/private/addonservice/edit-comment?jcrPath=/repository/collaboration${post.path}&commentId=" + commentId +"&newComment=" + newComment;
+    jQuery.ajax({
+      type: "GET",
+      url: url,
+      success: function( data ) {
+        fillComment_$uuid();
+        jQuery('#message-$uuid').html('<div class="alert alert-success"><p>Your comment has been updated.</p></div>').fadeIn(1500).fadeOut(1500);
+        
+      }
+     });
+
+     return false;
+  }
+
   function fillComment_$uuid(){
     var url = "/rest/addonservice/all-comment?jcrPath=/repository/collaboration${post.path}";
     jQuery.getJSON( url, function( data ) {
       jQuery("#comment-title-$uuid").html(data.length + "&nbsp Comment(s)");
       HTMLdata =  "";
 
-      for(i=0; i<data.length; i++){ 
+      for(i = (data.length-1); i>=0; i--){ 
 
         commentId = data[i].id; 
         canDelete = data[i].canDelete; 
@@ -580,8 +615,7 @@ void commentForm(Node post) {
         commentorUsername = data[i].commentorUsername; 
         commentorAvataUrl = data[i].commentorAvataUrl; 
         commentDetail = data[i].commentDetail; 
-        createDate = data[i].createDate;
-        deleteConfirm =  'Are you sure you want to delete this comment?';       
+        createDate = data[i].createDate;      
         HTMLdata += "<div class='commentContainer commentItem clearfix' id='comment-" + commentId + "'>" +
 				            "<div class='avatarBox pull-left'>" +
 					            "<a commentor='"+ commentorFullname + "' class='avatarMedium' data-placement='bottom' rel='tooltip' href='/portal/intranet/profile/" + commentorUsername + "' data-original-title='" + commentorFullname + "'>" +
@@ -594,19 +628,44 @@ void commentForm(Node post) {
 						            "<strong><a href='/portal/intranet/profile/" + commentorUsername +"'>" + commentorFullname + "</a></strong> " +
 						            "<div class='pull-right'>" +
                              createDate +
-							           " <a data-original-title='Edit this comment' class='actionIcon' href='javascript:void(0);' rel='tooltip' data-placement='bottom' title='' onclick='javascript:if(confirm(deleteConfirm))alert(1);'>" +
+							           " <a data-original-title='Edit this comment' class='actionIcon' href='javascript:void(0);' rel='tooltip' data-placement='bottom' title='' onclick='showUpdateCommentForm_$uuid(" + commentId +")'>" +
 							            "<i class='uiIconEdit uiIconLightGray'></i>" +
 							            "</a>" +
 					
-							            "<a data-original-title='Remove this comment' class='actionIcon' href='javascript:void(0);' rel='tooltip' data-placement='bottom' title='' onclick='javascript:if(confirm(deleteConfirm)) deleteComment_$uuid(" + commentId + ")'>" +
+							            "<a data-original-title='Remove this comment' class='actionIcon' href='javascript:void(0);' rel='tooltip' data-placement='bottom' title='' onclick='javascript:deleteComment_$uuid(" + commentId + ");return false;'>" +
 								            "<i class='uiIconTrash uiIconLightGray'></i>" +
 							            "</a>" +
 							
 						            "</div>" +
 					            "</div>" +
-					            "<div class='commentContent'>" +
+					            "<div class='commentContent' id='commentDetail_$uuid" + "_" + commentId + "'>" +
 						                commentDetail +
 					            "</div>" +
+
+                      "<!--BEGIN update form--> " + 
+                      "<div style='display:none' class='commentItem commentFormBox' id='updateComment_$uuid" + "_" + commentId +"'>" +           
+							          "<div class='commentRight'> " + 
+								          "<div class='commentInputBox '> " + 
+									          "<form class='form-inline'> " + 
+										          "<div class='pull-right comment-submit'> " + 
+											          "<input type='button' value='Update' class='btn btn-primary' rel='tooltip' data-placement='bottom' data-original-title='Update Comment'onclick='javascript:updateComment_$uuid(" + commentId + ")'> &nbsp" + 
+                                "<input type='button' value='Cancel' class='btn' rel='tooltip' data-placement='bottom' data-original-title='Cancel' onclick='javascrip:hideUpdateCommentForm_$uuid(" + commentId +")'> " + 
+												
+										          "</div> " + 
+
+										          "<div class='input-area'> " + 
+											
+												          "<input id= 'txtUpdateComment_$uuid" + "_" + commentId + "' type='text' tabindex='0' style=' resize: none; max-height: 50px; height: 50px;' placeholder='Your Comment Here…' value='" + commentDetail + "' data-default-value='" + commentDetail + "'>" + 
+											
+										          "</div> " + 
+										
+									          "</form> " + 
+								          "</div> " + 
+							          "</div><!--end commentRight--> " + 
+						          "</div><!--commentFormBox-->" +
+						        "<!--End update form--> " + 
+
+              
 				            "</div>" +
 		            "</div>";
 
@@ -905,4 +964,5 @@ void commentForm(Node post) {
   <!--END Addon comment-->
 
   
+
 
