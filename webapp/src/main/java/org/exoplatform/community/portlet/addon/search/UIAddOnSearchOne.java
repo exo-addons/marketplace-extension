@@ -19,27 +19,22 @@
 package org.exoplatform.community.portlet.addon.search;
 
 import javax.jcr.Node;
-
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
-
 
 import org.exoplatform.addon.service.AddOnService;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
-
+import org.exoplatform.services.wcm.friendly.FriendlyService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
-
 import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.navigation.NodeURL;
-
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
-
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
@@ -121,8 +116,11 @@ public class UIAddOnSearchOne extends UIContainer {
 		
 		nodeURL.setQueryParameterValue(detailParameterName, path.toString());
 		nodeURL.setSchemeUse(true);
-		return nodeURL.toString();
-	  }
+		FriendlyService friendlyService = getApplicationComponent(FriendlyService.class);
+		String link = friendlyService.getFriendlyUri(nodeURL.toString());
+		
+		return link;
+	}
 
 	public static class EditActionListener extends EventListener<UIAddOnSearchOne> {
 
