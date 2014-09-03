@@ -215,7 +215,7 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
         Profile userProfile = getSocialProfile(commentMessage.getCommentorUsername());
         commentMessage.setCommentorAvataUrl(userProfile.getAvatarUrl());
         commentMessage.setCommentorFullname(userProfile.getFullName(true));
-        if(viewUsername.equals(commentMessage.getCommentorUsername()) || viewerIsAdmin){
+        if(null!=viewUsername && (viewUsername.equals(commentMessage.getCommentorUsername()) || viewerIsAdmin)){
           commentMessage.setCanDelete(true);
         }else{
           commentMessage.setCanDelete(false);
