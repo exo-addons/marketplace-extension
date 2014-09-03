@@ -42,6 +42,7 @@
 			   <img>Image</img>
 			   <hosted>I wish my add-on to be hosted on the eXo Add-on repository on Github</hosted>
 			   <addNew>Add New Add-on</addNew>
+			   <backToList>Back To Add-ons</backToList>
 			   <myAddOn>My Add-ons</myAddOn>
 			</UIExtensionForm>
 	    <msg>

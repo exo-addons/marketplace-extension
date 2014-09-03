@@ -28,7 +28,9 @@ import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 import javax.jcr.Node;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -89,13 +91,14 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
     organizationIdentityProvider_ = (OrganizationIdentityProvider)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationIdentityProvider.class);
     userACL_= userACL;
   }
-  @GET
+  @POST
   @Path("/edit-comment")
   @Produces("application/json")
   public Response editComment(@Context SecurityContext sc,
-                              @Context UriInfo uriInfo, @QueryParam("jcrPath") String jcrPath, 
-                              @QueryParam("commentId") String commentId,
-                              @QueryParam("newComment") String newComment) throws Exception {
+                              @Context UriInfo uriInfo,
+                              @FormParam("jcrPath") String jcrPath, 
+                              @FormParam("commentId") String commentId,
+                              @FormParam("newComment") String newComment) throws Exception {
     
     
     String viewUsername = getUserId(sc, uriInfo);

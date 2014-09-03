@@ -4,6 +4,7 @@
  import org.exoplatform.webui.form.input.UIUploadInput;
 %>
 <%
+ def viewer = _ctx.getRequestContext().getRemoteUser();
  def rcontext = _ctx.getRequestContext() ;
  def jsManager = rcontext.getJavascriptManager();
  jsManager.require("SHARED/portalControl", "portalControl");
@@ -27,9 +28,11 @@
    <%   } // end if
     } // end for
    %>
+    <%if(null!=viewer){%>
 		<button type="button" onclick="location.href='/portal/intranet/create-addon'" class="btn btn-primary pull-right"><%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.addNew')%></button>
+		<%}%>
 		<% if(uicomponent.getBtnBackToAddonsVisible()){ %>
-   		<button type="button" onclick="<%=uicomponent.event("Sort","az")%>" class="btn btn-primary pull-right">Back To Add-ons</button>   
+   		<button type="button" onclick="<%=uicomponent.event("Sort","az")%>" class="btn btn-primary pull-right"><%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.backToList')%></button>   
 		<% } %>   
    <% for(action in uicomponent.getActions()) {
     String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);

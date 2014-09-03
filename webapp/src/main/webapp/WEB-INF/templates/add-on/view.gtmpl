@@ -562,11 +562,12 @@ void commentForm(Node post) {
 
   function showUpdateCommentForm_$uuid(commentId){
     jQuery("#updateComment_$uuid" + "_" + commentId).show();
+    jQuery("#txtUpdateComment_$uuid" + "_"  + commentId).val(jQuery("#commentDetail_$uuid" + "_"  + commentId).html());
     jQuery("#commentDetail_$uuid" + "_" + commentId).hide();
   }
   function hideUpdateCommentForm_$uuid(commentId){
     //revert textbox change
-    jQuery("#txtUpdateComment_$uuid" + "_"  + commentId).val(jQuery("#txtUpdateComment_$uuid" + "_"  + commentId).data('default-value'));
+    jQuery("#txtUpdateComment_$uuid" + "_"  + commentId).val(jQuery("#commentDetail_$uuid" + "_"  + commentId).html());
     jQuery("#updateComment_$uuid" + "_"  + commentId).hide();
     jQuery("#commentDetail_$uuid" + "_"  + commentId).show();
   }
@@ -592,10 +593,12 @@ void commentForm(Node post) {
     var newComment = jQuery("#txtUpdateComment_$uuid" + "_"  + commentId).val();
     if(newComment.trim()=="") return;
     
-    var url = "/rest/private/addonservice/edit-comment?jcrPath=/repository/collaboration${post.path}&commentId=" + commentId +"&newComment=" + newComment;
+    var url = "/rest/private/addonservice/edit-comment";
+    var jcrPath="/repository/collaboration${post.path}";
     jQuery.ajax({
-      type: "GET",
+      type: "POST",
       url: url,
+      data: { jcrPath:jcrPath, commentId:commentId, newComment:newComment },
       success: function( data ) {
         fillComment_$uuid();
         jQuery('#message-$uuid').html('<div class="alert alert-success"><p>The comment has been updated.</p></div>').fadeIn(1500).fadeOut(1500);
@@ -699,7 +702,9 @@ void commentForm(Node post) {
   <div class="uiGrayLightBox">
     <div class="clearfix">
       <button class="btn btn-primary pull-left" onclick="location.href='/portal/intranet/add-ons'" type="button">Back to Add-ons</button>
+     <%if(null!=viewer){%>
       <button class="btn btn-primary pull-right" onclick="location.href='/portal/login?initialURI=/portal/intranet/create-addon'" type="button">Add New Add-on</button>
+     <%}%>
     </div>
   </div>
 </div>
