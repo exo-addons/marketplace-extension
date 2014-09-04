@@ -28,6 +28,7 @@ import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -83,6 +84,7 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
   OrganizationIdentityProvider organizationIdentityProvider_;
   OrganizationService organizationService_;
   UserACL userACL_;
+  AddOnService addOnService_;
   
   public AddOnRestService(UserACL userACL){
     organizationService_ = (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
@@ -90,6 +92,37 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
     identityManager_ = (IdentityManager)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(IdentityManager.class);
     organizationIdentityProvider_ = (OrganizationIdentityProvider)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationIdentityProvider.class);
     userACL_= userACL;
+    addOnService_ = (AddOnService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(AddOnService.class);
+  }
+  
+  
+  @GET
+  @Path("/migrate")
+  @Produces("application/json")
+  @RolesAllowed({"administrators"})
+  public Response migrate(@Context SecurityContext sc,
+                          @Context UriInfo uriInfo){
+    try {
+      Node homeNode =AddOnService.getNode("/sites/intranet/web contents/Contributions");
+      NodeIterator iterator= homeNode.getNodes();
+      while (iterator.hasNext()) {
+        try {
+          Node node = iterator.nextNode();
+          LOG.info("Start migrate node: " + node.getPath()) ;
+          //add mixin to allow comment and vote
+          node.addMixin(AddOnService.MIX_COMMENTABLE_NODE_TYPE);
+          node.addMixin(AddOnService.MIX_VOTEABLE_NODE_TYPE);
+          node.save();
+        } catch (Exception e) {
+          LOG.warn(e);
+        }
+      }
+      
+      return Response.ok("Migrate successfully" , MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
+    return Response.ok("Migrate failured" , MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
   @POST
   @Path("/edit-comment")
