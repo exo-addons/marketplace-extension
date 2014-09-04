@@ -920,7 +920,7 @@ void commentForm(Node post) {
 							<p>
                     
                     <% if(authorUserName!=null){%>
-                          <a class="avatarLargeAddon" href="/portal/intranet/profile/$authorUserName" rel="author" data-placement="bottom" data-original-title="$author">
+                          <a class="avatarMedium" href="/portal/intranet/profile/$authorUserName" rel="author" data-placement="bottom" data-original-title="$author">
                               <img alt="$author" src="$avatarUrl">
                           </a>
                           <strong><a href="/portal/intranet/profile/$authorUserName">$author</a> </strong>
