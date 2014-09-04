@@ -127,6 +127,7 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
   @POST
   @Path("/edit-comment")
   @Produces("application/json")
+  @RolesAllowed("users")
   public Response editComment(@Context SecurityContext sc,
                               @Context UriInfo uriInfo,
                               @FormParam("jcrPath") String jcrPath, 
@@ -169,6 +170,7 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
   @GET
   @Path("/delete-comment")
   @Produces("application/json")
+  @RolesAllowed("users")
   public Response deleteComment(@Context SecurityContext sc,
                               @Context UriInfo uriInfo, @QueryParam("jcrPath") String jcrPath, 
                               @QueryParam("commentId") String commentId) throws Exception {
