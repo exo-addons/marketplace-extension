@@ -300,6 +300,19 @@ font-size: 14px;
     word-wrap: break-word;
 }
 
+
+.uiVote .avgRatingImages {
+    float: left;
+    margin-top: 5px;
+}
+
+.uiVote .voteRatingInfo {
+    float: left;
+    line-height: 16px;
+    margin-right: 15px;
+    margin-top: 5px;
+}
+
 /*START style for comment*/
     .commentList {
     padding: 15px 15px 0 15px;
