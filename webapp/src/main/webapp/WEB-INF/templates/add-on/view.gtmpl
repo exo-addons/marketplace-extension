@@ -508,8 +508,9 @@ void commentForm(Node post) {
         totalVote = jQuery(data).find("total").text();
         voteData = "Avg. Rating: <span>" + rate + "</span> &nbsp" +
                    "Votes: <span>" + totalVote + "</span>";
+        jQuery("#voteDetail-$uuid").show();
         jQuery("#voteSummary-$uuid").html(voteData);
-        
+
         //render voteStars
         rateInt = parseInt(rate + "");
         rateFloat = parseFloat(rate);
@@ -883,23 +884,22 @@ void commentForm(Node post) {
 							<% } %>
 						</div>
           <!-- Begin vote-->
-            <div class="uiVote clearfix" id="voteDetail">
+            <div class="uiVote clearfix" id="voteDetail-$uuid" style="display:none">
 	            <div class="voteRatingInfo" id= "voteSummary-$uuid">
 			            Avg. Rating: <span>0.0</span>
 			            Votes: <span>0</span>
 	            </div>
 	            <div class="avgRatingImages clearfix" id="voteStarList-$uuid">
 		
-					            <i class="voted"></i>
+					            <i class="unvoted"></i>
 			
-					            <i class="voted"></i>
+					            <i class="unvoted"></i>
 			
-					            <i class="voted"></i>
-			
-				            <i class="unvoted"></i>
+					            <i class="unvoted"></i>
 			
 				            <i class="unvoted"></i>
 			
+				            <i class="unvoted"></i>
 	            </div>
             </div>
             <div id='VoteMessage-$uuid' style="display:none"></div>
