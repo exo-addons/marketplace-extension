@@ -2,30 +2,30 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>add-on-center</artifactId>
-    <groupId>org.exoplatform.addons.marketplace-extension</groupId>
+    <artifactId>marketplace-extension</artifactId>
+    <groupId>org.exoplatform.addons.marketplace</groupId>
     <version>1.0.x-SNAPSHOT</version>
   </parent>
-  <artifactId>add-on-center-bundle</artifactId>
+  <artifactId>marketplace-extension-bundle</artifactId>
   <packaging>jar</packaging>
   <name>Add-on Center - Bundle</name>
   <description>Add-on Center - Bundle</description>
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>add-on-center-config</artifactId>
+      <artifactId>marketplace-extension-config</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>add-on-center-lib</artifactId>
+      <artifactId>marketplace-extension-lib</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>add-on-center-webapp</artifactId>
+      <artifactId>marketplace-extension-webapp</artifactId>
       <version>${project.version}</version>
       <type>war</type>
       <scope>provided</scope>

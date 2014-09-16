@@ -2,16 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>add-on-center</artifactId>
-    <groupId>org.exoplatform.addons.marketplace-extension</groupId>
+    <artifactId>marketplace-extension</artifactId>
+    <groupId>org.exoplatform.addons.marketplace</groupId>
     <version>1.0.x-SNAPSHOT</version>
   </parent>
-  <artifactId>add-on-center-webapp</artifactId>
+  <artifactId>marketplace-extension-webapp</artifactId>
   <packaging>war</packaging>
   <name>Add-on center - Webapp</name>
   <description>Add-on center - A portlet or any webapp</description>
   <build>
-    <finalName>add-on-center-webapp</finalName>
+    <finalName>marketplace-extension-webapp</finalName>
   </build>
   <dependencies>
     <dependency>
@@ -31,7 +31,7 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>add-on-center-lib</artifactId>
+      <artifactId>marketplace-extension-lib</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
