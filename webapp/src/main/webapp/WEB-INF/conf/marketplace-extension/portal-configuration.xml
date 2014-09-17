@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-
 <configuration
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.exoplatform.org/xml/ns/kernel_1_2.xsd http://www.exoplatform.org/xml/ns/kernel_1_2.xsd"
@@ -32,7 +31,7 @@
               <string>portal</string>
             </field>
             <field name="templateLocation">
-              <string>war:/conf/addon/</string>
+              <string>war:/conf/marketplace-extension/</string>
             </field>
             <field name="importMode"><string>insert</string></field>
           </object>

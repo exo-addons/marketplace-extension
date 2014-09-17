@@ -42,7 +42,7 @@
     <portlet-info>
       <title>AddOn Portlet</title>
       <short-title>AddOn Portlet</short-title>  
-      <keywords>marketplace Add-ons add</keywords>
+      <keywords>marketplace-extension-webapp</keywords>
     </portlet-info>
     <portlet-preferences>
             <preference>
@@ -99,7 +99,7 @@
     <portlet-info>
       <title>Add-ons Search Portlet</title>
       <short-title>Add-ons search portlet</short-title>
-      <keywords>marketplace Add-ons search</keywords> 
+      <keywords>marketplace-extension-webapp</keywords> 
     </portlet-info>
     <portlet-preferences>
       <preference>
