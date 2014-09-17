@@ -8,8 +8,8 @@
   </parent>
   <artifactId>marketplace-extension-bundle</artifactId>
   <packaging>jar</packaging>
-  <name>Add-on Center - Bundle</name>
-  <description>Add-on Center - Bundle</description>
+  <name>Marketplace-extension - Bundle</name>
+  <description>Marketplace-extension - Bundle</description>
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>

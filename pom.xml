@@ -12,8 +12,8 @@
   <artifactId>marketplace-extension</artifactId>
   <version>1.0.x-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>Add-on center</name>
-  <description>Add-on center to manage add-on</description>
+  <name>Marketplace extension</name>
+  <description>Marketplace extension to manage add-on</description>
   <modules>
     <module>lib</module>
     <module>config</module>

@@ -8,8 +8,8 @@
   </parent>
   <artifactId>marketplace-extension-lib</artifactId>
   <packaging>jar</packaging>
-  <name>Add-on Center - Library</name>
-  <description>Add-on Center - Extension Library providing all services</description>
+  <name>Marketplace-extension - Library</name>
+  <description>Marketplace-extension - Extension Library providing all services</description>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

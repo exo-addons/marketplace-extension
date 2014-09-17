@@ -8,7 +8,7 @@
   </parent>
   <artifactId>marketplace-extension-webapp</artifactId>
   <packaging>war</packaging>
-  <name>Add-on center - Webapp</name>
+  <name>Marketplace-extension - Webapp</name>
   <description>Add-on center - A portlet or any webapp</description>
   <build>
     <finalName>marketplace-extension-webapp</finalName>

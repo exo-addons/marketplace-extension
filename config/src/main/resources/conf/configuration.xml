@@ -28,7 +28,7 @@
 						      <string>acme-intranet</string>
 						    </value>
               	<value>
-                 	<string>add-on-center-webapp</string>
+                 	<string>marketplace-extension-webapp</string>
               	</value>							
 							</collection>
 						</field>					

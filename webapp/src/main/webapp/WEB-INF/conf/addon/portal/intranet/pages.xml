@@ -7,13 +7,13 @@
 
     <page>
       <name>search-addon</name>
-      <title>Add-on Center</title>
+      <title>Market Place</title>
       <access-permissions>*:/platform/users</access-permissions>
       <edit-permission>*:/platform/administrators</edit-permission>
       <show-max-window>false</show-max-window>
       <portlet-application>
          <portlet>
-            <application-ref>add-on-center-webapp</application-ref>
+            <application-ref>marketplace-extension-webapp</application-ref>
             <portlet-ref>AddonSearchPortlet</portlet-ref>
          </portlet>
          <access-permissions>Everyone</access-permissions>
@@ -29,7 +29,7 @@
       <show-max-window>false</show-max-window>
       <portlet-application>
          <portlet>
-            <application-ref>add-on-center-webapp</application-ref>
+            <application-ref>marketplace-extension-webapp</application-ref>
             <portlet-ref>AddOnPortlet</portlet-ref>
          </portlet>
          <access-permissions>Everyone</access-permissions>

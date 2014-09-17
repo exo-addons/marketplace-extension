@@ -11,10 +11,10 @@
 			<useProjectArtifact>false</useProjectArtifact>
 			<outputDirectory>/</outputDirectory>
 			<includes>
-				<include>${project.groupId}:add-on-center-webapp:war</include>
+				<include>${project.groupId}:marketplace-extension-webapp:war</include>
 			</includes>
 			<scope>provided</scope>
-			<outputFileNameMapping>add-on-center-webapp.war</outputFileNameMapping>
+			<outputFileNameMapping>marketplace-extension-webapp.war</outputFileNameMapping>
 		</dependencySet>
 		<!-- Libraries -->
 		<dependencySet>

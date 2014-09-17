@@ -24,7 +24,7 @@
     xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
 
   <portlet-skin>
-    <application-name>add-on-center-webapp</application-name>
+    <application-name>marketplace-extension-webapp</application-name>
     <portlet-name>AddOnPortlet</portlet-name>
     <skin-name>Default</skin-name>
     <css-path>/skin/css/add-ons.css</css-path>
@@ -32,7 +32,7 @@
   </portlet-skin>
 
   <portlet-skin>
-    <application-name>add-on-center-webapp</application-name>
+    <application-name>marketplace-extension-webapp</application-name>
     <portlet-name>AddonSearchPortlet</portlet-name>
     <skin-name>Default</skin-name>
     <css-path>/skin/css/add-ons.css</css-path>

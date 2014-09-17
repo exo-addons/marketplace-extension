@@ -9,6 +9,6 @@
   </parent>
   <artifactId>marketplace-extension-config</artifactId>
   <packaging>jar</packaging>
-  <name>Add-on Center - Config</name>
-  <description>Add-on Center - Extension Configuration JAR</description>
+  <name>Marketplace-extension - Config</name>
+  <description>Marketplace-extension - Extension Configuration JAR</description>
 </project>
