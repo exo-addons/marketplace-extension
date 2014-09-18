@@ -62,7 +62,7 @@
 
 	public String getImageCover(Node currentNode) {
 	
-	String path ="/add-on-center-webapp/skin/css/images/addons-icon.jpg";
+	String path ="/marketplace-extension-webapp/skin/css/images/addons-icon.jpg";
 	Node mediaNode = currentNode.getNode("medias/images");
 	NodeIterator iterator = mediaNode.getNodes();
 	
@@ -449,10 +449,10 @@ void commentForm(Node post) {
 
 
 <script type="text/javascript" src="/eXoResources/javascript/jquery-1.7.1.js"></script>
-<link href="/add-on-center-webapp/skin/css/jquery.fancybox-1.3.4.css" rel="stylesheet">
-<script src="/add-on-center-webapp/javascript/exo/add-on/jquery.fancybox-1.3.4.pack.js">
+<link href="/marketplace-extension-webapp/skin/css/jquery.fancybox-1.3.4.css" rel="stylesheet">
+<script src="/marketplace-extension-webapp/javascript/exo/add-on/jquery.fancybox-1.3.4.pack.js">
 </script>
-<link href="/add-on-center-webapp/skin/css/add-ons.css" rel="stylesheet">
+<link href="/marketplace-extension-webapp/skin/css/add-ons.css" rel="stylesheet">
 
 
 <script type="text/javascript">
