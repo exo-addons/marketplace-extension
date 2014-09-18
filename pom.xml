@@ -10,7 +10,7 @@
   </parent>
   <groupId>org.exoplatform.addons.marketplace</groupId>
   <artifactId>marketplace-extension</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.x-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Marketplace extension</name>
   <description>Marketplace extension to manage add-on</description>
