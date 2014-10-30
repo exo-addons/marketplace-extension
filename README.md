@@ -21,10 +21,10 @@ Simply build it with :
 Deploy to eXo
 ---------------
 After build with this add-on:
-* Copy file marketplace-extension/webapp/target/add-on-center-webapp.war into Platform-Tomcat/webapps
-* Copy file marketplace-extension/lib/target/add-on-center-lib-1.0.x-SNAPSHOT.jar and marketplace-extension/config/target/add-on-center-config-1.0.x-SNAPSHOT.jar into Platform-Tomcat/lib
+* Copy file marketplace-extension/webapp/target/marketplace-extension-webapp.war into Platform-Tomcat/webapps
+* Copy file marketplace-extension/lib/target/marketplace-extension-lib-1.0.x-SNAPSHOT.jar and marketplace-extension/config/target/marketplace-extension-config-1.0.x-SNAPSHOT.jar into Platform-Tomcat/lib
 * Start tomcat.
-* Note: three files above are also available in marketplace-extension/bundle/target/add-on-center-bundle-1.0.x-SNAPSHOT.zip
+* Note: three files above are also available in marketplace-extension/bundle/target/marketplace-extension-bundle-1.0.x-SNAPSHOT.zip
 
 Configuration
 ---------------
