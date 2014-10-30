@@ -1,7 +1,7 @@
 marketplace-extension
 =====================
 
-eXo Market Place extension helps you to manage your own catalog of Apps or Add-ons, as a real Market Place, on top of eXo Platform.
+eXo Market Place extension helps you to manage your own catalog of Apps or Add-ons, as a real Market Place, on top of eXo Platform.<br>
 Compatibility: From eXo Platform 4.1
 
 * Market place home: list all add-ons, allow search, filter and sort
