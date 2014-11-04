@@ -307,7 +307,7 @@ public class AddOnService {
 		Node htmlNode = currentNode.addNode("default.html", "nt:file");
 		htmlNode.addMixin("exo:htmlFile");
 		Node contentNode = htmlNode.addNode("jcr:content", "nt:resource");
-		contentNode.setProperty("jcr:data","");
+		contentNode.setProperty("jcr:data","default.html");
 		contentNode.setProperty("jcr:mimeType", "text/html");
 		contentNode.setProperty("jcr:encoding", "UTF-8");
 		contentNode.setProperty("jcr:lastModified", new Date().getTime());
