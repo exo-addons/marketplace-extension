@@ -231,7 +231,7 @@
 	//sessionProvider.close();
 	}
 	}
-	
+	/*Comment out to avoid add comment in Activity: ORG-1017
 	public String preProcesor(Node currentNode) {
 	String input = currentNode.getNode("default.html/jcr:content").getProperty("jcr:data").getString();
 	try {
@@ -250,7 +250,7 @@
 	return input;
 	}
 	}
-	
+	*/
 	public String encode(String input) {
 	int startPre =input.indexOf("<pre");
 	if (startPre > 0) {
@@ -713,7 +713,8 @@ void commentForm(Node post) {
 
 
 <%
-	def html = preProcesor(currentNode);
+  //Comment out to avoid add comment in Activity: ORG-1017
+	//def html = preProcesor(currentNode);
 	def img = getImageCover(currentNode);
 	def pluginTitle = getTitle(currentNode);
 	

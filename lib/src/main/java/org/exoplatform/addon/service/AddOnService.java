@@ -304,6 +304,7 @@ public class AddOnService {
 		Node currentNode = homeNode.getNode(currentNodeName);
 	
 		/** store the default.htl file*/
+/*  Comment out to avoid add comment in Activity: ORG-1017
 		Node htmlNode = currentNode.addNode("default.html", "nt:file");
 		htmlNode.addMixin("exo:htmlFile");
 		Node contentNode = htmlNode.addNode("jcr:content", "nt:resource");
@@ -311,6 +312,7 @@ public class AddOnService {
 		contentNode.setProperty("jcr:mimeType", "text/html");
 		contentNode.setProperty("jcr:encoding", "UTF-8");
 		contentNode.setProperty("jcr:lastModified", new Date().getTime());
+*/
 		
 		/**store the css default file*/
 		Node cssNode = currentNode.addNode("css/default.css" , "nt:file");
