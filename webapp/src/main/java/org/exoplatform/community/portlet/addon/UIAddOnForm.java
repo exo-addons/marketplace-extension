@@ -130,6 +130,8 @@ public class UIAddOnForm extends UIForm {
       String downloadUrl = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_DOWNLOAD_URL)
                                         .getValue();
       mapProperties.put("exo:" + UIAddOnWizard.ADDON_DOWNLOAD_URL, downloadUrl);
+      
+      mapProperties.put("exo:text", description);
 
       UICheckBoxInput hostedCb = (UICheckBoxInput) uiAddOnWizard.getUICheckBoxInput(UIAddOnWizard.ADDON_HOSTED);
       Boolean hosted = hostedCb.isChecked();
@@ -140,6 +142,9 @@ public class UIAddOnForm extends UIForm {
         uiApp.addMessage(new ApplicationMessage("UIAddOnPortlet.msg.invalid",
                                                 null,
                                                 ApplicationMessage.WARNING));
+        if(description == null){
+          ((UIFormRichtextInput) uiAddOnWizard.getChildById(UIAddOnWizard.ADDON_DESCRIPTION)).setValue("");
+        }
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddOnForm);
         return;
       }
@@ -245,6 +250,7 @@ public class UIAddOnForm extends UIForm {
 
         }
         uiAddOnWizard.reset();
+        ((UIFormRichtextInput) uiAddOnWizard.getChildById(UIAddOnWizard.ADDON_DESCRIPTION)).setValue("");
         if (author != null)
           uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_AUTHOR).setValue(author);
         uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_EMAIL).setValue(email);
