@@ -59,10 +59,18 @@
 				<here>here</here>
 				<submit>to submit your Add-On</submit>
 				<notestep2>Note: The first image uploaded will be used as the add-on introduction image. </notestep2>
+				<sort-popular>Popular</sort-popular>
+				<sort-latest>Lastest</sort-latest>
+				<sort-az>A -> Z</sort-az>
+				<sort-za>Z -> A</sort-za>
 			</label>
 			<tab>
 			    <step1>Step 1: Your Add-on Details</step1>
 			    <step2>Step 2: Your Add-on Gallery</step2>
 			</tab>
+			<action>
+				<Search>Search</Search>
+				<Sort>Sort</Sort>
+			</action>
 </UIAddOnSearchPortlet>
 </bundle>

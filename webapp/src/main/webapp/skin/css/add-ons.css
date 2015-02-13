@@ -29,6 +29,10 @@
 .addonSearchToolbar .btn-primary {
   margin-left: 0px;
 }
+.addonSearchToolbar .sortBy {
+	margin-right: 10px;
+	width: 85px;
+}
 /* Admin List Addon */
 .listAddonCenter {
   margin: 0 60px 20px;

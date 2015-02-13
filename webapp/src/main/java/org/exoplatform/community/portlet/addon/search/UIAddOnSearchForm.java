@@ -136,18 +136,28 @@ public class UIAddOnSearchForm extends UIForm {
 			UIAddOnSearchResult uiAddOnSearchResult = uiAddonsSearchPageContainer.getChildById(UIAddOnSearchPageLayout.SEARCH_RESULT);			
 
 			if(strSortOrder.equals("myaddons")){
-				
-				UIAddOnSearchForm.filterSelected="myaddons";	
-				uiAddOnSearchResult.showMyAddons();
+				if(UIAddOnSearchForm.filterSelected.equals("myaddons")){
+				  uiAddOnSearchResult.SortAddons("popular");
+	        UIAddOnSearchForm.filterSelected="popular";
+				}else{
+  				UIAddOnSearchForm.filterSelected="myaddons";	
+  				uiAddOnSearchResult.showMyAddons();
+				}
 					
 			}else if(strSortOrder.equals("za")){
 				uiAddOnSearchResult.SortAddons("za");
 				UIAddOnSearchForm.filterSelected="za";					
-			}
-			else{
+			}else if(strSortOrder.equals("az")){
         uiAddOnSearchResult.SortAddons("az");
 				UIAddOnSearchForm.filterSelected="az";				
-			}
+			}else if(strSortOrder.equals("latest")){
+        uiAddOnSearchResult.SortAddons("latest");
+        UIAddOnSearchForm.filterSelected="latest";        
+      }else{
+        //Sort by vote
+        uiAddOnSearchResult.SortAddons("popular");
+        UIAddOnSearchForm.filterSelected="popular";     
+      }
 			uiAddonsSearchPageContainer.manageView(UIAddOnSearchPageLayout.SEARCH_RESULT);	
 			portletRequestContext.addUIComponentToUpdateByAjax(uiAddonsSearchPageContainer);	
 			

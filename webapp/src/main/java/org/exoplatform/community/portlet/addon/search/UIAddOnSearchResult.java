@@ -210,9 +210,16 @@ public class UIAddOnSearchResult extends UIContainer {
         
         this.setSQLOrder(" ORDER BY exo:title DESC ");
       }
-      else{
+      else if(sort.equals("az")){
         this.setSQLOrder(" ORDER BY exo:title ASC ");
-      }      
+      }else if(sort.equals("latest")){
+        //Oder by latest created
+        this.setSQLOrder(" ORDER BY exo:dateCreated DESC ");
+      }
+      else{
+        //
+        this.setSQLOrder(" ORDER BY exo:votingRate DESC ");
+      }
       this.doSearch();
     } catch (RepositoryException e) {
       log.error("ERR show my addons");

@@ -33,7 +33,16 @@
 		<%}%>
 		<% if(uicomponent.getBtnBackToAddonsVisible()){ %>
    		<button type="button" onclick="<%=uicomponent.event("Sort","az")%>" class="btn btn-primary pull-right"><%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.backToList')%></button>   
-		<% } %>   
+		<% } %>
+
+  <select name="sortby" class="sortBy pull-right" id="SortAddon">
+		<option value="popular" selected="selected" ><%=_ctx.appRes('UIAddOnSearchPortlet.label.sort-popular')%></option>
+		<option value="az"><%=_ctx.appRes('UIAddOnSearchPortlet.label.sort-az')%></option>
+		<option value="za"><%=_ctx.appRes('UIAddOnSearchPortlet.label.sort-za')%></option>
+		<option value="latest"><%=_ctx.appRes('UIAddOnSearchPortlet.label.sort-latest')%></option>
+	</select>
+
+ 
    <% for(action in uicomponent.getActions()) {
     String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
     if (!actionLabel.equals("Sort") && !actionLabel.equals("Remove")){ 
@@ -49,15 +58,37 @@
    <% if(uicomponent.isMyAddonsVisible()){ %>
    <a class="<%= uicomponent.getStyleFilterSelected("myaddons")%>" href="<%=uicomponent.event("Sort","myaddons")%>"><%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.myAddOn')%></a>
    <% } %>	
+<!--
    <a class="<%= uicomponent.getStyleFilterSelected("az")%>" href="<%=uicomponent.event("Sort","az")%>"> A <i class="uiIconMiniArrowRight uiIconLightGray"></i> Z</a>
    <a class="<%= uicomponent.getStyleFilterSelected("za")%>" href="<%=uicomponent.event("Sort","za")%>"> Z  <i class="uiIconMiniArrowRight uiIconLightGray"></i> A</a>
+-->
    
   </div>
  </div> 
 </div>
 <script>
-jQuery('document').ready(function(){
 
+function setSelectValueOfSortAddon(){
+  jQuery('#SortAddon').val("<%=uicomponent.filterSelected%>");
+}
+
+jQuery('#SortAddon').change(function() {
+    var val = jQuery("#SortAddon option:selected").val();
+    var url ="#";
+    if(val=="az"){
+       url="<%=uicomponent.event("Sort","az")%>";
+    }else if(val=="za"){
+       url="<%=uicomponent.event("Sort","za")%>" ;
+    }else if(val=="latest"){
+       url="<%=uicomponent.event("Sort","latest")%>" ;
+    }else{
+        url="<%=uicomponent.event("Sort","popular")%>" ;
+    }
+    eval(url);
+});
+
+jQuery('document').ready(function(){
+  
     jQuery('#keywordInput').keypress(function(e){
         if(e.which == 13){//Enter key pressed
             jQuery('#btnDoSearch').click();//Trigger search button click event
@@ -66,6 +97,9 @@ jQuery('document').ready(function(){
 
 
     });
+
+    //set sellected value of SortAddon
+    setSelectValueOfSortAddon();
 
 });
 </script>
