@@ -272,19 +272,13 @@ public class UIAddOnSearchResult extends UIContainer {
     NodeIterator it = result.getNodes();
     while (it.hasNext()) {
       Node findedNode = it.nextNode();
-      this.data.add(findedNode);
-    }
-    this.display();
-
-  }
-
-  private void display() throws RepositoryException, Exception {
-
-    for (Node aNode : this.getData()) {
-      if (super.getChildById(aNode.getUUID()) == null) {
-        UIAddOnSearchOne uiAddOnSearchOne = addChild(UIAddOnSearchOne.class, null, aNode.getUUID());
-        uiAddOnSearchOne.setNodeId(aNode.getUUID());
+      
+      if (super.getChildById(findedNode.getUUID()) == null) {
+        UIAddOnSearchOne uiAddOnSearchOne = addChild(UIAddOnSearchOne.class, null, findedNode.getUUID());
+        uiAddOnSearchOne.setNodeId(findedNode.getUUID());
       }
+      
+      this.data.add(findedNode);
     }
   }
 
