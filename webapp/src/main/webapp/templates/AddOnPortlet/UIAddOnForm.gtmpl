@@ -1,226 +1,226 @@
 <%
-	import org.exoplatform.webui.form.UIFormInputSet;
-	import org.exoplatform.webui.form.UIFormInputBase;
-	import org.exoplatform.webui.form.input.UIUploadInput;
+  import org.exoplatform.webui.form.UIFormInputSet;
+  import org.exoplatform.webui.form.UIFormInputBase;
+  import org.exoplatform.webui.form.input.UIUploadInput;
 %>
 <div class="uiBox formCreateAddon">
-	<h3 class="title">Tell Us About Your Add-On</h3>
-	<div class="uiContentBox">
-		<div class="UIAddOnPortlet">
-			<%uiform.begin()%>
-			<%
-					def rcontext = _ctx.getRequestContext() ;
-					def jsManager = rcontext.getJavascriptManager();
-					jsManager.require("SHARED/portalControl", "portalControl");
-		
-		
-				for(formInput in uicomponent.getChildren()) { 
-		
-			%>
-	
-				<div class="UITabContent FormContact form-horizontal" id="UITabContent" style="padding-left: 140px;">
-		
-				<%  	
-					List children = formInput.getChildren() ;
-			    def imageCount = 1;
-					for(component in children) {
+  <h3 class="title">Tell Us About Your Add-On</h3>
+  <div class="uiContentBox">
+    <div class="UIAddOnPortlet">
+      <%uiform.begin()%>
+      <%
+          def rcontext = _ctx.getRequestContext() ;
+          def jsManager = rcontext.getJavascriptManager();
+          jsManager.require("SHARED/portalControl", "portalControl");
+    
+    
+        for(formInput in uicomponent.getChildren()) { 
+    
+      %>
+  
+        <div class="UITabContent FormContact form-horizontal" id="UITabContent" style="padding-left: 140px;">
+    
+        <%    
+          List children = formInput.getChildren() ;
+          def imageCount = 1;
+          for(component in children) {
 
-						if(component.isRendered()){
-					%>
-		
-					<% 
-			
-						fieldName = component.getName(); 
-						String isTextArea = "";
-						if (fieldName.equals("description")) isTextArea = "textArea";
-			
-					%>	
-					<div class="control-group $isTextArea">
-			
-						<%if(component instanceof UIFormInputBase && !fieldName.equals(uicomponent.getId()) && !fieldName.equals("hosted")) { %>
-			
-						<!-- start label div class="FieldLabel" -->                     
-						<label class="control-label" >
-							<%if(fieldName != null && fieldName.length() > 0) {%>
-							<%
-					
-								def label = _ctx.appRes("UIAddOnPortlet.UIExtensionForm." + fieldName); 
-					
-								
-								if ( fieldName.startsWith("img")){
-								 label= _ctx.appRes('UIAddOnPortlet.UIExtensionForm.img_0') + " " + imageCount;
+            if(component.isRendered()){
+          %>
+    
+          <% 
+      
+            fieldName = component.getName(); 
+            String isTextArea = "";
+            if (fieldName.equals("description")) isTextArea = "textArea";
+      
+          %>  
+          <div class="control-group $isTextArea">
+      
+            <%if(component instanceof UIFormInputBase && !fieldName.equals(uicomponent.getId()) && !fieldName.equals("hosted")) { %>
+      
+            <!-- start label div class="FieldLabel" -->                     
+            <label class="control-label" >
+              <%if(fieldName != null && fieldName.length() > 0) {%>
+              <%
+          
+                def label = _ctx.appRes("UIAddOnPortlet.UIExtensionForm." + fieldName); 
+          
+                
+                if ( fieldName.startsWith("img")){
+                 label= _ctx.appRes('UIAddOnPortlet.UIExtensionForm.img_0') + " " + imageCount;
                  imageCount++;
                 }
-							%> 
-				
-							$label 
-				
-							<%}%>
-				
-						</label>
-						<!-- fin label div class="FieldLabel" -->
-			
-						<% if(component instanceof UIFormInputBase && component.isEditable()) { %>
-			
-						<div class="controls">
-							<% uicomponent.renderField(component) %>
-							<% if(fieldName == "img0") { %>
-							<a class="actionIcon" href="<%=uicomponent.event("Add")%>"> 
-							<i class="uiIconPlus uiIconLightGray"></i>
-							</a>
-							<% } %>
-				
-							<%  if (component instanceof UIUploadInput && fieldName != "img0") { %>
-							<a class="actionIcon" href="<%=uicomponent.event("Remove",component.getId())%>">
-							<i class="uiIconMinus uiIconLightGray"></i>
-							</a>
-							<% } %>
-						</div>
-			
-						<% }else { %>
-			
-						<div class="NonEditableField">
-							<% uicomponent.renderField(component) %>
-						</div>
-			
-						<% } %>
-			
-			
-						<%} else if(fieldName.equals("hosted")){
-				
-							def label = _ctx.appRes("UIAddOnPortlet.UIExtensionForm." + fieldName); 
-						%>
-						    	
-						<div class="controls"> <!-- class hide -->
-							<label class="checkbox">
-								<% uicomponent.renderField(component) %> $label
-							</label>
-						</div>
-			
-						<% } else { %>
-			
-						    	<div class="FieldComponent 0" colspan="2">
-							<% uicomponent.renderChild(component) ; %> 
-						</div>
-			
-						<%}%>
-						<!-- end if input -->	
-			
-					</div>
-					<% 		
-						}
-					} // end loop for child 
-				%>
+              %> 
+        
+              $label 
+        
+              <%}%>
+        
+            </label>
+            <!-- fin label div class="FieldLabel" -->
+      
+            <% if(component instanceof UIFormInputBase && component.isEditable()) { %>
+      
+            <div class="controls">
+              <% uicomponent.renderField(component) %>
+              <% if(fieldName == "img0") { %>
+              <a class="actionIcon" href="<%=uicomponent.event("Add")%>"> 
+              <i class="uiIconPlus uiIconLightGray"></i>
+              </a>
+              <% } %>
+        
+              <%  if (component instanceof UIUploadInput && fieldName != "img0" && fieldName != "avatar") { %>
+              <a class="actionIcon" href="<%=uicomponent.event("Remove",component.getId())%>">
+              <i class="uiIconMinus uiIconLightGray"></i>
+              </a>
+              <% } %>
+            </div>
+      
+            <% }else { %>
+      
+            <div class="NonEditableField">
+              <% uicomponent.renderField(component) %>
+            </div>
+      
+            <% } %>
+      
+      
+            <%} else if(fieldName.equals("hosted")){
+        
+              def label = _ctx.appRes("UIAddOnPortlet.UIExtensionForm." + fieldName); 
+            %>
+                  
+            <div class="controls"> <!-- class hide -->
+              <label class="checkbox">
+                <% uicomponent.renderField(component) %> $label
+              </label>
+            </div>
+      
+            <% } else { %>
+      
+                  <div class="FieldComponent 0" colspan="2">
+              <% uicomponent.renderChild(component) ; %> 
+            </div>
+      
+            <%}%>
+            <!-- end if input --> 
+      
+          </div>
+          <%    
+            }
+          } // end loop for child 
+        %>
 
-			</div>
-		
-		<%  } // end loop for child %>
+      </div>
+    
+    <%  } // end loop for child %>
 
-				<%uiform.end()%>
-			</div>
+        <%uiform.end()%>
+      </div>
 
-			<div class="uiAction uiActionBorder">
-		<% for(action in uicomponent.getActions()) {
-						
-								String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
-								if (!actionLabel.equals("Add") && !actionLabel.equals("Remove")){ 
-								String link = uicomponent.event(action);
-								String typeAction= "btn btn-primary btn-large";
-								if (actionLabel.equals("Cancel")){ 
-								typeAction = "btn btn-large";
-								link="javascript:history.go(-1);";
-								}
-							%>
-					
-							<div onclick="$link" class="$typeAction" style="margin-right: 5px;">
-								$actionLabel
-							</div>
-							<%}}%>
-	</div>
+      <div class="uiAction uiActionBorder">
+    <% for(action in uicomponent.getActions()) {
+            
+                String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+                if (!actionLabel.equals("Add") && !actionLabel.equals("Remove")){ 
+                String link = uicomponent.event(action);
+                String typeAction= "btn btn-primary btn-large";
+                if (actionLabel.equals("Cancel")){ 
+                typeAction = "btn btn-large";
+                link="javascript:history.go(-1);";
+                }
+              %>
+          
+              <div onclick="$link" class="$typeAction" style="margin-right: 5px;">
+                $actionLabel
+              </div>
+              <%}}%>
+  </div>
 
-		</div>
+    </div>
 
 </div>
 
 <script type='text/javascript'>
   window.onload = function() {
 
-	eXo.webui.UIForm.submitForm = function(formId, action, useAjax, callback) {
-	  if(action.toLowerCase() == "changetype" || action.toLowerCase() == "close" || action.toLowerCase() == "back") {
-	  	if (eXo.ecm.ECMUtils) {
-	      eXo.ecm.ECMUtils.editFullScreen = false;
-	    }
-	    if (b_changed) {      
-			  var answer = null;
-			  if (action.toLowerCase() == "changetype") {
-			  	answer = confirm(document.getElementById("ChangeTypeConfirmationMsg").innerHTML);
-			  } else {
-			  	answer = confirm(document.getElementById("CloseConfirmationMsg").innerHTML);
-			  }  
-	      if (answer) {
-	      	b_changed = false;
-	      }	else {
-	      	return;
-	      }
-	    }
-	  }    
-	 
-	 if (!callback) callback = null;
-	 var form = this.getFormElemt(formId) ;
-	 //TODO need review try-cactch block for form doesn't use FCK
-	 try {
-	  if (FCKeditorAPI && typeof FCKeditorAPI == "object") {
-	    for ( var name in FCKeditorAPI.__Instances ) {
-	      var oEditor ;
-	      try {
-	        oEditor = FCKeditorAPI.__Instances[name] ;
-	        if (oEditor && oEditor.GetParentForm && oEditor.GetParentForm() == form ) {
-	          oEditor.UpdateLinkedField() ;
-	        }
-	      } catch(e) {
-	        continue ;
-	      }
-	    }
-	  }
-	 } catch(e) {}
-	
-	 try {
-	  
-	  if (CKEDITOR && typeof CKEDITOR == "object") {
-	    for ( var name in CKEDITOR.instances ) {
-	      var oEditor ;
-	      try {
-	        oEditor = CKEDITOR.instances[name] ;
-	        if (oEditor && document.getElementById(name)) {
-	            var rendered = jQuery(document.getElementById(name)).nextAll('span:first')[0].id.indexOf('cke');
-	            if (rendered == 0) document.getElementById(name).value = oEditor.getData();
+  eXo.webui.UIForm.submitForm = function(formId, action, useAjax, callback) {
+    if(action.toLowerCase() == "changetype" || action.toLowerCase() == "close" || action.toLowerCase() == "back") {
+      if (eXo.ecm.ECMUtils) {
+        eXo.ecm.ECMUtils.editFullScreen = false;
+      }
+      if (b_changed) {      
+        var answer = null;
+        if (action.toLowerCase() == "changetype") {
+          answer = confirm(document.getElementById("ChangeTypeConfirmationMsg").innerHTML);
+        } else {
+          answer = confirm(document.getElementById("CloseConfirmationMsg").innerHTML);
+        }  
+        if (answer) {
+          b_changed = false;
+        } else {
+          return;
+        }
+      }
+    }    
+   
+   if (!callback) callback = null;
+   var form = this.getFormElemt(formId) ;
+   //TODO need review try-cactch block for form doesn't use FCK
+   try {
+    if (FCKeditorAPI && typeof FCKeditorAPI == "object") {
+      for ( var name in FCKeditorAPI.__Instances ) {
+        var oEditor ;
+        try {
+          oEditor = FCKeditorAPI.__Instances[name] ;
+          if (oEditor && oEditor.GetParentForm && oEditor.GetParentForm() == form ) {
+            oEditor.UpdateLinkedField() ;
+          }
+        } catch(e) {
+          continue ;
+        }
+      }
+    }
+   } catch(e) {}
+  
+   try {
+    
+    if (CKEDITOR && typeof CKEDITOR == "object") {
+      for ( var name in CKEDITOR.instances ) {
+        var oEditor ;
+        try {
+          oEditor = CKEDITOR.instances[name] ;
+          if (oEditor && document.getElementById(name)) {
+              var rendered = jQuery(document.getElementById(name)).nextAll('span:first')[0].id.indexOf('cke');
+              if (rendered == 0) document.getElementById(name).value = oEditor.getData();
 
-	        }
-	      } catch(e) {
-	        continue ;
-	      }
-	    }
-	  }
-	 } catch(e) {}
-	  form.elements['formOp'].value = action ;
-	  
+          }
+        } catch(e) {
+          continue ;
+        }
+      }
+    }
+   } catch(e) {}
+    form.elements['formOp'].value = action ;
+    
 
-	 if (navigator.appName == 'Microsoft Internet Explorer')
-	 {
-	   if ((action.toLowerCase() == "save" || action.toLowerCase() == "saveandclose" || action.toLowerCase() == "close") && window.popup_opened == true) {
-	     window.onbeforeunload = null;
-	     useAjax=false;
-	     window.popup_opened = false;
-	   }
-	  }
+   if (navigator.appName == 'Microsoft Internet Explorer')
+   {
+     if ((action.toLowerCase() == "save" || action.toLowerCase() == "saveandclose" || action.toLowerCase() == "close") && window.popup_opened == true) {
+       window.onbeforeunload = null;
+       useAjax=false;
+       window.popup_opened = false;
+     }
+    }
 
-	  if(useAjax) {
-	    b_changed = false;
-	    this.ajaxPost(form, callback) ;
-	  } else {
-	    form.submit();
-	  }
-	} ;
+    if(useAjax) {
+      b_changed = false;
+      this.ajaxPost(form, callback) ;
+    } else {
+      form.submit();
+    }
+  } ;
 }
-	
+  
 </script>

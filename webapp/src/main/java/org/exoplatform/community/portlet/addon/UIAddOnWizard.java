@@ -19,16 +19,19 @@
 package org.exoplatform.community.portlet.addon;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+
 import org.exoplatform.addon.service.AddOnService;
-
-
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIFormRichtextInput;
 import org.exoplatform.wcm.webui.validator.MandatoryValidator;
 import org.exoplatform.webui.form.UIFormInputSet;
@@ -51,7 +54,11 @@ public class UIAddOnWizard extends UIFormInputSet{
 	public static String ADDON_DOCUMENT_URL = "documentUrl";
 	public static String ADDON_DOWNLOAD_URL = "downloadUrl";
 	public static String ADDON_HOSTED = "hosted";
-	public static String ADDON_IMG_0 = "img0";	
+	public static String ADDON_IMG_0 = "img0";
+	public static String ADDON_CODE_URL = "codeUrl"; 
+	public static String ADDON_DEMO_URL = "demoUrl"; 
+	public static String ADDON_INSTALL_COMMAND = "installCommand"; 
+	public static String ADDON_AVATAR = "avatar";
 	
 	public UIAddOnWizard(String id) throws Exception{
 		setId(id) ;
@@ -101,9 +108,20 @@ public class UIAddOnWizard extends UIFormInputSet{
 	    UIFormStringInput documentUrlInput = new UIFormStringInput(ADDON_DOCUMENT_URL, null, null);
 	    UIFormStringInput downloadUrlInput = (UIFormStringInput) new UIFormStringInput(ADDON_DOWNLOAD_URL, null, "").addValidator(MandatoryValidator.class);
 	    downloadUrlInput.setHTMLAttribute("placeholder","http://");
+	    
+	    UIFormStringInput codeUrlInput = new UIFormStringInput(ADDON_CODE_URL, null, null);
+	    codeUrlInput.setHTMLAttribute("placeholder","http://");
+	    UIFormStringInput demoUrlInput = new UIFormStringInput(ADDON_DEMO_URL, null, null);
+	    demoUrlInput.setHTMLAttribute("placeholder","http://");
+	    UIFormStringInput installCommandInput = new UIFormStringInput(ADDON_INSTALL_COMMAND, null, null);
+	    
 	    UICheckBoxInput   hostedCbInput = new UICheckBoxInput(ADDON_HOSTED, null, false);
+	    
+	    UIUploadInput avatarUploadInput = new UIUploadInput(ADDON_AVATAR, "");
+	    
 	    UIUploadInput imgUploadInput = new UIUploadInput(ADDON_IMG_0, "img0");
-        addChild(titleInput);
+      
+	    addChild(titleInput);
 	    addChild(descriptionRichTextInput);
 	    addChild(versionInput);
 	    
@@ -114,9 +132,14 @@ public class UIAddOnWizard extends UIFormInputSet{
 	    addChild(documentUrlInput);
 	    addChild(downloadUrlInput);
 	    addChild(authorInput);
-	    
 	    addChild(emailInput);
-	    addChild(hostedCbInput);				
+	    
+	    addChild(codeUrlInput);
+	    addChild(demoUrlInput);
+	    addChild(installCommandInput);
+	    
+	    addChild(hostedCbInput);
+	    addChild(avatarUploadInput);  
 	    addChild(imgUploadInput);	
 
 		
@@ -126,9 +149,9 @@ public class UIAddOnWizard extends UIFormInputSet{
 		if(null != aNode){
 			String propertyName = null;
 			String txt = null;
-			String[] properties= {ADDON_TITLE,ADDON_DESCRIPTION,ADDON_DOWNLOAD_URL,ADDON_DOCUMENT_URL,ADDON_SOURCE_URL,ADDON_COMPABILITY,ADDON_LICENSE,ADDON_VERSION,ADDON_AUTHOR,ADDON_EMAIL};
+			String[] properties= {ADDON_TITLE,ADDON_DESCRIPTION,ADDON_DOWNLOAD_URL,ADDON_CODE_URL,ADDON_DEMO_URL,ADDON_INSTALL_COMMAND,ADDON_DOCUMENT_URL,ADDON_SOURCE_URL,ADDON_COMPABILITY,ADDON_LICENSE,ADDON_VERSION,ADDON_AUTHOR,ADDON_EMAIL};
 			for(int i =0; i < properties.length; i++)
-		    {
+		  {
 				propertyName = properties[i];
 				
 				try {
@@ -144,7 +167,26 @@ public class UIAddOnWizard extends UIFormInputSet{
 					log.error("ERR init vals for edit addon "+propertyName);
 				}
 
-		    }				
+		  }
+			
+			//check to display avatar image and uploadAvatar component
+			try {
+        String avatarImageUrl = AddOnService.getAvatarNode(aNode);
+        UIComponent uploadAvatar = null;
+        List<UIComponent> listChildren = this.getChildren();
+        for (UIComponent child : listChildren) {
+          if(child instanceof UIUploadInput && child.getName().equals(ADDON_AVATAR)){
+            uploadAvatar = child;
+          }
+        }
+        if(null!=avatarImageUrl && avatarImageUrl.length()>0){
+          uploadAvatar.setRendered(false);
+        }else{
+          uploadAvatar.setRendered(true);
+        }
+      } catch (Exception e) {
+        log.error("ERR init vals for edit addon avatar",e);
+      }
 			
 		}
 

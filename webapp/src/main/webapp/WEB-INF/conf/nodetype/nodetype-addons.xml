@@ -53,6 +53,18 @@
       <propertyDefinition name="exo:sourceUrl" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
         <valueConstraints/>
       </propertyDefinition>
+      
+      <propertyDefinition name="exo:codeUrl" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="exo:demoUrl" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
+
+      <propertyDefinition name="exo:installCommand" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false" >
+        <valueConstraints/>
+      </propertyDefinition>
 
       <propertyDefinition name="jcr:uuid" requiredType="String" autoCreated="true" mandatory="true" onParentVersion="INITIALIZE" protected="true" multiple="false" >
         <valueConstraints/>
@@ -105,6 +117,13 @@
           <requiredPrimaryType>nt:base</requiredPrimaryType>
         </requiredPrimaryTypes>
       </childNodeDefinition>
+      <!--
+      <childNodeDefinition name="avatar" defaultPrimaryType="exo:multimediaFolder" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="false" >
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>nt:base</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+      -->
 
     </childNodeDefinitions>
 

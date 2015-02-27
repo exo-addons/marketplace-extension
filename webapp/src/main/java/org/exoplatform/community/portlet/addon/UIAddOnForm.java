@@ -131,6 +131,18 @@ public class UIAddOnForm extends UIForm {
                                         .getValue();
       mapProperties.put("exo:" + UIAddOnWizard.ADDON_DOWNLOAD_URL, downloadUrl);
       
+      String codeUrl = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_CODE_URL).getValue();
+      if (codeUrl != null)
+        mapProperties.put("exo:" + UIAddOnWizard.ADDON_CODE_URL, codeUrl);
+      
+      String demoUrl = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_DEMO_URL).getValue();
+      if (demoUrl != null)
+        mapProperties.put("exo:" + UIAddOnWizard.ADDON_DEMO_URL, demoUrl);
+
+      String installCommand = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_INSTALL_COMMAND).getValue();
+      if (installCommand != null)
+        mapProperties.put("exo:" + UIAddOnWizard.ADDON_INSTALL_COMMAND, installCommand);
+       
       mapProperties.put("exo:text", description);
 
       UICheckBoxInput hostedCb = (UICheckBoxInput) uiAddOnWizard.getUICheckBoxInput(UIAddOnWizard.ADDON_HOSTED);
@@ -148,17 +160,47 @@ public class UIAddOnForm extends UIForm {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddOnForm);
         return;
       }
-      if (!AddOnService.validateEmail(email)) {
-        uiApp.addMessage(new ApplicationMessage("UIAddOnPortlet.msg.invalidemail",
+      
+      //Check list emails
+      String listEmail[] = email.split(",");
+      for (String emailItem : listEmail) {
+        if (!AddOnService.validateEmail(emailItem)) {
+          uiApp.addMessage(new ApplicationMessage("UIAddOnPortlet.msg.invalidemail",
+                                                  null,
+                                                  ApplicationMessage.WARNING));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiAddOnForm);
+          return;
+        }
+      }
+      
+      try {
+        URL url = new URL(downloadUrl);
+      } catch (MalformedURLException e) {
+        uiApp.addMessage(new ApplicationMessage("UIAddOnPortlet.msg.malformurl",
                                                 null,
                                                 ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddOnForm);
         return;
       }
+      
       try {
-        URL url = new URL(downloadUrl);
+        if(codeUrl!=null && !codeUrl.isEmpty()){
+          URL url = new URL(codeUrl);
+        }
       } catch (MalformedURLException e) {
-        uiApp.addMessage(new ApplicationMessage("UIAddOnPortlet.msg.malformurl",
+        uiApp.addMessage(new ApplicationMessage("UIAddOnPortlet.msg.invalidCodeUrl",
+                                                null,
+                                                ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddOnForm);
+        return;
+      }
+      
+      try {
+        if(demoUrl!=null && !demoUrl.isEmpty()){
+          URL url = new URL(demoUrl);
+        }
+      } catch (MalformedURLException e) {
+        uiApp.addMessage(new ApplicationMessage("UIAddOnPortlet.msg.invalidDemoUrl",
                                                 null,
                                                 ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddOnForm);
@@ -195,7 +237,8 @@ public class UIAddOnForm extends UIForm {
 
       for (UIComponent child : listChildren) {
 
-        if (child instanceof UIUploadInput) {
+        if (child instanceof UIUploadInput && (!child.getName().equals(UIAddOnWizard.ADDON_AVATAR))) {
+          //Persist screenShots
           child = (UIUploadInput) child;
 
           UploadResource[] uploadResource = ((UIUploadInput) child).getUploadResources();
@@ -211,6 +254,30 @@ public class UIAddOnForm extends UIForm {
             String imgMineType = uploadResource[0].getMimeType();
 
             Node imageNode = currentNode.addNode("medias/images/" + imgFileName, "nt:file");
+            Node imageContent = imageNode.addNode("jcr:content", "nt:resource");
+
+            imageContent.setProperty("jcr:data", inputStreams[0]);
+            imageContent.setProperty("jcr:mimeType", imgMineType);
+            imageContent.setProperty("jcr:lastModified", Calendar.getInstance());
+          }
+        }else if(child instanceof UIUploadInput && child.getName().equals(UIAddOnWizard.ADDON_AVATAR)){
+          //Persist avatar
+          child = (UIUploadInput) child;
+
+          UploadResource[] uploadResource = ((UIUploadInput) child).getUploadResources();
+          inputStreams = ((UIUploadInput) child).getUploadDataAsStreams();
+
+          if (inputStreams.length == 0 && listChildren.size() == 1) {
+
+            // TODO : Using default image
+          }
+          if (uploadResource.length > 0) {
+            String imgFileName = uploadResource[0].getFileName();
+            imgFileName = imgFileName.replaceAll("[^a-zA-Z0-9.-]", "-");
+            String imgMineType = uploadResource[0].getMimeType();
+
+            Node avatarFolderNode = currentNode.addNode("medias/avatar", "nt:folder");
+            Node imageNode = avatarFolderNode.addNode("avatar_" + imgFileName, "nt:file");
             Node imageContent = imageNode.addNode("jcr:content", "nt:resource");
 
             imageContent.setProperty("jcr:data", inputStreams[0]);
@@ -242,7 +309,8 @@ public class UIAddOnForm extends UIForm {
             for (String uploadId : uploadIds) {
               uploadService.removeUploadResource(uploadId);
             }
-            if (!((UIUploadInput) child).getName().equals(UIAddOnWizard.ADDON_IMG_0)) {
+            String childName = ((UIUploadInput) child).getName();
+            if (!childName.equals(UIAddOnWizard.ADDON_IMG_0) && !childName.equals(UIAddOnWizard.ADDON_AVATAR)) {
               uiAddOnWizard.removeChildById(child.getId());
             }
 
@@ -280,6 +348,9 @@ public class UIAddOnForm extends UIForm {
                                         sourceUrl,
                                         documentUrl,
                                         downloadUrl,
+                                        codeUrl,
+                                        demoUrl,
+                                        installCommand,
                                         hosted,hostName);
 
       } catch (Exception e) {

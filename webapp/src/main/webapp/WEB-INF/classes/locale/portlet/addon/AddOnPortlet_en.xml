@@ -43,6 +43,10 @@
 	      <sourceUrl>Source Code</sourceUrl>
 	      <documentUrl>Documentation</documentUrl>
 	      <downloadUrl>Download</downloadUrl>
+	      <codeUrl>Contribution code URL</codeUrl>
+	      <demoUrl>Demo URL</demoUrl>
+	      <installCommand>Install command</installCommand>
+	      <avatar>Avatar</avatar>
 	      <img_0>Upload Screenshots</img_0>
 	      <img>Image</img>
 	      <hosted>I wish my add-on to be hosted on the eXo Add-on repository on Github</hosted>
@@ -54,7 +58,9 @@
 				<invalid>Please fill the mandatory fields!</invalid>
 				<invalidemail>The email field is not correct!</invalidemail>
 				<invalidImage>Please upload image files only!</invalidImage>
-				<malformurl>The download url is not correct!</malformurl>
+				<malformurl>The download URL is not correct!</malformurl>
+				<invalidCodeUrl>The Contribute code URL is not correct!</invalidCodeUrl>
+				<invalidDemoUrl>The Demo URL is not correct!</invalidDemoUrl>
 		 </msg>
 		 <label>
 				<wizardSteps>Steps</wizardSteps>

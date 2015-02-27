@@ -72,6 +72,7 @@ import org.exoplatform.webui.form.UIFormRichtextInput;
     @EventConfig(listeners = UIAddOnSearchEdit.AddUIUploadActionListener.class, phase = Phase.DECODE),
     @EventConfig(listeners = UIAddOnSearchEdit.RemoveUIUploadActionListener.class, phase = Phase.DECODE),
     @EventConfig(listeners = UIAddOnSearchEdit.RemoveImageActionListener.class, phase = Phase.DECODE),
+    @EventConfig(listeners = UIAddOnSearchEdit.RemoveAvatarImageActionListener.class, phase = Phase.DECODE),
     @EventConfig(listeners = UIAddOnSearchEdit.CancelActionListener.class, phase = Phase.DECODE) })
 public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
 
@@ -86,6 +87,8 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
   private List<String>       imageGallery   = new ArrayList<String>();
 
   private List<String>       imagesRemoved  = new ArrayList<String>();
+  
+  private String             avatarImage;
 
   public UIAddOnSearchEdit() throws Exception {
     UIAddOnWizard uiAddOnWizard = new UIAddOnWizard(WIZARD_FORM_ID);
@@ -106,8 +109,10 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
     this.imgCount = 1;
     this.setImageGallery(new ArrayList<String>());
     this.setImagesRemoved(new ArrayList<String>());
+    this.setAvatarImage("");
     try {
       this.getImagesNode();
+      this.getAvatarNode();
     } catch (RepositoryException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -138,7 +143,8 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
     String[] properties = { UIAddOnWizard.ADDON_TITLE, UIAddOnWizard.ADDON_DESCRIPTION,
         UIAddOnWizard.ADDON_DOWNLOAD_URL, UIAddOnWizard.ADDON_DOCUMENT_URL,
         UIAddOnWizard.ADDON_SOURCE_URL, UIAddOnWizard.ADDON_COMPABILITY,
-        UIAddOnWizard.ADDON_LICENSE, UIAddOnWizard.ADDON_VERSION };
+        UIAddOnWizard.ADDON_LICENSE, UIAddOnWizard.ADDON_VERSION, UIAddOnWizard.ADDON_CODE_URL,
+        UIAddOnWizard.ADDON_DEMO_URL, UIAddOnWizard.ADDON_INSTALL_COMMAND};
 
     for (int i = 0; i < properties.length; i++) {
       if (compName.equals(properties[i])) {
@@ -177,6 +183,14 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
 
   }
 
+  public String getAvatarImage() {
+    return avatarImage;
+  }
+
+  public void setAvatarImage(String avatarImage) {
+    this.avatarImage = avatarImage;
+  }
+
   public void setImagesRemoved(List<String> images) {
 
     this.imagesRemoved = images;
@@ -193,6 +207,12 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
   public void getImagesNode() throws Exception, RepositoryException {
 
     this.setImageGallery(AddOnService.getImagesNode(this.getNode()));
+
+  }
+  
+  public void getAvatarNode() throws Exception, RepositoryException {
+
+    this.setAvatarImage(AddOnService.getAvatarNode(this.getNode()));
 
   }
 
@@ -216,8 +236,21 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
 
     }
   }
+  
+  public void removeAvatarNode() throws PathNotFoundException, RepositoryException {
+    if (this.getNode() != null && this.getNode().hasNode("medias/avatar")) {
+      Node avatarFolderNode = this.getNode().getNode("medias/avatar");
+      NodeIterator nodeIterator = avatarFolderNode.getNodes();
 
-  public boolean addImageNode(UIUploadInput child, Event<UIAddOnSearchEdit> event) throws FileNotFoundException,
+      while (nodeIterator.hasNext()) {
+        Node img = nodeIterator.nextNode();
+        img.remove();
+      }
+
+    }
+  }
+
+  public boolean addImageNode(String targetSubNodeName, UIUploadInput child, Event<UIAddOnSearchEdit> event) throws FileNotFoundException,
                                                ItemExistsException,
                                                PathNotFoundException,
                                                NoSuchNodeTypeException,
@@ -244,7 +277,10 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddOnSearchEdit);
         return false;
       }
-      Node imageNode = this.getNode().addNode("medias/images/" + imgFileName, "nt:file");
+      if(!this.getNode().hasNode("medias/"+ targetSubNodeName)){
+        this.getNode().addNode("medias/"+ targetSubNodeName);
+      }
+      Node imageNode = this.getNode().addNode("medias/"+ targetSubNodeName + "/" + imgFileName, "nt:file");
       Node imageContent = imageNode.addNode("jcr:content", "nt:resource");
       imageContent.setProperty("jcr:data", inputStreams[0]);
       imageContent.setProperty("jcr:mimeType", imgMineType);
@@ -253,6 +289,9 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
     }
     return true;
   }
+  
+  
+  
 
   public static class CancelActionListener extends EventListener<UIAddOnSearchEdit> {
 
@@ -316,6 +355,25 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
     }
 
   }
+  
+  public static class RemoveAvatarImageActionListener extends EventListener<UIAddOnSearchEdit> {
+
+    @Override
+    public void execute(Event<UIAddOnSearchEdit> event) throws Exception {
+
+      UIAddOnSearchEdit uiAddOnSearchEdit = event.getSource();
+      uiAddOnSearchEdit.setAvatarImage(null);
+      UIAddOnWizard uiAddOnWizard = uiAddOnSearchEdit.getChildById(UIAddOnSearchEdit.WIZARD_FORM_ID);
+      List<UIComponent> listChildren = uiAddOnWizard.getChildren();
+      for (UIComponent child : listChildren) {
+        if(child instanceof UIUploadInput && child.getName().equals(UIAddOnWizard.ADDON_AVATAR)){
+          child.setRendered(true);
+        }
+      }
+      event.getRequestContext().addUIComponentToUpdateByAjax(uiAddOnSearchEdit);
+    }
+
+  }
 
   public static class UpdateActionListener extends EventListener<UIAddOnSearchEdit> {
 
@@ -365,7 +423,18 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
 
       String downloadUrl = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_DOWNLOAD_URL)
                                         .getValue();
+      String codeUrl = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_CODE_URL).getValue();
+      if (codeUrl != null)
+        mapProperties.put("exo:" + UIAddOnWizard.ADDON_CODE_URL, codeUrl);
+      
+      String demoUrl = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_DEMO_URL).getValue();
+      if (demoUrl != null)
+        mapProperties.put("exo:" + UIAddOnWizard.ADDON_DEMO_URL, demoUrl);
 
+      String installCommand = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_INSTALL_COMMAND).getValue();
+      if (installCommand != null)
+        mapProperties.put("exo:" + UIAddOnWizard.ADDON_INSTALL_COMMAND, installCommand);
+      
       mapProperties.put("exo:" + UIAddOnWizard.ADDON_DOWNLOAD_URL, downloadUrl);
 
       UICheckBoxInput hostedCb = (UICheckBoxInput) uiAddOnWizard.getUICheckBoxInput(UIAddOnWizard.ADDON_HOSTED);
@@ -382,13 +451,25 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddOnSearchEdit);
         return;
       }
-      if (!AddOnService.validateEmail(email)) {
+      //Check list emails
+      String listEmail[] = email.split(",");
+      for (String emailItem : listEmail) {
+        if (!AddOnService.validateEmail(emailItem)) {
+          uiApp.addMessage(new ApplicationMessage("UIAddOnSearchPortlet.msg.invalidemail",
+                                                  null,
+                                                  ApplicationMessage.WARNING));
+          event.getRequestContext().addUIComponentToUpdateByAjax(uiAddOnSearchEdit);
+          return;
+        }
+      }
+      
+/*      if (!AddOnService.validateEmail(email)) {
         uiApp.addMessage(new ApplicationMessage("UIAddOnSearchPortlet.msg.invalidemail",
                                                 null,
                                                 ApplicationMessage.WARNING));
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddOnSearchEdit);
         return;
-      }
+      }*/
       try {
         URL url = new URL(downloadUrl);
 
@@ -399,6 +480,31 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
         event.getRequestContext().addUIComponentToUpdateByAjax(uiAddOnSearchEdit);
         return;
       }
+      
+      try {
+        if(codeUrl!=null && !codeUrl.isEmpty()){
+          URL url = new URL(codeUrl);
+        }
+      } catch (MalformedURLException e) {
+        uiApp.addMessage(new ApplicationMessage("UIAddOnSearchPortlet.msg.invalidCodeUrl",
+                                                null,
+                                                ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddOnSearchEdit);
+        return;
+      }
+      
+      try {
+        if(demoUrl!=null && !demoUrl.isEmpty()){
+          URL url = new URL(demoUrl);
+        }
+      } catch (MalformedURLException e) {
+        uiApp.addMessage(new ApplicationMessage("UIAddOnSearchPortlet.msg.invalidDemoUrl",
+                                                null,
+                                                ApplicationMessage.WARNING));
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddOnSearchEdit);
+        return;
+      }
+      
       uiAddOnSearchEdit.removeImageNode();
       String nodeName = uiAddOnSearchEdit.getNode().getName();
 
@@ -406,9 +512,18 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
       listChildren = uiAddOnWizard.getChildren();
       for (UIComponent child : listChildren) {
 
-        if (child instanceof UIUploadInput) {
-          boolean canUpload = uiAddOnSearchEdit.addImageNode((UIUploadInput) child, event);
+        if (child instanceof UIUploadInput && !child.getName().equals(UIAddOnWizard.ADDON_AVATAR)) {
+          //update screenShots
+          boolean canUpload = uiAddOnSearchEdit.addImageNode("images",(UIUploadInput) child, event);
           if(canUpload==false) return;
+        }else if(child instanceof UIUploadInput && child.getName().equals(UIAddOnWizard.ADDON_AVATAR)) {
+          //Update avatar image
+          UploadResource[] uploadResource = ((UIUploadInput) child).getUploadResources();
+          if(uploadResource.length>0){
+            uiAddOnSearchEdit.removeAvatarNode();
+            boolean canUpload = uiAddOnSearchEdit.addImageNode("avatar",(UIUploadInput) child, event);
+            if(canUpload==false) return;
+          }
         }
       }
 
@@ -426,7 +541,8 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
           for (String uploadId : uploadIds) {
             uploadService.removeUploadResource(uploadId);
           }
-          if (!((UIUploadInput) child).getName().equals(UIAddOnWizard.ADDON_IMG_0)) {
+          String childName = ((UIUploadInput) child).getName();
+          if (!childName.equals(UIAddOnWizard.ADDON_IMG_0) && !childName.equals(UIAddOnWizard.ADDON_AVATAR)) {
             uiAddOnWizard.removeChildById(child.getId());
           }
 

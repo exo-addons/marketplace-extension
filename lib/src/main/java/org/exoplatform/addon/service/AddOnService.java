@@ -140,6 +140,20 @@ public class AddOnService {
 		
 
 	}
+	
+	public static String getAvatarNode(Node node) throws Exception, RepositoryException{
+    if(node != null){
+      Node mediaNode = node.getNode("medias/avatar"); 
+      NodeIterator nodeIterator = mediaNode.getNodes();
+      while (nodeIterator.hasNext()) {
+        Node img = nodeIterator.nextNode();
+        if(img.getPath() != null)
+          return (imgPathBase + img.getPath());
+      }
+      
+    }
+    return null;
+	}
 		
 	public static Node updateNode(String title,String name,Boolean hosted, Map<String,String> map,Boolean isNew) throws Exception {
 
@@ -433,7 +447,12 @@ public class AddOnService {
 	}
 	
 	public static void sendNewAddonSubmisson(String receiver, String fromEmail, String subject,
-			                                 String email,  String titleAddon, String description, String version,String license, String author, String compatibility,String  sourceUrl, String documentUrl ,String downloadUrl , Boolean hosted, String hostName)
+			                                     String email,  String titleAddon, String description,
+			                                     String version,String license, String author,
+			                                     String compatibility,String  sourceUrl,
+			                                     String documentUrl ,String downloadUrl , String codeUrl,
+			                                     String demoUrl, String installCommand, Boolean hosted,
+			                                     String hostName)
 			throws Exception {
 
 		MailService mailService = WCMCoreUtils.getService(MailService.class);
@@ -452,6 +471,11 @@ public class AddOnService {
 		String _sourceUrl = sourceUrl!= null ? "Source Code: " +  sourceUrl : "Source Code: ";
 		String _documentUrl= documentUrl!= null ? "Documentation: " +  documentUrl : "Documentation: ";
 		String _downloadUrl= downloadUrl!= null ? "Download: " +  downloadUrl : "Download: ";
+		
+		String _codeUrl= codeUrl!= null ? "Code URL: " +  codeUrl : "Code URL: ";
+		String _demoUrl= demoUrl!= null ? "Demo URL: " +  demoUrl : "Demo URL: ";
+		String _installCommand= installCommand!= null ? "Install command: " +  installCommand : "Install command: ";
+		
 		String _hosted= hosted ? "I wish my add-on to be hosted on the eXo Add-on repository on Github: Yes" : "I wish my add-on to be hosted on the eXo Add-on repository on Github: No";
 		String bodyMessage = "The following add-on is submitted on " + hostName + "<br><br>"
 				
@@ -463,6 +487,9 @@ public class AddOnService {
                 + _sourceUrl + "<br><br>"
                 + _documentUrl + "<br><br>"
 				+ _downloadUrl + "<br><br>"
+        + _codeUrl + "<br><br>"
+        + _demoUrl + "<br><br>"
+        + _installCommand + "<br><br>"
 				+ _hosted + "<br><br>"
 				+ _author + "<br><br>"
 				+ "Email (for internal use only): " + email + "<br><br>"
