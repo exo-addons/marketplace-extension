@@ -214,7 +214,7 @@ public class UIAddOnSearchResult extends UIContainer {
         this.setSQLOrder(" ORDER BY exo:title ASC ");
       }else if(sort.equals("latest")){
         //Oder by latest created
-        this.setSQLOrder(" ORDER BY exo:dateCreated DESC ");
+        this.setSQLOrder(" ORDER BY exo:dateModified DESC ");
       }
       else{
         //

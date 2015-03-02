@@ -142,7 +142,7 @@ public class AddOnService {
 	}
 	
 	public static String getAvatarNode(Node node) throws Exception, RepositoryException{
-    if(node != null){
+    if(node != null && node.hasNode("medias/avatar")){
       Node mediaNode = node.getNode("medias/avatar"); 
       NodeIterator nodeIterator = mediaNode.getNodes();
       while (nodeIterator.hasNext()) {
