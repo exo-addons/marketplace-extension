@@ -388,52 +388,52 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
 
       Map<String, String> mapProperties = new HashMap<String, String>();
 
-      String email = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_EMAIL).getValue();
+      String email = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_EMAIL).getValue();  
 
       mapProperties.put("exo:" + UIAddOnWizard.ADDON_EMAIL, email);
 
       String author = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_AUTHOR).getValue();
-      if (author != null)
-        mapProperties.put("exo:" + UIAddOnWizard.ADDON_AUTHOR, author);
+      if (author == null) author = "";
+      mapProperties.put("exo:" + UIAddOnWizard.ADDON_AUTHOR, author);
 
       String description = ((UIFormRichtextInput) uiAddOnWizard.getChildById(UIAddOnWizard.ADDON_DESCRIPTION)).getValue();
       mapProperties.put("exo:" + UIAddOnWizard.ADDON_DESCRIPTION, description);
 
       String version = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_VERSION).getValue();
-      if (version != null)
-        mapProperties.put("exo:" + UIAddOnWizard.ADDON_VERSION, version);
+      if (version == null) version = "";
+      mapProperties.put("exo:" + UIAddOnWizard.ADDON_VERSION, version);
 
       String license = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_LICENSE).getValue();
-      if (license != null)
-        mapProperties.put("exo:" + UIAddOnWizard.ADDON_LICENSE, license);
+      if (license == null) license = "";
+      mapProperties.put("exo:" + UIAddOnWizard.ADDON_LICENSE, license);
 
       String compatibility = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_COMPABILITY)
                                           .getValue();
-      if (compatibility != null)
-        mapProperties.put("exo:" + UIAddOnWizard.ADDON_COMPABILITY, compatibility);
+      if (compatibility == null) compatibility = "";
+      mapProperties.put("exo:" + UIAddOnWizard.ADDON_COMPABILITY, compatibility);
 
       String sourceUrl = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_SOURCE_URL).getValue();
-      if (sourceUrl != null)
-        mapProperties.put("exo:" + UIAddOnWizard.ADDON_SOURCE_URL, sourceUrl);
+      if (sourceUrl == null) sourceUrl = "";
+      mapProperties.put("exo:" + UIAddOnWizard.ADDON_SOURCE_URL, sourceUrl);
 
       String documentUrl = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_DOCUMENT_URL)
                                         .getValue();
-      if (documentUrl != null)
-        mapProperties.put("exo:" + UIAddOnWizard.ADDON_DOCUMENT_URL, documentUrl);
+      if (documentUrl == null) documentUrl = "";
+      mapProperties.put("exo:" + UIAddOnWizard.ADDON_DOCUMENT_URL, documentUrl);
 
       String downloadUrl = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_DOWNLOAD_URL)
                                         .getValue();
       String codeUrl = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_CODE_URL).getValue();
-      if (codeUrl != null)
-        mapProperties.put("exo:" + UIAddOnWizard.ADDON_CODE_URL, codeUrl);
+      if (codeUrl == null) codeUrl = "";
+      mapProperties.put("exo:" + UIAddOnWizard.ADDON_CODE_URL, codeUrl);
       
       String demoUrl = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_DEMO_URL).getValue();
-      if (demoUrl != null)
-        mapProperties.put("exo:" + UIAddOnWizard.ADDON_DEMO_URL, demoUrl);
+      if (demoUrl == null) demoUrl = "";
+      mapProperties.put("exo:" + UIAddOnWizard.ADDON_DEMO_URL, demoUrl);
 
       String installCommand = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_INSTALL_COMMAND).getValue();
-      if (installCommand != null)
-        mapProperties.put("exo:" + UIAddOnWizard.ADDON_INSTALL_COMMAND, installCommand);
+      if (installCommand == null) installCommand = "";
+      mapProperties.put("exo:" + UIAddOnWizard.ADDON_INSTALL_COMMAND, installCommand);
       
       mapProperties.put("exo:" + UIAddOnWizard.ADDON_DOWNLOAD_URL, downloadUrl);
 
@@ -463,13 +463,6 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
         }
       }
       
-/*      if (!AddOnService.validateEmail(email)) {
-        uiApp.addMessage(new ApplicationMessage("UIAddOnSearchPortlet.msg.invalidemail",
-                                                null,
-                                                ApplicationMessage.WARNING));
-        event.getRequestContext().addUIComponentToUpdateByAjax(uiAddOnSearchEdit);
-        return;
-      }*/
       try {
         URL url = new URL(downloadUrl);
 
