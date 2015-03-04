@@ -14,7 +14,18 @@
 .form-action {
   margin: 20px 0 50px;
 }
-/* Admin Addon Searbar*/
+
+.formCreateAddon {
+  margin-left: 60px;
+  margin-right: 60px;
+}
+.formCreateAddon .title {
+  padding-bottom: 15px;
+  padding-top: 15px;
+  text-align: center;
+}
+
+/* Admin List Addon */
 .addonSearchToolbar {
   margin: 20px 60px;
 }
@@ -29,87 +40,12 @@
 .addonSearchToolbar .btn-primary {
   margin-left: 0px;
 }
+
 .addonSearchToolbar .sortBy {
-	margin-right: 10px;
-	width: 85px;
-}
-/* Admin List Addon */
-.listAddonCenter {
-  margin: 0 60px 20px;
-}
-.listAddonCenter .CaptionItem .row-fluid {
-  margin-bottom: 20px;
-}
-.listAddonCenter .NormalNews {
-  padding: 15px 10px 15px 15px;
-  border: 1px solid #cfcfcf;
-  background-color: #ffffff;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  float: left;
-}
-.listAddonCenter .NormalNews .media {
-  margin-bottom: 15px;
-  margin-top: 0;
-}
-.listAddonCenter .NormalNews .action {
-  text-align: right;
-}
-.listAddonCenter .NormalNews .action .UIForm {
-  display: inline-block;
-  margin-right: 5px;
-}
-.listAddonCenter .NormalNews .pull-left {
-  width: 120px;
-}
-.listAddonCenter .NormalNews .pull-left img {
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  width: 120px;
-  height: 120px;
-}
-.listAddonCenter .NormalNews .media-body .title {
-  margin: -3px 0 5px;
-}
-.listAddonCenter .NormalNews .media-body .title a {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  line-height: 22px;
-}
-.listAddonCenter .NormalNews .media-body .Summary {
-  max-height: 98px;
-  overflow: hidden;
-}
-.listAddonCenter .NormalNews .editAddon {
-  display: none;
-  width: 45px;
-  height: 45px;
-  background: url('images/bgCornerAddonBox.png') no-repeat 0 0 transparent;
-  position: absolute;
-  top: -1px;
-  right: -1px;
-  -webkit-border-top-right-radius: 2px;
-  -moz-border-radius-topright: 2px;
-  border-top-right-radius: 2px;
+  margin-right: 10px;
+  width: 80px;
 }
 
-.listAddonCenter .NormalNews:hover {
-  position: relative;
-/*
-  border-color: #94b0df;
-  -webkit-box-shadow: 0 0 5px 0 rgba(19, 75, 159, 0.25);
-  -moz-box-shadow: 0 0 5px 0 rgba(19, 75, 159, 0.25);
-  box-shadow: 0 0 5px 0 rgba(19, 75, 159, 0.25);
-*/
-}
-
-.listAddonCenter .NormalNews:hover .editAddon {
-  display: block;
-}
 .listAddonCenter .boxLoadMore {
   background: none;
   padding-left: 0;
@@ -130,8 +66,69 @@
 .boxLoadMore .btn {
   display: block;
 }
-/* Admin Detail Addon */
-.detailAddonBox .editAddon {
+
+.listAddonCenter {
+  margin: 0 60px 20px;
+}
+
+.listAddonCenter .CaptionItem .row-fluid {
+  margin-bottom: 20px;
+}
+
+.listAddonCenter .NormalNews {
+  padding: 15px 10px 15px 15px;
+  border: 1px solid #cfcfcf;
+  background-color: #ffffff;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  float: left;
+}
+
+.listAddonCenter .NormalNews .media {
+  margin-bottom: 15px;
+  margin-top: 0;
+}
+
+.listAddonCenter .NormalNews .action {
+  text-align: right;
+}
+
+.listAddonCenter .NormalNews .action .UIForm {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.listAddonCenter .NormalNews .pull-left {
+  width: 120px;
+}
+
+.listAddonCenter .NormalNews .pull-left img {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  width: 120px;
+  height: 120px;
+}
+
+.listAddonCenter .NormalNews .media-body .title {
+  margin: -3px 0 5px;
+}
+
+.listAddonCenter .NormalNews .media-body .title a {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 22px;
+}
+
+.listAddonCenter .NormalNews .media-body .Summary {
+  max-height: 98px;
+  overflow: hidden;
+}
+
+.listAddonCenter .NormalNews .editAddon {
   display: none;
   width: 45px;
   height: 45px;
@@ -143,16 +140,98 @@
   -moz-border-radius-topright: 2px;
   border-top-right-radius: 2px;
 }
-.detailAddonBox:hover {
+
+.listAddonCenter .NormalNews:hover {
   position: relative;
-  border-color: #94b0df;
-  -webkit-box-shadow: 0 0 5px 0 rgba(19, 75, 159, 0.25);
-  -moz-box-shadow: 0 0 5px 0 rgba(19, 75, 159, 0.25);
-  box-shadow: 0 0 5px 0 rgba(19, 75, 159, 0.25);
 }
-.detailAddonBox:hover .editAddon {
+
+.listAddonCenter .NormalNews:hover .editAddon {
   display: block;
 }
+.listAddonCenter .NormalNews {
+    background: none repeat scroll 0 0 #EBEBEB;
+    border: 1px solid #C7C7C7;
+    border-radius: 3px;
+    float: left;
+    padding: 15px;
+}
+
+.listAddonCenter .NormalNews .contentHover{
+  position: absolute;
+  top: 185px;
+}
+
+.listAddonCenter .NormalNews .media .contentHover .uiIconEdit{
+  background-image: url("/eXoResources/skin/images/Icons/uiIconsWhite.png");
+}
+
+.listAddonCenter .NormalNews .media .contentHover{
+  background: white;
+  padding: 19px;
+  width: 90%;
+}
+
+.listAddonCenter .NormalNews .media .contentHover .addonsDescription{
+  height: 103px;
+  font-size: 14px;
+  overflow: hidden;
+  word-wrap: break-word;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.listAddonCenter .NormalNews .media{
+  height: 180px;
+  border: 1px solid white;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.listAddonCenter .NormalNews .media img{
+  width: 100%;
+}
+
+.listAddonCenter .NormalNews .content h4{
+  font-size: 16px;
+  margin-bottom: 3px;
+}
+
+.listAddonCenter .NormalNews .content p{
+  margin: 0px;
+  font-size: 14px;
+}
+
+.uiVote .avgRatingImages {
+  float: left;
+  margin-top: 5px;
+}
+
+.uiVote .voteRatingInfo {
+  float: left;
+  line-height: 16px;
+  margin-right: 15px;
+  margin-top: 5px;
+}
+
+.voteMessageParent{
+  margin-left: 110px;
+  margin-top: 0px;
+}
+
+.voteMessageAlert{
+  padding: 0px 5px;
+  margin-top: 0px;
+  margin-bottom: 0;
+  height: 19px;
+  width: 215px;
+}
+
+.voteMessageAlertContent{
+  margin: 0px;
+}
+
+/*BEGIN Style for Edit addon*/
 .boxViewImageAddon .image {
   display: block;
   background-color: #3b3b3b;
@@ -193,13 +272,7 @@
   width: 105px;
   height: 105px;
 }
-.UIPluginTemplateOneScr {
-  margin: 0 60px 20px!important;
-}
-.UIPluginTemplateOneScr .media .pull-left {
-  margin-right: 40px;
-  width: 282px;
-}
+
 .AddOnGallery {
   margin-left: -6px;
 }
@@ -208,198 +281,258 @@
   margin-left: 6px;
   margin-bottom: 6px;
 }
-.detailInfoAddon .btn {
-  margin-top: 10px;
-}
-.detailInfoAddon h4 {
-  color: #2F5E92;
-  margin: 0 0 10px;
-}
-.detailInfoAddon .btn {
-  color: #fff;
-}
-/* Form Create */
-.formCreateAddon {
-  margin-left: 60px;
-  margin-right: 60px;
-}
-.formCreateAddon .title {
-  padding-bottom: 15px;
-  padding-top: 15px;
-  text-align: center;
-}
-.form-horizontal textarea {
-  padding: 3px 6px;
-}
-.searchResultBox {
-  margin-left: 60px;
-  margin-right: 60px;
-}
-
-/* ================== A.Hieu======================= */
-.listAddonCenter .NormalNews {
-    background: none repeat scroll 0 0 #EBEBEB;
-    border: 1px solid #C7C7C7;
-    border-radius: 3px;
-    float: left;
-    padding: 15px;
-}
-
-.listAddonCenter .NormalNews .contentHover{
- position: absolute;
- top: 185px;
-}
-
-.listAddonCenter .NormalNews .media .contentHover .uiIconEdit{
- background-image: url("/eXoResources/skin/images/Icons/uiIconsWhite.png");
-}
-
-.listAddonCenter .NormalNews .media .contentHover{
- background: white;
- padding: 19px;
-width: 90%;
-}
-
-.listAddonCenter .NormalNews .media .contentHover .addonsDescription{
- height: 103px;
-font-size: 14px;
-overflow: hidden;
-word-wrap: break-word;
-margin-bottom: 12px;
-cursor: pointer;
-}
-
-.listAddonCenter .NormalNews .media{
- height: 180px;
- border: 1px solid white;
- border-radius: 5px;
- overflow: hidden;
-position: relative;
-}
-
-.listAddonCenter .NormalNews .media img{
- width: 100%;
-}
-
-.listAddonCenter .NormalNews .content h4{
- font-size: 16px;
-margin-bottom: 3px;
-}
-
-.listAddonCenter .NormalNews .content p{
-margin: 0px;
-font-size: 14px;
-}
-.avatarXSmall img {
-    border-radius: 2px;
-    height: 36px;
-    width: 36px;
-}
-
-.author a {
-    color: #2f5e92;
-    font-family: "Helvetica Neue Bold",Helvetica,Lucida,Arial,sans-serif;
-    font-weight: bold;
-    text-decoration: none;
-    word-wrap: break-word;
-}
+/*END Style for Edit addon*/
 
 
-.uiVote .avgRatingImages {
-    float: left;
-    margin-top: 5px;
+/*********   Addon detail *********/
+.addonToolbar, .addonMainContent, .addonMoreInfo, .addonCommentList, .UIPluginTemplateOneScr {
+    border-bottom: 1px solid #ccc;
+    margin: 25px 60px 20px;
+    padding-bottom: 20px;
+    vertical-align: middle;
 }
 
-.uiVote .voteRatingInfo {
-    float: left;
-    line-height: 16px;
-    margin-right: 15px;
-    margin-top: 5px;
+.addonCommentList {
+  border-bottom: none;
 }
+
+.addonToolbar .btn {
+  margin-left: 5px;
+}
+
+.addonMainContent .detail {
+    display: inline-block;
+    width: 100%;
+}
+
+.addonMainContent .img {
+  margin-top: 20px;
+  width: 121px;
+
+}
+
+.addonMainContent .img .addonAvatar {
+  height: 121px;
+  width: 121px;
+}
+
+.addonMainContent .info {
+  margin: 0 300px 0 150px;
+
+}
+
+.addonMainContent .info h2 {
+  font-weight: normal;
+  margin: 10px 0 0;
+}
+
+.addonMainContent .info .dateTime {
+    margin: 10px 0;
+}
+
+.addonMainContent .info .btnList .btn{
+  margin-right: 5px;
+}
+
+.addonMainContent .install {
+  padding-top: 90px;
+  width: 270px;
+}
+
+.addonMainContent .listImg {
+  margin: 10px 0;
+  position: relative;
+}
+
+.addonMainContent .listImg .next, .addonMainContent .listImg .prev {
+    background: url("/marketplace-extension-webapp/skin/css/images/controlnext-prev.png") no-repeat scroll left top rgba(0, 0, 0, 0);
+    height: 30px;
+    left: 0;
+    outline: medium none;
+    position: absolute;
+    top: 40%;
+    width: 34px;
+    z-index: 100;
+}
+
+.addonMainContent .listImg .next {
+    background-position: left -30px;
+    left: 955px;
+}
+
+.addonMainContent .listImg .prev {
+    background-position: left top;
+}
+
+.addonMainContent .listImg .next:hover {
+    background-position: left -90px;
+}
+
+.addonMainContent .listImg .prev:hover {
+    background-position: left -60px;
+}
+
+.addonMainContent .listImg .next, .addonMainContent .listImg .prev {
+    top: 45%;
+}
+
+.addonMainContent .listImg .image {
+  visibility: visible; 
+  overflow: hidden; 
+  position: relative; 
+  z-index: 2; 
+  left: 35px; 
+}
+
+.addonMainContent .listImg .image ul {
+  margin: 0px; 
+  padding: 0px; 
+  position: relative; 
+  list-style-type: none; 
+  z-index: 1; 
+}
+
+.addonMainContent .listImg .image ul li {
+  overflow: hidden; 
+  float: left; 
+  margin: 0 5px;
+}
+
+.addonMainContent .listImg .image ul li img {
+  width: 440px;
+}
+
+.addonMoreInfo .title20, .UIPluginTemplateOneScr h5 {
+  font-size: 20px;
+  font-weight: normal;
+  margin-bottom: 20px;
+}
+
+.addonMoreInfo .title20 {
+  margin-bottom: 10px;
+}
+
+.addonMoreInfo .authorList li {
+  float: left;
+  margin: 0 10px 10px 0;
+}
+
+.addonCommentList .listComment .commentBox .commentInfo {
+  margin-bottom: 5px;
+}
+
+.addonCommentList .input-area {
+  overflow: hidden;
+}
+.addonCommentList .input-area  > input {
+  height: 50px;
+  max-height: 50px;
+  resize: none;
+  width: 100%;
+}
+
+/********************/
+.addonMainContent .addonContent p {
+  margin: 10px 0;
+}
+
+.addonMainContent .addonContent ul li {
+  list-style-type: disc;
+  list-style-position: inside;
+}
+
 
 /*START style for comment*/
-    .commentList {
-    padding: 15px 15px 0 15px;
-    }
-    .commentList .commentItem {
-    position: relative;
-    }
-    .commentList .commentItem .commmentLeft {
+.commentList {
+  padding: 20px 0 0;
+}
+.commentList .commentItem {
+position: relative;
+}
+.commentList .commentItem .commmentLeft {
+float: left;
+}
+.author a+span {
+margin-left: 10px;
+color: #999;
+}
+.contentComment {
+word-wrap: break-word;
+}
+.commentList .commentItem .ContentBlock {
+word-wrap: break-word;
+}
+
+.avatarLargeAddon img {
+    border-radius: 4px;
+    height: 80px;
+    margin-right: 5px;
+    width: 80px;
+}
+
+/*comment form*/
+.inputContainer .commentItem {
+    padding-bottom: 15px;
+}
+.inputContainer {
+    padding-top: 0;
+}
+
+.commentList .commentItem .commmentLeft {
     float: left;
-    }
-    .author a+span {
-    margin-left: 10px;
+}
+.commmentLeft +   .commentRight {
+     margin-left: 68px;
+}
+.commentList .commentItem .commentInputBox .commentInput {
+    margin-right: 112px;
+}
+
+.commentContent + .commentFormBox {
+margin-top:10px;
+}
+.listComment .commentBox {
+    margin-left: 68px;
+    padding: 10px 20px;
+    position: relative;
+}
+.listComment .commentBox  .arrowLeft {
+    background: url("/social-resources/skin/images/Activity/arrows.png") no-repeat scroll -21px 0;
+    display: block;
+    height: 16px;
+    left: -8px;
+    position: absolute;
+    top: 17px;
+    width: 8px;
+}
+
+.listComment .commentBox .commentInfo {
+    margin-bottom: 5px;
+}
+
+.commentInfo div.pull-right {
     color: #999;
-    }
-    .contentComment {
-    word-wrap: break-word;
-    }
-    .commentList .commentItem .ContentBlock {
-    word-wrap: break-word;
-    }
+}
 
-    .avatarLargeAddon img {
-        border-radius: 4px;
-        height: 80px;
-        margin-right: 5px;
-        width: 80px;
-    }
+.commentInfo a.actionIcon {
+    margin-top: -5px;
+}
 
-    /*comment form*/
-    .inputContainer .commentItem {
-        padding-bottom: 15px;
-    }
-    .inputContainer {
-        padding-top: 0;
-    }
+.UISingleContentViewerPortlet .UIPresentationContainer .title {
+    margin: 0;
+    padding: 0;
+}
 
-    .commentList .commentItem .commmentLeft {
-        float: left;
-    }
-	.commmentLeft +   .commentRight {
-         margin-left: 85px;
-    }
-    .commentList .commentItem .commentInputBox .commentInput {
-        margin-right: 112px;
-    }
-
-	.commentContent + .commentFormBox {
-		margin-top:10px;
-	}
-    .listComment .commentBox {
-        margin-left: 85px;
-        padding: 10px 20px;
-        position: relative;
-    }
-    .listComment .commentBox  .arrowLeft {
-        background: url("/social-resources/skin/images/Activity/arrows.png") no-repeat scroll -21px 0;
-        display: block;
-        height: 16px;
-        left: -8px;
-        position: absolute;
-        top: 17px;
-        width: 8px;
-    }
-
-    .listComment .commentBox .commentInfo {
-        margin-bottom: 5px;
-    }
-
-    .UISingleContentViewerPortlet .UIPresentationContainer .title {
-     margin: 0;
-        padding: 8px 10px;
-    }
-
-    .comment-submit {
-        margin-left: 10px;
-    }
-    .input-area {
-        overflow: hidden;
-    }
-    .input-area  > input{
-	    height: 50px;
-        max-height: 50px;
-        resize: none;
-	    width: 100%;
-    }
+.comment-submit {
+    margin-top: 20px;
+}
+.input-area {
+    overflow: hidden;
+}
+.input-area  > input{
+  height: 50px;
+    max-height: 50px;
+    resize: none;
+  width: 100%;
+}
 /*END style for comment*/
