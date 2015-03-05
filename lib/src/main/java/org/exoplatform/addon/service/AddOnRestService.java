@@ -16,6 +16,7 @@
  */
 package org.exoplatform.addon.service;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.text.DateFormat;
@@ -43,10 +44,14 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.RuntimeDelegate;
 
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.ecm.connector.fckeditor.FCKUtils;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.services.cms.comments.CommentsService;
+import org.exoplatform.services.jcr.core.nodetype.ExtendedNodeTypeManager;
+import org.exoplatform.services.jcr.core.nodetype.NodeTypeDataManager;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Membership;
@@ -95,6 +100,45 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
     addOnService_ = (AddOnService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(AddOnService.class);
   }
   
+  
+  @GET
+  @Path("/migrateModel")
+  @Produces("application/json")
+  @RolesAllowed({"administrators"})
+  public Response migrateModel(@Context SecurityContext sc,
+                          @Context UriInfo uriInfo){
+    
+    try{
+      boolean doUpgrade =this.upgrade();
+      if(doUpgrade) return Response.ok("Migrate successfully", MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+      return Response.ok("Migrate failured", MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+      
+    }catch (Exception e){
+      LOG.info(e);
+      return Response.ok("Migrate failured", MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+    }
+  }
+  
+  
+  public boolean upgrade() throws Exception {
+    try {
+      registerNodeTypes("war:/conf/nodetype/nodetype-addons.xml", ExtendedNodeTypeManager.REPLACE_IF_EXISTS);
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
+
+  }
+  
+  public void registerNodeTypes(String nodeTypeFilesName, int alreadyExistsBehaviour) throws Exception {
+    ExoContainer container = ExoContainerContext.getCurrentContainer();
+    ConfigurationManager configurationService = (ConfigurationManager) container.getComponentInstanceOfType(ConfigurationManager.class);
+    InputStream isXml = configurationService.getInputStream(nodeTypeFilesName);
+    ExtendedNodeTypeManager ntManager = this.repositoryService.getCurrentRepository().getNodeTypeManager();
+    LOG.info("\nTrying register node types from xml-file " + nodeTypeFilesName);
+    ntManager.registerNodeTypes(isXml, alreadyExistsBehaviour, NodeTypeDataManager.TEXT_XML);
+    LOG.info("\nNode types were registered from xml-file " + nodeTypeFilesName);
+  }
   
   @GET
   @Path("/migrate")
