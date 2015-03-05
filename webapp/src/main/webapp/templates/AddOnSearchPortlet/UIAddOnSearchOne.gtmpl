@@ -51,7 +51,7 @@
 				  <p>$itemDescription</p>
 				</div>	
 				<div class="actionButton">
-				  <button class="btn btn-primary" onclick="window.open('<%= itemDownloadUrl %>','blank');">Dowload</button>
+				  <button class="btn btn-primary" onclick="window.open('<%= itemDownloadUrl %>','blank');">Download</button>
 					<% if(canEdit){ %>
 					<button class="btn btn-primary" onclick="<%=uicomponent.event("Edit")%>"><i class="uiIconEdit"></i></btn>
 					<% } %>
