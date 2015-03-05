@@ -774,7 +774,19 @@ void commentForm(Node post) {
 
 
     // init image slider
-    jQuery('#ca-container-$uuid').contentcarousel();
+    jQuery('#ca-container-$uuid').contentcarousel({
+        // speed for the sliding animation
+        //sliderSpeed   : 500,
+        // easing for the sliding animation
+        //sliderEasing  : 'easeOutExpo',
+        // speed for the item animation (open / close)
+        //itemSpeed   : 500,
+        // easing for the item animation (open / close)
+        //itemEasing    : 'easeOutExpo',
+        // number of items to scroll at a time
+        //scroll      : 1,
+          minItemToShowNav:2
+      });
 
     //init image slider popup
     jQuery(".screenShotPopup").fancybox({
@@ -900,7 +912,7 @@ void commentForm(Node post) {
         <div class="ca-item ca-item-$i">
           <div class="ca-item-main">
             <a class="screenShotPopup" data-fancybox-group="gallery"  href="/rest/jcr/repository/collaboration<%=gal_img%>">
-              <img height="320" alt="addon image" src="/rest/jcr/repository/collaboration<%=gal_img%>">
+              <img style="max-height:292px" alt="addon image" src="/rest/jcr/repository/collaboration<%=gal_img%>">
             </a>
           </div>
           
@@ -909,20 +921,6 @@ void commentForm(Node post) {
     </div>
   </div>
 
-    <!--
-    <a href="#" class="next"></a>
-    <div class="image">  
-      <ul>
-        <li>
-          <img height="320" alt="addon image" src="/marketplace-extension-webapp/skin/css/images/addon_img_1.png">
-        </li>
-        <li>
-          <img height="320" alt="addon image" src="/marketplace-extension-webapp/skin/css/images/addon_img_1.png">  
-        </li>
-      </ul>
-    </div>
-    <a href="#" class="prev"></a>  
--->
   </div>
   <%} //end check list image%>
 

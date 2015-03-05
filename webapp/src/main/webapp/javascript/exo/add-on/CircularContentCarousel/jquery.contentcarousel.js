@@ -146,7 +146,8 @@
 						sliderEasing	: 'easeOutExpo',// easing for the sliding animation
 						itemSpeed		: 500,			// speed for the item animation (open / close)
 						itemEasing		: 'easeOutExpo',// easing for the item animation (open / close)
-						scroll			: 1				// number of items to scroll at a time
+						scroll			: 1,				// number of items to scroll at a time
+						minItemToShowNav: 1       //if totalItem > minItemToShowNav, the navigation arrow will display
 					};
 					
 					return this.each(function() {
@@ -167,7 +168,7 @@
 						cache.totalItems	= $items.length;
 						
 						// add navigation buttons
-						if( cache.totalItems > 3 )	
+						if( cache.totalItems > settings.minItemToShowNav)
 							$el.prepend('<div class="ca-nav"><span class="ca-nav-prev">Previous</span><span class="ca-nav-next">Next</span></div>')	
 						
 						// control the scroll value
