@@ -73,8 +73,11 @@ public class UIAddOnSearchResult extends UIContainer {
   //private final static String ADDONS_FOLDER  = "/Contributions/";
   
   public void processRender(WebuiRequestContext context) throws Exception {
-    if (REFRESH)
+    if (REFRESH){
       init();
+      SortAddons("popular");
+    }
+    
     super.processRender(context);
   }
 
@@ -217,8 +220,8 @@ public class UIAddOnSearchResult extends UIContainer {
         this.setSQLOrder(" ORDER BY exo:dateModified DESC ");
       }
       else{
-        //
-        this.setSQLOrder(" ORDER BY exo:votingRate DESC ");
+        // oder by vote
+        this.setSQLOrder(" ORDER BY exo:voteTotal DESC, exo:votingRate DESC ");
       }
       this.doSearch();
     } catch (RepositoryException e) {
