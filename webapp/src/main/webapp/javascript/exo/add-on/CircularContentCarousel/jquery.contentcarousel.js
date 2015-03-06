@@ -226,6 +226,7 @@
 						});
 						
 						// adds events to the mouse
+            /* comment for not allow image jum on mousewheel
 						$el.bind('mousewheel.contentcarousel', function(e, delta) {
 							if(delta > 0) {
 								if( cache.isAnimating ) return false;
@@ -239,7 +240,8 @@
 							}	
 							return false;
 						});
-						
+						*/
+
 					});
 				}
 			}
