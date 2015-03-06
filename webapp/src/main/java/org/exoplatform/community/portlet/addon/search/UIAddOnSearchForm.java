@@ -19,8 +19,11 @@
 package org.exoplatform.community.portlet.addon.search;
 
 
-import org.exoplatform.portal.webui.util.Util;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
@@ -28,17 +31,31 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIDropDownControl;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.model.SelectItemOption;
 
 
-@ComponentConfig(
-		lifecycle = UIFormLifecycle.class,
-		template = "app:/templates/AddOnSearchPortlet/UIAddOnSearchForm.gtmpl", 
-		events = { @EventConfig(listeners = UIAddOnSearchForm.SearchActionListener.class),
-					@EventConfig(listeners = UIAddOnSearchForm.SortActionListener.class) 
-		}
-	)
+
+@ComponentConfigs({
+  @ComponentConfig(
+                   lifecycle = UIFormLifecycle.class,
+                   template = "app:/templates/AddOnSearchPortlet/UIAddOnSearchForm.gtmpl", 
+                   events = { @EventConfig(listeners = UIAddOnSearchForm.SearchActionListener.class),
+                         @EventConfig(listeners = UIAddOnSearchForm.SortActionListener.class) 
+                   }
+                 ),
+  @ComponentConfig(
+    type = UIDropDownControl.class, 
+    id = "DisplayModesDropDown", 
+    template = "system:/groovy/webui/core/UIDropDownControl.gtmpl",
+    events = {
+      @EventConfig(listeners = UIAddOnSearchForm.ChangeOptionActionListener.class)
+    }
+  )
+})
 public class UIAddOnSearchForm extends UIForm {
 
 	/** The Constant KEYWORD_INPUT. */
@@ -49,6 +66,12 @@ public class UIAddOnSearchForm extends UIForm {
 	
 	  /** The Constant MESSAGE_NOT_EMPTY_KEYWORD. */
 	public static final String MESSAGE_NOT_EMPTY_KEYWORD       = "UISearchForm.message.keyword-not-empty";
+	
+	private static final String FILTER_POPULAR="popular";
+	private static final String FILTER_AZ="az";
+	private static final String FILTER_ZA="za";
+	private static final String FILTER_LATEST="latest";
+	private static final String FILTER_MY_ADDONS="myaddons";
 
 	public static String filterSelected = "";
 	public static Boolean REFRESH = true;
@@ -60,6 +83,20 @@ public class UIAddOnSearchForm extends UIForm {
 		uiKeywordInput.setHTMLAttribute("placeholder","Search");
 
 		addUIFormInput(uiKeywordInput);
+		ResourceBundle resourceBundle =  WebuiRequestContext.getCurrentInstance().getApplicationResourceBundle();
+		
+		List<SelectItemOption<String>> displayModes = new ArrayList<SelectItemOption<String>>(4);
+    displayModes.add(new SelectItemOption<String>(resourceBundle.getString("UIAddOnSearchPortlet.label.sort-" + FILTER_POPULAR), FILTER_POPULAR));
+    displayModes.add(new SelectItemOption<String>(resourceBundle.getString("UIAddOnSearchPortlet.label.sort-" + FILTER_AZ), FILTER_AZ));
+    displayModes.add(new SelectItemOption<String>(resourceBundle.getString("UIAddOnSearchPortlet.label.sort-" + FILTER_ZA), FILTER_ZA));
+    displayModes.add(new SelectItemOption<String>(resourceBundle.getString("UIAddOnSearchPortlet.label.sort-" + FILTER_LATEST), FILTER_LATEST));
+    
+    UIDropDownControl uiDropDownControl = addChild(UIDropDownControl.class, "DisplayModesDropDown", null);
+    uiDropDownControl.setOptions(displayModes);
+    
+    setSelectedMode(uiDropDownControl);
+    
+    addChild(uiDropDownControl);
 	
 	}
   public void processRender(WebuiRequestContext context) throws Exception {
@@ -68,6 +105,14 @@ public class UIAddOnSearchForm extends UIForm {
     super.processRender(context);
   }
 	
+  private void setSelectedMode(UIDropDownControl uiDropDownControl) {
+    if (filterSelected != null && filterSelected.length()>0 && !filterSelected.equals(FILTER_MY_ADDONS)) {
+      uiDropDownControl.setValue(filterSelected);
+    }else{
+      uiDropDownControl.setValue(FILTER_POPULAR);
+    }
+  }
+  
 	public Boolean isMyAddonsVisible(){
 		String userId = Util.getPortalRequestContext().getRemoteUser();
 		if(userId != null)
@@ -162,6 +207,50 @@ public class UIAddOnSearchForm extends UIForm {
 			portletRequestContext.addUIComponentToUpdateByAjax(uiAddonsSearchPageContainer);	
 			
 		}
+	}
+	
+	public static class ChangeOptionActionListener extends EventListener<UIDropDownControl> {
+
+    public void execute(Event<UIDropDownControl> event) throws Exception {
+      UIAddOnSearchForm.REFRESH=false;
+      UIDropDownControl uiDropDownControl = event.getSource();
+      UIAddOnSearchForm uiAddOnSearchForm = (UIAddOnSearchForm)uiDropDownControl.getParent();
+      
+      WebuiRequestContext requestContext = event.getRequestContext();
+      String strSortOrder = requestContext.getRequestParameter(OBJECTID);
+      
+      PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();      
+      UIAddOnSearchPageLayout uiAddonsSearchPageContainer = (UIAddOnSearchPageLayout)uiAddOnSearchForm.getParent();
+      UIAddOnSearchResult uiAddOnSearchResult = uiAddonsSearchPageContainer.getChildById(UIAddOnSearchPageLayout.SEARCH_RESULT);      
+
+      if(strSortOrder.equals("myaddons")){
+        if(UIAddOnSearchForm.filterSelected.equals("myaddons")){
+          uiAddOnSearchResult.SortAddons("popular");
+          UIAddOnSearchForm.filterSelected="popular";
+        }else{
+          UIAddOnSearchForm.filterSelected="myaddons";  
+          uiAddOnSearchResult.showMyAddons();
+        }
+          
+      }else if(strSortOrder.equals("za")){
+        uiAddOnSearchResult.SortAddons("za");
+        UIAddOnSearchForm.filterSelected="za";          
+      }else if(strSortOrder.equals("az")){
+        uiAddOnSearchResult.SortAddons("az");
+        UIAddOnSearchForm.filterSelected="az";        
+      }else if(strSortOrder.equals("latest")){
+        uiAddOnSearchResult.SortAddons("latest");
+        UIAddOnSearchForm.filterSelected="latest";        
+      }else{
+        //Sort by vote
+        uiAddOnSearchResult.SortAddons("popular");
+        UIAddOnSearchForm.filterSelected="popular";     
+      }
+      uiDropDownControl.setValue(strSortOrder);
+      
+      uiAddonsSearchPageContainer.manageView(UIAddOnSearchPageLayout.SEARCH_RESULT);  
+      portletRequestContext.addUIComponentToUpdateByAjax(uiAddonsSearchPageContainer);  
+    }
 	}
 	
 }

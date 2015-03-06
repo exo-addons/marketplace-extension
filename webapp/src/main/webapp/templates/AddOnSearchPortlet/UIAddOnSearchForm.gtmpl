@@ -2,6 +2,7 @@
  import org.exoplatform.webui.form.UIFormInputSet;
  import org.exoplatform.webui.form.UIFormInputBase;
  import org.exoplatform.webui.form.input.UIUploadInput;
+ import org.exoplatform.webui.core.UIDropDownControl;
 %>
 <%
  def viewer = _ctx.getRequestContext().getRemoteUser();
@@ -15,32 +16,43 @@
   <div class="clearfix">
    <%   
     List children = uicomponent.getChildren() ;
+    def uiDropDownControl = null;
     for(component in children) {
-    if(component.isRendered()){
-    fieldName = component.getName(); 
-    String isTextArea = "";
-   %> 
-   <div class="uiSearchForm uiSearchInput pull-left">
-    <% if(component instanceof UIFormInputBase && component.isEditable()) { %>
-     <% uicomponent.renderChild(component.getClass()) %>
-    <% }%>
-   </div>
-   <%   } // end if
+      if(component.isRendered()){
+
+          if(component instanceof UIDropDownControl){
+            uiDropDownControl = component;
+          }
+          fieldName = component.getName(); 
+          String isTextArea = "";
+         %> 
+         <div class="uiSearchForm uiSearchInput pull-left">
+          <% if(component instanceof UIFormInputBase && component.isEditable()) { %>
+           <% uicomponent.renderChild(component.getClass()) %>
+          <% }%>
+         </div>
+     <% } // end if
     } // end for
    %>
-    <%if(null!=viewer){%>
-		<button type="button" onclick="location.href='/portal/intranet/create-addon'" class="btn btn-primary pull-right"><%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.addNew')%></button>
-		<%}%>
-		<% if(uicomponent.getBtnBackToAddonsVisible()){ %>
-   		<button type="button" onclick="<%=uicomponent.event("Sort","az")%>" class="btn btn-primary pull-right"><%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.backToList')%></button>   
-		<% } %>
+    
+    <button type="button"  style="margin-left: 5px;"
+      onclick="window.open('https://codenvy.com/f?id=7nop24paia4u2okn', '_blank')" class="btn btn-primary pull-right">
+      <%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.codeNew')%>
+    </button>
 
-  <select name="sortby" class="sortBy pull-right" id="SortAddon">
-		<option value="popular" selected="selected" ><%=_ctx.appRes('UIAddOnSearchPortlet.label.sort-popular')%></option>
-		<option value="az"><%=_ctx.appRes('UIAddOnSearchPortlet.label.sort-az')%></option>
-		<option value="za"><%=_ctx.appRes('UIAddOnSearchPortlet.label.sort-za')%></option>
-		<option value="latest"><%=_ctx.appRes('UIAddOnSearchPortlet.label.sort-latest')%></option>
-	</select>
+    <button type="button"
+      onclick="window.open('/portal/intranet/create-addon', '_blank')" class="btn btn-primary pull-right">
+      <%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.addNew')%>
+    </button>
+
+
+    <% if(uicomponent.getBtnBackToAddonsVisible()){ %>
+      <button type="button" onclick="<%=uicomponent.event("Sort","az")%>" class="btn btn-primary pull-right"><%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.backToList')%></button>   
+    <% } %>
+
+    <div class="pull-right">
+      <% uicomponent.renderChild(uiDropDownControl.getClass()) %>
+    </div>
 
  
    <% for(action in uicomponent.getActions()) {
@@ -57,7 +69,7 @@
    %>
    <% if(uicomponent.isMyAddonsVisible()){ %>
    <a class="<%= uicomponent.getStyleFilterSelected("myaddons")%>" href="<%=uicomponent.event("Sort","myaddons")%>"><%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.myAddOn')%></a>
-   <% } %>	
+   <% } %>  
 <!--
    <a class="<%= uicomponent.getStyleFilterSelected("az")%>" href="<%=uicomponent.event("Sort","az")%>"> A <i class="uiIconMiniArrowRight uiIconLightGray"></i> Z</a>
    <a class="<%= uicomponent.getStyleFilterSelected("za")%>" href="<%=uicomponent.event("Sort","za")%>"> Z  <i class="uiIconMiniArrowRight uiIconLightGray"></i> A</a>
@@ -68,38 +80,16 @@
 </div>
 <script>
 
-function setSelectValueOfSortAddon(){
-  jQuery('#SortAddon').val("<%=uicomponent.filterSelected%>");
-}
-
-jQuery('#SortAddon').change(function() {
-    var val = jQuery("#SortAddon option:selected").val();
-    var url ="#";
-    if(val=="az"){
-       url="<%=uicomponent.event("Sort","az")%>";
-    }else if(val=="za"){
-       url="<%=uicomponent.event("Sort","za")%>" ;
-    }else if(val=="latest"){
-       url="<%=uicomponent.event("Sort","latest")%>" ;
-    }else{
-        url="<%=uicomponent.event("Sort","popular")%>" ;
-    }
-    eval(url);
-});
-
 jQuery('document').ready(function(){
   
     jQuery('#keywordInput').keypress(function(e){
         if(e.which == 13){//Enter key pressed
             jQuery('#btnDoSearch').click();//Trigger search button click event
-						return false;
+            return false;
         }
 
 
     });
-
-    //set sellected value of SortAddon
-    setSelectValueOfSortAddon();
 
 });
 </script>
