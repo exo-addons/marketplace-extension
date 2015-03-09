@@ -602,7 +602,6 @@ void commentForm(Node post) {
       toolbar :
       [
         { name: 'tools', items : [ 'Maximize' ] },
-        { name: 'document', items : [ 'Source'] },
         { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
         { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-',
   '-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-' ] },
@@ -754,7 +753,6 @@ void commentForm(Node post) {
       toolbar :
       [
         { name: 'tools', items : [ 'Maximize' ] },
-        { name: 'document', items : [ 'Source'] },
         { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
         { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-',
   '-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-' ] },
@@ -846,15 +844,18 @@ void commentForm(Node post) {
 <!--END Addon navigation-->
 <div class="addonMainContent">
   <div class="clearfix">
-  <div class="img pull-left"><a href="#" title=""><img class='addonAvatar' src="$addonAvatarUrl" alt="" /></a></div>
+     <div class="img pull-left"><a href="#" title=""><img class='addonAvatar' src="$addonAvatarUrl" alt="" /></a></div>
   <%if(installCommand!=null && installCommand!=("")){%>
       <div class="install pull-right">
         <div>Install via eXo add-on Manager:</div>
-        <div><input type="text" id="installCommand_$uuid" readonly='readonly' value="$installCommand" /></div>
+        <div class="installInputArea">
+          <div class="specialTxt">&#36;</div>
+          <input type="text" id="installCommand_$uuid" readonly='readonly' value="$installCommand"/>
+        </div>
       </div>
     <%}%>
       
-      <div class="info">
+    <div class="info">
     <div class="detail">
       <h2>$title</h2>
       
@@ -943,7 +944,7 @@ void commentForm(Node post) {
       <span>$lastUpdate</span>
     </div>
     <div class="span3">
-      <h6>Authors</h6>
+      <h6><%if(authorEmail.length>1){%>Authors<%}else{%>Author<%}%></h6>
       <ul class="authorList">
         <%for (String emailItem : authorEmail) {
             def authorUserName = getUsernameByEmail(emailItem.trim());
