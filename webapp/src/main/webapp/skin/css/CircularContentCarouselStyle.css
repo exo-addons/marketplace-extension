@@ -34,7 +34,7 @@
 	position:absolute;
 	top:10px;
 	right:10px;
-	background:#fff url(../images/cross.png) no-repeat center center;
+	background:#fff url(images/cross.png) no-repeat center center;
 	width:27px;
 	height:27px;
 	text-indent:-9000px;
@@ -62,29 +62,9 @@
 	height:189px;
 	position:relative;
 	margin:0 auto;
-	background:transparent url(../images/animal1.png) no-repeat center center;
+	background:transparent url(images/animal1.png) no-repeat center center;
 }
-.ca-item-2 .ca-icon{
-	background-image:url(../images/animal2.png);
-}
-.ca-item-3 .ca-icon{
-	background-image:url(../images/animal3.png);
-}
-.ca-item-4 .ca-icon{
-	background-image:url(../images/animal4.png);
-}
-.ca-item-5 .ca-icon{
-	background-image:url(../images/animal5.png);
-}
-.ca-item-6 .ca-icon{
-	background-image:url(../images/animal6.png);
-}
-.ca-item-7 .ca-icon{
-	background-image:url(../images/animal7.png);
-}
-.ca-item-8 .ca-icon{
-	background-image:url(../images/animal8.png);
-}
+
 .ca-item h3{
 	font-family: 'Coustard', sans-serif;
 	text-transform:uppercase;
@@ -177,7 +157,7 @@
 .ca-nav span{
 	width:25px;
 	height:38px;
-	background:transparent url(../images/arrows.png) no-repeat top left;
+	background:transparent url(images/arrows.png) no-repeat top left;
 	position:absolute;
 	top:50%;
 	margin-top:-19px;

@@ -501,7 +501,7 @@ void commentForm(Node post) {
 <script src="/CommonsResources/ckeditor/ckeditor.js"></script>
 <link href="/marketplace-extension-webapp/skin/css/add-ons.css" rel="stylesheet">
 <!--Stylesheep for image slider-->
-<link href="/marketplace-extension-webapp/skin/css/CircularContentCarousel/css/style.css" rel="stylesheet">
+<link href="/marketplace-extension-webapp/skin/css/CircularContentCarouselStyle.css" rel="stylesheet">
 
 <!--JS for image slider-->
 <script type="text/javascript" 
@@ -927,7 +927,7 @@ void commentForm(Node post) {
 
   <div class="addonContent">
     <p>
-      <div id="description_$uuid">
+      <div class="description" id="description_$uuid">
         <%=description%>
       </div>
       
