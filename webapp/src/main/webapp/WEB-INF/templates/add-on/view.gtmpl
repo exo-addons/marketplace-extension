@@ -742,30 +742,33 @@ void commentForm(Node post) {
   }
 
 
-  jQuery(document).ready(function(){
-    fillComment_$uuid();
-    fillVote_$uuid();
+    jQuery(document).ready(function(){
+      fillComment_$uuid();
+      fillVote_$uuid();
 
-    // Replace the <textarea id="comment-$uuid"> with a CKEditor
-    CKEDITOR.replace( 'comment-$uuid',
-    {
-      removePlugins: 'elementspath',
-      toolbar :
-      [
-        { name: 'tools', items : [ 'Maximize' ] },
-        { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
-        { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-',
-  '-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-' ] },
-        { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
-        
-      ],
+      if("$viewer" != "null"){
+        // Replace the <textarea id="comment-$uuid"> with a CKEditor
+        CKEDITOR.replace( 'comment-$uuid',
+        {
+          removePlugins: 'elementspath',
+          toolbar :
+          [
+            { name: 'tools', items : [ 'Maximize' ] },
+            { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
+            { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-',
+      '-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-' ] },
+            { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
+            
+          ],
 
-      height: 80
+          height: 80
+        });  
+      }
+
+      <%if(installCommand!=null && installCommand!=("")){%>
+        jQuery("#installCommand_$uuid").click(function() {jQuery(this).select(); } );
+      <%}%>
     });
-    <%if(installCommand!=null && installCommand!=("")){%>
-      jQuery("#installCommand_$uuid").click(function() {jQuery(this).select(); } );
-    <%}%>
-  });
 
 
   jQuery(document).ready(function(){
