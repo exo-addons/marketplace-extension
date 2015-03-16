@@ -274,37 +274,41 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
       List<Node> comments = commentsService_.getComments(content, null);
 
       for (Node comment:comments) {
-        
-        CommentMessage commentMessage= new CommentMessage();
-        if (comment.hasProperty("exo:name")) {
-          commentMessage.setId(comment.getProperty("exo:name").getString());
+        try {
+          CommentMessage commentMessage= new CommentMessage();
+          if (comment.hasProperty("exo:name")) {
+            commentMessage.setId(comment.getProperty("exo:name").getString());
+          }
+          if (comment.hasProperty("exo:commentContent")) {
+            commentMessage.setCommentDetail(comment.getProperty("exo:commentContent").getString());
+          }
+          if (comment.hasProperty("exo:commentor")) {
+            commentMessage.setCommentorUsername(comment.getProperty("exo:commentor").getString());
+          }
+          /*
+          if (comment.hasProperty("exo:commentorFullName")) {
+            commentMessage.setCommentorFullname(comment.getProperty("exo:commentorFullName").getString());
+          }*/
+          
+          if (comment.hasProperty("exo:dateCreated")) {
+            commentMessage.setCreateDate(DateFormat.getDateTimeInstance().format(comment.getProperty("exo:dateCreated").getDate().getTime()));
+            commentMessage.setCommentCreatedDate(comment.getProperty("exo:dateCreated").getDate().getTime());
+          }
+          Profile userProfile = getSocialProfile(commentMessage.getCommentorUsername());
+          commentMessage.setCommentorAvataUrl(userProfile.getAvatarUrl());
+          commentMessage.setCommentorFullname(userProfile.getFullName());
+          if(null!=viewUsername && (viewUsername.equals(commentMessage.getCommentorUsername()) || viewerIsAdmin)){
+            commentMessage.setCanDelete(true);
+          }else{
+            commentMessage.setCanDelete(false);
+          }
+                 
+          listCommentMessages.add(commentMessage);
+        } catch (Exception e) {
+          LOG.warn("Can not load all comment",e);
         }
-        if (comment.hasProperty("exo:commentContent")) {
-          commentMessage.setCommentDetail(comment.getProperty("exo:commentContent").getString());
-        }
-        if (comment.hasProperty("exo:commentor")) {
-          commentMessage.setCommentorUsername(comment.getProperty("exo:commentor").getString());
-        }
-        /*
-        if (comment.hasProperty("exo:commentorFullName")) {
-          commentMessage.setCommentorFullname(comment.getProperty("exo:commentorFullName").getString());
-        }*/
-        
-        if (comment.hasProperty("exo:dateCreated")) {
-          commentMessage.setCreateDate(DateFormat.getDateTimeInstance().format(comment.getProperty("exo:dateCreated").getDate().getTime()));
-          commentMessage.setCommentCreatedDate(comment.getProperty("exo:dateCreated").getDate().getTime());
-        }
-        Profile userProfile = getSocialProfile(commentMessage.getCommentorUsername());
-        commentMessage.setCommentorAvataUrl(userProfile.getAvatarUrl());
-        commentMessage.setCommentorFullname(userProfile.getFullName());
-        if(null!=viewUsername && (viewUsername.equals(commentMessage.getCommentorUsername()) || viewerIsAdmin)){
-          commentMessage.setCanDelete(true);
-        }else{
-          commentMessage.setCanDelete(false);
-        }
-               
-        listCommentMessages.add(commentMessage);
       }
+      
       Collections.sort(listCommentMessages);
       
       DateFormat dateFormat = new SimpleDateFormat(IF_MODIFIED_SINCE_DATE_FORMAT);
