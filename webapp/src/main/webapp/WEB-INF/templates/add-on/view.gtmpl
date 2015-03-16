@@ -837,8 +837,8 @@ void commentForm(Node post) {
     <li class="active">$title</li>
   </ul>
   <div class="pull-right">
-    <button class="btn" type="button" onclick="location.href='/portal/intranet/add-ons'">Back to Add-ons</button>
     <button class="btn" type="button" onclick="location.href='/portal/intranet/create-addon'">Add New Add-on</button>
+    <button class="btn" type="button" onclick="window.open('https://codenvy.com/f?id=7nop24paia4u2okn', '_blank')">Code New Add-ons</button>
   </div>
 </div>
 <!--END Addon navigation-->
@@ -850,7 +850,7 @@ void commentForm(Node post) {
         <div>Install via eXo add-on Manager:</div>
         <div class="installInputArea">
           <div class="specialTxt">&#36;</div>
-          <input type="text" id="installCommand_$uuid" readonly='readonly' value="$installCommand"/>
+          <input data-original-title='$installCommand' data-placement='bottom' rel='tooltip' type="text" id="installCommand_$uuid" readonly='readonly' value="$installCommand"/>
         </div>
       </div>
     <%}%>
