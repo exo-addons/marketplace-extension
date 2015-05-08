@@ -39,7 +39,7 @@ import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.version.VersionException;
 
 import org.exoplatform.addon.service.AddOnService;
-import org.exoplatform.community.portlet.addon.UIAddOnForm;
+import org.exoplatform.addon.utils.ImageUtils;
 import org.exoplatform.community.portlet.addon.UIAddOnWizard;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.util.Util;
@@ -89,6 +89,8 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
   private List<String>       imagesRemoved  = new ArrayList<String>();
   
   private String             avatarImage;
+  
+  public enum ImageType {SCREENSHOT, AVATAR, THUMBNAIL};
 
   public UIAddOnSearchEdit() throws Exception {
     UIAddOnWizard uiAddOnWizard = new UIAddOnWizard(WIZARD_FORM_ID);
@@ -249,8 +251,53 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
 
     }
   }
+  
+  public void removeThumbnalNode() throws PathNotFoundException, RepositoryException {
+    if (this.getNode() != null && this.getNode().hasNode("medias/thumbnail")) {
+      Node thumbnailFolderNode = this.getNode().getNode("medias/thumbnail");
+      NodeIterator nodeIterator = thumbnailFolderNode.getNodes();
 
-  public boolean addImageNode(String targetSubNodeName, UIUploadInput child, Event<UIAddOnSearchEdit> event) throws FileNotFoundException,
+      while (nodeIterator.hasNext()) {
+        Node img = nodeIterator.nextNode();
+        img.remove();
+      }
+
+    }
+  }
+  
+  public boolean updateThumbnailImage() throws Exception{
+    removeThumbnalNode();
+    
+    //find first node in screenshot
+    Node firstNode = null;
+    Node mediaNode = this.getNode().getNode("medias/images");                
+    if(mediaNode != null){
+      NodeIterator iterator = mediaNode.getNodes(); 
+      if (iterator.getSize() > 0) {
+        firstNode= iterator.nextNode();
+      }
+    }
+    if(firstNode!=null){
+      if(!this.getNode().hasNode("medias/thumbnail")){
+        this.getNode().addNode("medias/thumbnail");
+      }
+      String imageMimeType = firstNode.getNode("jcr:content").getProperty("jcr:mimeType").getString();
+      String imageFileName = firstNode.getName();
+      InputStream imageInputStream = firstNode.getNode("jcr:content").getProperty("jcr:data").getStream();
+      
+      Node imageNode = this.getNode().addNode("medias/thumbnail" + "/thumbnail_" + imageFileName, "nt:file");
+      Node imageContent = imageNode.addNode("jcr:content", "nt:resource");
+      InputStream thumbnalInputStream = ImageUtils.createResizedImage(imageInputStream, 450, 360, imageMimeType);
+      imageContent.setProperty("jcr:data", thumbnalInputStream);
+      imageContent.setProperty("jcr:mimeType", imageMimeType);
+      imageContent.setProperty("jcr:lastModified", Calendar.getInstance());
+    }else{
+      return false;
+    }
+    return true;
+  }
+
+  public boolean addImageNode(String targetSubNodeName, UIUploadInput child, Event<UIAddOnSearchEdit> event, ImageType imageType) throws FileNotFoundException,
                                                ItemExistsException,
                                                PathNotFoundException,
                                                NoSuchNodeTypeException,
@@ -280,12 +327,23 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
       if(!this.getNode().hasNode("medias/"+ targetSubNodeName)){
         this.getNode().addNode("medias/"+ targetSubNodeName);
       }
-      Node imageNode = this.getNode().addNode("medias/"+ targetSubNodeName + "/" + imgFileName, "nt:file");
-      Node imageContent = imageNode.addNode("jcr:content", "nt:resource");
-      imageContent.setProperty("jcr:data", inputStreams[0]);
-      imageContent.setProperty("jcr:mimeType", imgMineType);
-      imageContent.setProperty("jcr:lastModified", Calendar.getInstance());
-
+      
+      if(imageType.equals(ImageType.AVATAR)){
+        Node imageNode = this.getNode().addNode("medias/"+ targetSubNodeName + "/avatar_" + imgFileName, "nt:file");
+        Node imageContent = imageNode.addNode("jcr:content", "nt:resource");
+        InputStream avatarInputStream = ImageUtils.createResizedImage(inputStreams[0], 242, 242, imgMineType);
+        imageContent.setProperty("jcr:data", avatarInputStream);
+        imageContent.setProperty("jcr:mimeType", imgMineType);
+        imageContent.setProperty("jcr:lastModified", Calendar.getInstance());
+      }
+      
+      if(imageType.equals(ImageType.SCREENSHOT)){
+        Node imageNode = this.getNode().addNode("medias/"+ targetSubNodeName + "/" + imgFileName, "nt:file");
+        Node imageContent = imageNode.addNode("jcr:content", "nt:resource");
+        imageContent.setProperty("jcr:data", inputStreams[0]);
+        imageContent.setProperty("jcr:mimeType", imgMineType);
+        imageContent.setProperty("jcr:lastModified", Calendar.getInstance());
+      }
     }
     return true;
   }
@@ -503,22 +561,31 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
 
       List<UIComponent> listChildren = new ArrayList<UIComponent>();
       listChildren = uiAddOnWizard.getChildren();
+      
       for (UIComponent child : listChildren) {
-
+         
         if (child instanceof UIUploadInput && !child.getName().equals(UIAddOnWizard.ADDON_AVATAR)) {
           //update screenShots
-          boolean canUpload = uiAddOnSearchEdit.addImageNode("images",(UIUploadInput) child, event);
+          boolean canUpload = uiAddOnSearchEdit.addImageNode("images",(UIUploadInput) child, event, ImageType.SCREENSHOT);
           if(canUpload==false) return;
+          
         }else if(child instanceof UIUploadInput && child.getName().equals(UIAddOnWizard.ADDON_AVATAR)) {
+          //remove old avatar
+          if(child.isRendered()){
+            uiAddOnSearchEdit.removeAvatarNode();
+          }
           //Update avatar image
           UploadResource[] uploadResource = ((UIUploadInput) child).getUploadResources();
           if(uploadResource.length>0){
-            uiAddOnSearchEdit.removeAvatarNode();
-            boolean canUpload = uiAddOnSearchEdit.addImageNode("avatar",(UIUploadInput) child, event);
+            boolean canUpload = uiAddOnSearchEdit.addImageNode("avatar",(UIUploadInput) child, event, ImageType.AVATAR);
             if(canUpload==false) return;
           }
+
         }
       }
+      
+      //update thumbnail image
+      uiAddOnSearchEdit.updateThumbnailImage();
 
       try {
 

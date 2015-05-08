@@ -342,7 +342,7 @@
 
   /* get the url of the avatar */
   String getAvatarUrl(def username) {
-    String avatar = "/social-resources/skin/images/ShareImages/UserAvtDefault.png";
+    String avatar = "/marketplace-extension-webapp/skin/css/images/UserAvtDefault.png";
     try {
       def identityManager = uicomponent.getApplicationComponent(IdentityManager.class)
       def userIdentity = identityManager.getOrCreateIdentity(OrganizationIdentityProvider.NAME, username)
@@ -961,7 +961,7 @@ void commentForm(Node post) {
             } //end of if
             else{ //if author is not existed in Platform
         %>
-              <li><a rel="tooltip" data-placement="bottom" commentor="$emailItem" title="$emailItem" href="mailto:$emailItem" class="avatarXSmall"><img alt="$emailItem" src="/social-resources/skin/images/ShareImages/UserAvtDefault.png"></a></li>
+              <li><a rel="tooltip" data-placement="bottom" commentor="$emailItem" title="$emailItem" href="mailto:$emailItem" class="avatarXSmall"><img alt="$emailItem" src="/marketplace-extension-webapp/skin/css/images/UserAvtDefault.png"></a></li>
         <%
             } //end else
           } //end of for 

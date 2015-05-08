@@ -325,7 +325,7 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
   }
   
   Profile getSocialProfile(String username) {
-    String avatar = "/social-resources/skin/images/ShareImages/UserAvtDefault.png";
+    String avatar = "/marketplace-extension-webapp/skin/css/images/UserAvtDefault.png";
     try {
       Identity userIdentity = identityManager_.getOrCreateIdentity(OrganizationIdentityProvider.NAME, username,true);
       Profile userProfile = userIdentity.getProfile();

@@ -53,5 +53,11 @@
       <scope>provided</scope>
     </dependency>
     
+    <dependency>
+      <groupId>org.imgscalr</groupId>
+      <artifactId>imgscalr-lib</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
   </dependencies>
 </project>

@@ -59,6 +59,7 @@ import org.exoplatform.webui.form.input.UICheckBoxInput;
 import org.exoplatform.webui.form.input.UIUploadInput;
 import org.exoplatform.webui.form.UIFormRichtextInput;
 import org.exoplatform.addon.service.AddOnService;
+import org.exoplatform.addon.utils.ImageUtils;
 
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "app:/templates/AddOnPortlet/UIAddOnForm.gtmpl", events = {
     @EventConfig(listeners = UIAddOnForm.SubmitActionListener.class, phase = Phase.DECODE),
@@ -234,10 +235,11 @@ public class UIAddOnForm extends UIForm {
       } catch (Exception e) {
         log.debug("Exceptions happen while storing data",e);
       }
-
+      int screenShotIndex = 0;
       for (UIComponent child : listChildren) {
 
         if (child instanceof UIUploadInput && (!child.getName().equals(UIAddOnWizard.ADDON_AVATAR))) {
+          screenShotIndex++;
           //Persist screenShots
           child = (UIUploadInput) child;
 
@@ -259,6 +261,17 @@ public class UIAddOnForm extends UIForm {
             imageContent.setProperty("jcr:data", inputStreams[0]);
             imageContent.setProperty("jcr:mimeType", imgMineType);
             imageContent.setProperty("jcr:lastModified", Calendar.getInstance());
+            
+            //create thumbnail for first screenshot
+            if(screenShotIndex == 1){
+              Node thumbnailFolderNode = currentNode.addNode("medias/thumbnail", "nt:folder");
+              Node thumbnailNode = thumbnailFolderNode.addNode("thumbnail" + imgFileName, "nt:file");
+              Node thumbnailContent = thumbnailNode.addNode("jcr:content", "nt:resource");
+              InputStream thumbnailInputStream = ImageUtils.createResizedImage(inputStreams[0], 450, 360, imgMineType);
+              thumbnailContent.setProperty("jcr:data", thumbnailInputStream);
+              thumbnailContent.setProperty("jcr:mimeType", imgMineType);
+              thumbnailContent.setProperty("jcr:lastModified", Calendar.getInstance());
+            }
           }
         }else if(child instanceof UIUploadInput && child.getName().equals(UIAddOnWizard.ADDON_AVATAR)){
           //Persist avatar
@@ -279,8 +292,11 @@ public class UIAddOnForm extends UIForm {
             Node avatarFolderNode = currentNode.addNode("medias/avatar", "nt:folder");
             Node imageNode = avatarFolderNode.addNode("avatar_" + imgFileName, "nt:file");
             Node imageContent = imageNode.addNode("jcr:content", "nt:resource");
-
-            imageContent.setProperty("jcr:data", inputStreams[0]);
+            
+            //resize avatar
+            InputStream avatarInputStream = ImageUtils.createResizedImage(inputStreams[0], 121, 121, imgMineType);
+            
+            imageContent.setProperty("jcr:data", avatarInputStream);
             imageContent.setProperty("jcr:mimeType", imgMineType);
             imageContent.setProperty("jcr:lastModified", Calendar.getInstance());
           }

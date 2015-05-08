@@ -18,7 +18,9 @@
  */
 package org.exoplatform.addon.service;
 
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +35,7 @@ import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import org.exoplatform.addon.utils.ImageUtils;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.definition.PortalContainerConfig;
@@ -102,22 +105,78 @@ public class AddOnService {
 		}
 		
 		return null;
-	}	
+	}
+	public static Node createAddonThumbnailImageCover(Node node) throws Exception{
+    //find first node in screenshot
+    Node firstNode = null;
+    Node mediaNode = node.getNode("medias/images");                
+    if(mediaNode != null){
+      NodeIterator iterator = mediaNode.getNodes(); 
+      if (iterator.getSize() > 0) {
+        firstNode= iterator.nextNode();
+      }
+    }
+    if(firstNode!=null){
+      if(!node.hasNode("medias/thumbnail")){
+        node.addNode("medias/thumbnail");
+      }
+      String imageMimeType = firstNode.getNode("jcr:content").getProperty("jcr:mimeType").getString();
+      String imageFileName = firstNode.getName();
+      InputStream imageInputStream = firstNode.getNode("jcr:content").getProperty("jcr:data").getStream();
+      
+      Node imageNode = node.addNode("medias/thumbnail" + "/thumbnail_" + imageFileName, "nt:file");
+      Node imageContent = imageNode.addNode("jcr:content", "nt:resource");
+      InputStream thumbnalInputStream = ImageUtils.createResizedImage(imageInputStream, 450, 360, imageMimeType);
+      imageContent.setProperty("jcr:data", thumbnalInputStream);
+      imageContent.setProperty("jcr:mimeType", imageMimeType);
+      imageContent.setProperty("jcr:lastModified", Calendar.getInstance());
+      node.save();
+      return imageNode;
+    }else{
+      return null;
+    }
+  }
+	
 	public static String getImageCover(Node node) throws PathNotFoundException, RepositoryException{
 		
 		String path ="/marketplace-extension-webapp/skin/css/images/addons-icon.jpg";
+		try{
 		if(node != null){
+	    //get thumbnailImageCover
+		  if(node.hasNode("medias/thumbnail")){
+  		  Node thumbnailNode = node.getNode("medias/thumbnail");   
+  		  if(thumbnailNode != null){
+  
+          NodeIterator iterator = thumbnailNode.getNodes(); 
+          if (iterator.getSize() > 0) {
+            Node firstNode= iterator.nextNode();
+            path = "/rest/jcr/repository/collaboration" + firstNode.getPath();
+            return path;
+          }
+          
+        }
+		  }
+		  
+		  //if thumbnailImage is not existed, create ImageCover from screenshot
 			Node mediaNode = node.getNode("medias/images");			   			   
 			if(mediaNode != null){
 
 				NodeIterator iterator = mediaNode.getNodes();	
 				if (iterator.getSize() > 0) {
-					Node firstNode= iterator.nextNode();
-					path = "/rest/jcr/repository/collaboration" + firstNode.getPath();
+					//Node firstNode= iterator.nextNode();
+				  try {
+            Node thumbnailNodeImage = createAddonThumbnailImageCover(node);
+            path = "/rest/jcr/repository/collaboration" + thumbnailNodeImage.getPath();
+          } catch (Exception e) {
+            log.warn("Can not create ThumbnailImageCover for " + node.getPath(), e);
+          }
 				}
 				
 			}
 			
+		}
+		}catch(Exception e){
+		  log.warn("Can not get ImageCover of " + node.getPath(), e);
 		}
 		return path;
 		

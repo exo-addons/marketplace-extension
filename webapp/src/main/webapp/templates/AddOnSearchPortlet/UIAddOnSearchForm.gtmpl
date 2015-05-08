@@ -41,7 +41,7 @@
     </button>
 
     <button type="button"
-      onclick="window.open('/portal/intranet/create-addon', '_blank')" class="btn btn-primary pull-right">
+      onclick="location.href='/portal/intranet/create-addon'" class="btn btn-primary pull-right">
       <%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.addNew')%>
     </button>
 
