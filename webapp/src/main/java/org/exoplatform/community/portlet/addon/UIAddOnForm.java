@@ -267,7 +267,7 @@ public class UIAddOnForm extends UIForm {
               Node thumbnailFolderNode = currentNode.addNode("medias/thumbnail", "nt:folder");
               Node thumbnailNode = thumbnailFolderNode.addNode("thumbnail" + imgFileName, "nt:file");
               Node thumbnailContent = thumbnailNode.addNode("jcr:content", "nt:resource");
-              InputStream thumbnailInputStream = ImageUtils.createResizedImage(inputStreams[0], 450, 360, imgMineType);
+              InputStream thumbnailInputStream = ImageUtils.createResizedImage(imageContent.getProperty("jcr:data").getStream(), 450, 360, imgMineType);
               thumbnailContent.setProperty("jcr:data", thumbnailInputStream);
               thumbnailContent.setProperty("jcr:mimeType", imgMineType);
               thumbnailContent.setProperty("jcr:lastModified", Calendar.getInstance());
