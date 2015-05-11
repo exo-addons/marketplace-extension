@@ -38,6 +38,8 @@ import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
 import javax.jcr.version.VersionException;
 
+import org.jboss.cache.commands.read.GetNodeCommand;
+
 import org.exoplatform.addon.service.AddOnService;
 import org.exoplatform.addon.utils.ImageUtils;
 import org.exoplatform.community.portlet.addon.UIAddOnWizard;
@@ -622,17 +624,27 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
 
       UIPopupContainer uiPopupContainer = uiAddOnSearchEdit.getAncestorOfType(UIPopupContainer.class);
       uiPopupContainer.deActivate();
-      // init addons list
-      // and show directly my addons
-      UIAddOnSearchForm.REFRESH = false;
-      UIAddOnSearchForm.filterSelected = "myaddons";
+      
       UIAddOnSearchPageLayout uiAddOnSearchPageLayout = uiPopupContainer.getAncestorOfType(UIAddOnSearchPageLayout.class);
-      uiAddOnSearchPageLayout.getChild(UIAddOnSearchResult.class).showMyAddons();  
-      event.getRequestContext()
-           .addUIComponentToUpdateByAjax(uiAddOnSearchPageLayout);
+      UIAddOnSearchResult uiAddOnSearchResult = uiAddOnSearchPageLayout.getChild(UIAddOnSearchResult.class);
+      UIAddOnSearchOne addOnSearchOne = uiAddOnSearchResult.getChildById(uiAddOnSearchEdit.getNodeId());
+      try {
+        event.getRequestContext().addUIComponentToUpdateByAjax(uiPopupContainer);
+        event.getRequestContext().addUIComponentToUpdateByAjax(addOnSearchOne);
+        
+        //execute JS from UIAddOnSearchOne.gtmpl to update CoverImage animation
+        event.getRequestContext().getJavascriptManager().addJavascript("loadCoverImage()");
+      } catch (Exception e) {
+        // init addons list
+        // and show directly my addons
 
+        UIAddOnSearchForm.REFRESH = false;
+        UIAddOnSearchForm.filterSelected = "myaddons";
+        uiAddOnSearchResult.showMyAddons();  
+        event.getRequestContext()
+             .addUIComponentToUpdateByAjax(uiAddOnSearchPageLayout);
+      }
     }
-
   }
 
   @Override

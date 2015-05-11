@@ -51,6 +51,7 @@ import org.exoplatform.webui.event.EventListener;
 public class UIAddOnSearchOne extends UIContainer {
 		
 	private String nodeId;
+	private Boolean canEdit = false;
 	public UIAddOnSearchOne() throws Exception{
 		
 			
@@ -63,7 +64,16 @@ public class UIAddOnSearchOne extends UIContainer {
 		return this.nodeId;
 	}
 	
-	public Node getNode() throws PathNotFoundException, RepositoryException{
+	
+	public Boolean getCanEdit() {
+    return canEdit;
+  }
+	
+  public void setCanEdit(Boolean canEdit) {
+    this.canEdit = canEdit;
+  }
+  
+  public Node getNode() throws PathNotFoundException, RepositoryException{
 		return AddOnService.getNodeById(this.getNodeId());
 	}
 
@@ -80,7 +90,9 @@ public class UIAddOnSearchOne extends UIContainer {
 	}	
 	
 	public Boolean canEdit() throws RepositoryException{
-		
+		if(getCanEdit()){
+		  return true;
+		}
 		String userId = Util.getPortalRequestContext().getRemoteUser();
 		String ownerid = this.getStrProperty("exo:owner");	
 

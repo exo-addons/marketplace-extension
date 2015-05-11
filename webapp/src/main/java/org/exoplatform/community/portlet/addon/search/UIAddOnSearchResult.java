@@ -19,6 +19,7 @@
 package org.exoplatform.community.portlet.addon.search;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -29,12 +30,19 @@ import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.exoplatform.addon.service.AddOnService;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.jcr.impl.core.query.QueryImpl;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.services.organization.Membership;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -69,6 +77,8 @@ public class UIAddOnSearchResult extends UIContainer {
   private int                 totaItem       = 0;
 
   private String              keyword        = "";
+  
+  private Boolean canEdit = false;
 
   //private final static String ADDONS_FOLDER  = "/Contributions/";
   
@@ -141,7 +151,53 @@ public class UIAddOnSearchResult extends UIContainer {
     return (int) this.totaItem;
   }
 
+  
+  public Boolean getCanEdit() {
+    return canEdit;
+  }
+
+  public void setCanEdit(Boolean canEdit) {
+    this.canEdit = canEdit;
+  }
+  
+  private boolean checkLoginUserPermission()
+  {
+    PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+    PortalRequestContext prc = (PortalRequestContext) context.getParentAppRequestContext();
+    UIPortalApplication portalApp = (UIPortalApplication) prc.getUIApplication();
+    UIPortal portal = portalApp.getCurrentSite();
+    UserACL userACL = portal.getApplicationComponent(UserACL.class);
+    
+    String loginUserId = prc.getRemoteUser();
+    if(null == loginUserId || loginUserId.length()==0)
+      return false;
+    //return true if invokeUserId is root
+    if(userACL.getSuperUser().equalsIgnoreCase(loginUserId))
+      return true;
+
+    try {
+      OrganizationService organizationService = (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+      Collection<Membership> membershipCollection = organizationService.getMembershipHandler().findMembershipsByUserAndGroup(loginUserId, "/platform/administrators");
+
+      if(membershipCollection.isEmpty())
+        return false;
+
+      for (Membership membership : membershipCollection) {
+        String membershipType = membership.getMembershipType();
+        if (membershipType.equals("*") || membershipType.equals("manager"))
+          return true;
+      }
+
+    } catch (Exception e) {
+      log.warn(e);
+      return false;
+    }
+
+    return false;
+  }
+
   public void init() throws Exception {
+    setCanEdit(checkLoginUserPermission());
     clearResult();
     this.setKeyword("");
     this.searchDBAddonByKey();
@@ -206,7 +262,7 @@ public class UIAddOnSearchResult extends UIContainer {
   public void SortAddons(String sort){
 
     UIAddOnSearchResult.REFRESH = false;
-    this.setSQLCondition("");
+    
     try {
       this.clearResult();
       if(sort.equals("za")){
@@ -236,8 +292,9 @@ public class UIAddOnSearchResult extends UIContainer {
 
     String sqlQuery = "";
     // create query
-    String sqlStatement = " SELECT * FROM exo:addon WHERE publication:currentState='published' AND  NOT (jcr:mixinTypes = 'exo:restoreLocation') AND jcr:path like '%"
-        + AddOnService.getAddOnHomePath() + "%' ";
+    String sqlStatement = " SELECT * FROM exo:addon WHERE jcr:path like '%" +
+                          AddOnService.getAddOnHomePath() + 
+                          "%' AND publication:currentState='published' AND  NOT (jcr:mixinTypes = 'exo:restoreLocation') ";
     sqlQuery = sqlStatement + this.getSQLCondition() + this.getSQLOrder();
     this.getDBResource(sqlQuery);
 
@@ -279,6 +336,7 @@ public class UIAddOnSearchResult extends UIContainer {
       if (super.getChildById(findedNode.getUUID()) == null) {
         UIAddOnSearchOne uiAddOnSearchOne = addChild(UIAddOnSearchOne.class, null, findedNode.getUUID());
         uiAddOnSearchOne.setNodeId(findedNode.getUUID());
+        uiAddOnSearchOne.setCanEdit(this.getCanEdit());
       }
       
       this.data.add(findedNode);
@@ -287,8 +345,10 @@ public class UIAddOnSearchResult extends UIContainer {
 
   public void getTotalDBResources() throws Exception {
 
-    String sqlQuery = "SELECT exo:name FROM exo:addon WHERE  publication:currentState='published' AND NOT (jcr:mixinTypes = 'exo:restoreLocation') AND jcr:path like '%"
-        + AddOnService.getAddOnHomePath() + "%' ";
+    String sqlQuery = "SELECT exo:name FROM exo:addon WHERE jcr:path like '%" + 
+                      AddOnService.getAddOnHomePath() +
+                      "%' AND publication:currentState='published' AND NOT (jcr:mixinTypes = 'exo:restoreLocation') ";
+    
     sqlQuery += this.getSQLCondition();
     QueryResult result = this.excSQL(sqlQuery, false);
     int count = (int) result.getRows().getSize();

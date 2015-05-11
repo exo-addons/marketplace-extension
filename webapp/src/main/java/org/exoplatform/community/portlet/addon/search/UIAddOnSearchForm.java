@@ -96,7 +96,7 @@ public class UIAddOnSearchForm extends UIForm {
     
     setSelectedMode(uiDropDownControl);
     
-    addChild(uiDropDownControl);
+    //addChild(uiDropDownControl);
 	
 	}
   public void processRender(WebuiRequestContext context) throws Exception {
@@ -159,8 +159,39 @@ public class UIAddOnSearchForm extends UIForm {
 				keyword = "";
 			uiAddOnSearchResult.clearResult();
 			uiAddOnSearchResult.setKeyword(keyword);
+			
+			//DisplayModesDropDown
+			UIDropDownControl uiDropDownControl = uiAddOnSearchForm.getChild(UIDropDownControl.class);
+			String strSortOrder = uiDropDownControl.getOptions().get(uiDropDownControl.getSelectedIndex()).getValue();
+			//uiAddOnSearchResult.set
+			
+			if(strSortOrder.equals("myaddons")){
+        if(UIAddOnSearchForm.filterSelected.equals("myaddons")){
+          uiAddOnSearchResult.SortAddons("popular");
+          UIAddOnSearchForm.filterSelected="popular";
+        }else{
+          UIAddOnSearchForm.filterSelected="myaddons";  
+          uiAddOnSearchResult.showMyAddons();
+        }
+          
+      }else if(strSortOrder.equals("za")){
+        uiAddOnSearchResult.SortAddons("za");
+        UIAddOnSearchForm.filterSelected="za";          
+      }else if(strSortOrder.equals("az")){
+        uiAddOnSearchResult.SortAddons("az");
+        UIAddOnSearchForm.filterSelected="az";        
+      }else if(strSortOrder.equals("latest")){
+        uiAddOnSearchResult.SortAddons("latest");
+        UIAddOnSearchForm.filterSelected="latest";        
+      }else{
+        //Sort by vote
+        uiAddOnSearchResult.SortAddons("popular");
+        UIAddOnSearchForm.filterSelected="popular";     
+      }
+			
 
-			uiAddOnSearchResult.doSearch();
+			//uiAddOnSearchResult.doSearch();
+			
 			uiAddonsSearchPageContainer.manageView(UIAddOnSearchPageLayout.SEARCH_RESULT);
             portletRequestContext.addUIComponentToUpdateByAjax(uiAddonsSearchPageContainer);
 			
@@ -178,7 +209,21 @@ public class UIAddOnSearchForm extends UIForm {
 			
 			PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();			
 			UIAddOnSearchPageLayout uiAddonsSearchPageContainer = (UIAddOnSearchPageLayout)uiAddOnSearchForm.getParent();
-			UIAddOnSearchResult uiAddOnSearchResult = uiAddonsSearchPageContainer.getChildById(UIAddOnSearchPageLayout.SEARCH_RESULT);			
+			UIAddOnSearchResult uiAddOnSearchResult = uiAddonsSearchPageContainer.getChildById(UIAddOnSearchPageLayout.SEARCH_RESULT);		
+			
+			//BEGIN get and set keyword for keep search
+			UIFormStringInput uiKeywordInput = uiAddOnSearchForm.getUIStringInput(UIAddOnSearchForm.KEYWORD_INPUT);        
+      String keyword = uiKeywordInput.getValue();
+      if(keyword != null){
+        
+        keyword = keyword.replace('-', ' ').toLowerCase(portletRequestContext.getLocale());
+          keyword = keyword.replaceAll("'","''");       
+      
+      }else
+        keyword = "";
+      uiAddOnSearchResult.clearResult();
+      uiAddOnSearchResult.setKeyword(keyword);
+      //END get and set keyword for keep search
 
 			if(strSortOrder.equals("myaddons")){
 				if(UIAddOnSearchForm.filterSelected.equals("myaddons")){
