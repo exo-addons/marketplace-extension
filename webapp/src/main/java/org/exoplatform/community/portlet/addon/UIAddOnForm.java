@@ -60,6 +60,7 @@ import org.exoplatform.webui.form.input.UIUploadInput;
 import org.exoplatform.webui.form.UIFormRichtextInput;
 import org.exoplatform.addon.service.AddOnService;
 import org.exoplatform.addon.utils.ImageUtils;
+import org.exoplatform.addon.utils.AddonUtils;
 
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "app:/templates/AddOnPortlet/UIAddOnForm.gtmpl", events = {
     @EventConfig(listeners = UIAddOnForm.SubmitActionListener.class, phase = Phase.DECODE),
@@ -229,7 +230,8 @@ public class UIAddOnForm extends UIForm {
         }
       }
 
-      String nameAddon = titleAddon.replaceAll(" ", "-").toLowerCase();
+      String nameAddon = AddonUtils.cleanString(titleAddon);
+      
       try {
         currentNode = AddOnService.storeNode(titleAddon, nameAddon, hosted, mapProperties, true);
       } catch (Exception e) {
