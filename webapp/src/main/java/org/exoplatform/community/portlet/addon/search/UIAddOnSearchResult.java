@@ -79,6 +79,9 @@ public class UIAddOnSearchResult extends UIContainer {
   private String              keyword        = "";
   
   private Boolean canEdit = false;
+  
+  private String addonHomePath; 
+  private int totalAddon = 0;
 
   //private final static String ADDONS_FOLDER  = "/Contributions/";
   
@@ -197,6 +200,7 @@ public class UIAddOnSearchResult extends UIContainer {
   }
 
   public void init() throws Exception {
+    addonHomePath = AddOnService.getAddOnHomePath();
     setCanEdit(checkLoginUserPermission());
     clearResult();
     this.setKeyword("");
@@ -292,9 +296,10 @@ public class UIAddOnSearchResult extends UIContainer {
 
     String sqlQuery = "";
     // create query
-    String sqlStatement = " SELECT * FROM exo:addon WHERE jcr:path like '%" +
-                          AddOnService.getAddOnHomePath() + 
-                          "%' AND publication:currentState='published' AND  NOT (jcr:mixinTypes = 'exo:restoreLocation') ";
+    String sqlStatement = " SELECT * FROM exo:addon WHERE jcr:path like '" +
+                          addonHomePath + 
+                          "%' AND NOT jcr:path LIKE '" + addonHomePath + "%/%'" +
+                          " AND publication:currentState='published' AND  NOT (jcr:mixinTypes = 'exo:restoreLocation') ";
     sqlQuery = sqlStatement + this.getSQLCondition() + this.getSQLOrder();
     this.getDBResource(sqlQuery);
 
@@ -344,17 +349,16 @@ public class UIAddOnSearchResult extends UIContainer {
   }
 
   public void getTotalDBResources() throws Exception {
-
-    String sqlQuery = "SELECT exo:name FROM exo:addon WHERE jcr:path like '%" + 
-                      AddOnService.getAddOnHomePath() +
-                      "%' AND publication:currentState='published' AND NOT (jcr:mixinTypes = 'exo:restoreLocation') ";
+    String sqlQuery = "SELECT exo:name FROM exo:addon WHERE jcr:path like '" + 
+                       addonHomePath + 
+                      "%' AND NOT jcr:path LIKE '" + addonHomePath + "%/%'" +
+                      " AND publication:currentState='published' AND NOT (jcr:mixinTypes = 'exo:restoreLocation') ";
     
     sqlQuery += this.getSQLCondition();
     QueryResult result = this.excSQL(sqlQuery, false);
     int count = (int) result.getRows().getSize();
     log.debug(" ================ total item " + count + " ========================== ");
     this.setTotalItem(count);
-
   }
 
   public Boolean isShowMore() {
