@@ -33,6 +33,7 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.jcr.lock.LockException;
 import javax.jcr.nodetype.ConstraintViolationException;
 import javax.jcr.nodetype.NoSuchNodeTypeException;
@@ -45,10 +46,16 @@ import org.exoplatform.addon.utils.ImageUtils;
 import org.exoplatform.community.portlet.addon.UIAddOnWizard;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.jcr.access.AccessControlEntry;
+import org.exoplatform.services.jcr.access.AccessControlList;
+import org.exoplatform.services.jcr.access.PermissionType;
+import org.exoplatform.services.jcr.core.ExtendedNode;
+import org.exoplatform.services.jcr.ext.common.SessionProvider;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.wcm.publication.PublicationDefaultStates;
 import org.exoplatform.services.wcm.publication.WCMPublicationService;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -226,7 +233,7 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
     if (this.getNode() != null) {
       Node mediaNode = this.getNode().getNode("medias/images");
       NodeIterator nodeIterator = mediaNode.getNodes();
-
+    /*
       while (nodeIterator.hasNext()) {
         Node img = nodeIterator.nextNode();
         String src = AddOnService.imgPathBase + img.getPath();
@@ -237,7 +244,25 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
           }
         }
       }
-
+      */
+      
+      //BEGIN use systemSession to remove thumbnailFolderNode
+      SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
+      Session session = sessionProvider.getSession(WCMCoreUtils.getRepository().getConfiguration().getDefaultWorkspaceName(), WCMCoreUtils.getRepository());
+      
+      while (nodeIterator.hasNext()) {
+        Node img = nodeIterator.nextNode();
+        String src = AddOnService.imgPathBase + img.getPath();
+        for (int i = 0; i < this.getImagesRemoved().size(); i++) {
+          if (src.equals(this.getImagesRemoved().get(i))) {
+            log.debug(" ===== remove image " + img.getPath());
+            Node toRemove =  (Node) session.getItem(img.getPath());
+            toRemove.remove();
+          }
+        }
+      }
+      session.save();
+      //END use systemSession to remove thumbnailFolderNode
     }
   }
   
@@ -245,11 +270,25 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
     if (this.getNode() != null && this.getNode().hasNode("medias/avatar")) {
       Node avatarFolderNode = this.getNode().getNode("medias/avatar");
       NodeIterator nodeIterator = avatarFolderNode.getNodes();
-
-      while (nodeIterator.hasNext()) {
+      /*
+       while (nodeIterator.hasNext()) {
         Node img = nodeIterator.nextNode();
         img.remove();
       }
+      */
+      
+      //BEGIN use systemSession to remove thumbnailFolderNode
+      SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
+      Session session = sessionProvider.getSession(WCMCoreUtils.getRepository().getConfiguration().getDefaultWorkspaceName(), WCMCoreUtils.getRepository());
+      
+      
+      while (nodeIterator.hasNext()) {
+        Node img = nodeIterator.nextNode();
+        Node toRemove =  (Node) session.getItem(img.getPath());
+        toRemove.remove();
+      }
+      session.save();
+      //END use systemSession to remove thumbnailFolderNode
 
     }
   }
@@ -257,12 +296,22 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
   public void removeThumbnalNode() throws PathNotFoundException, RepositoryException {
     if (this.getNode() != null && this.getNode().hasNode("medias/thumbnail")) {
       Node thumbnailFolderNode = this.getNode().getNode("medias/thumbnail");
+      
+      //use systemSession to remove thumbnailFolderNode
+      
+      SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
+      Session session = sessionProvider.getSession(WCMCoreUtils.getRepository().getConfiguration().getDefaultWorkspaceName(), WCMCoreUtils.getRepository());
+      Node toRemove =  (Node) session.getItem(thumbnailFolderNode.getPath());
+      toRemove.remove();
+      session.save();
+      
+      /*   
       NodeIterator nodeIterator = thumbnailFolderNode.getNodes();
 
       while (nodeIterator.hasNext()) {
         Node img = nodeIterator.nextNode();
         img.remove();
-      }
+      }*/
 
     }
   }
