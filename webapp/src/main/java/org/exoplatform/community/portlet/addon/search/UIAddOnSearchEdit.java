@@ -246,7 +246,7 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
       }
       */
       
-      //BEGIN use systemSession to remove thumbnailFolderNode
+      //BEGIN use systemSession to remove ImageNode
       SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
       Session session = sessionProvider.getSession(WCMCoreUtils.getRepository().getConfiguration().getDefaultWorkspaceName(), WCMCoreUtils.getRepository());
       
@@ -262,7 +262,7 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
         }
       }
       session.save();
-      //END use systemSession to remove thumbnailFolderNode
+      //END use systemSession to remove ImageNode
     }
   }
   
@@ -277,7 +277,7 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
       }
       */
       
-      //BEGIN use systemSession to remove thumbnailFolderNode
+      //BEGIN use systemSession to remove AvatarNode
       SessionProvider sessionProvider = WCMCoreUtils.getSystemSessionProvider();
       Session session = sessionProvider.getSession(WCMCoreUtils.getRepository().getConfiguration().getDefaultWorkspaceName(), WCMCoreUtils.getRepository());
       
@@ -288,7 +288,7 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
         toRemove.remove();
       }
       session.save();
-      //END use systemSession to remove thumbnailFolderNode
+      //END use systemSession to remove AvatarNode
 
     }
   }
