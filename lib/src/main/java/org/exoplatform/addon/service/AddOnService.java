@@ -35,12 +35,16 @@ import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import org.exoplatform.addon.service.model.Addon;
 import org.exoplatform.addon.utils.ImageUtils;
+import org.exoplatform.commons.utils.CommonsUtils;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.definition.PortalContainerConfig;
 import org.exoplatform.container.xml.PortalContainerInfo;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.cache.CacheService;
+import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.cms.CmsService;
 import org.exoplatform.services.cms.JcrInputProperty;
 import org.exoplatform.services.jcr.access.PermissionType;
@@ -55,6 +59,8 @@ import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.webui.Utils;
 
 public class AddOnService {
+  
+  public static final String ADDON_CACHE_NAME = "addon.cache";
   
   /** The Constant PREFERENCE_RECEIVER. */
   public static final String PREFERENCE_RECEIVER = "adminEmail";
@@ -602,5 +608,77 @@ public class AddOnService {
 		 return matcher.matches();
 	}
 	
+	
+	public static ExoCache<String, Addon> getAddonCache(){
+	  CacheService addonCache = CommonsUtils.getService(CacheService.class);
+	  ExoCache<String, Addon> cacheData = addonCache.getCacheInstance(ADDON_CACHE_NAME);
+	  return cacheData;
+	  
+	}
+	
+	public static void cleanAllAddonCache(){
+	    ExoCache<String, Addon> cacheData = getAddonCache();
+	    cacheData.clearCache();
+	}
+	
+	public static void cleanAddonCacheByUuid(String uuid){
+	  log.info("Clean addon cache with id: " +uuid);
+    ExoCache<String, Addon> cacheData = getAddonCache();
+    cacheData.remove(uuid);
+}
+	
+	public static void updateAddonDetailUrlToCache(String uuid, String detailUrl){
+	  Addon addon = getAddonFromCache(uuid);
+	  addon.setSeeDetailUrl(detailUrl);
+	}
+	
+	
+  public static Addon getAddonFromCache(String uuid){
+     ExoCache<String, Addon> cacheData = getAddonCache();
+     Addon addon = cacheData.get(uuid);
+     if(null == addon){
+       addon = buildAddonFromJcrNode(uuid);
+       cacheData.put(uuid, addon);
+     }
+     return addon;
+  }
+  
+  public static Addon buildAddonFromJcrNode(String uuid){
+    log.info("Build addon cache data for uuid: " + uuid);
+    Addon addon = new Addon();
+    try {
+      Node node = getNodeById(uuid);
+      
+      addon.setUuid(node.getUUID());
+      addon.setDescription(getStrProperty(node, "exo:description"));
+      addon.setDownloadLink(getStrProperty(node, "exo:downloadUrl"));
+      addon.setJcrNodePath(node.getPath());
+      addon.setName(getStrProperty(node, "exo:title"));
+      addon.setOwnerid(getStrProperty(node, "exo:owner"));
+      addon.setCoverImagePath(getImageCover(node));
+      addon.setAuthor(getStrProperty(node, "exo:author"));
+      
+      Double voteRate=0.0;
+      if (node.isNodeType("mix:votable")) {
+        if (node.hasProperty("exo:votingRate"))
+            voteRate = new Double(node.getProperty("exo:votingRate").getString());
+      }
+      addon.setVoteRate(voteRate);
+      
+      Integer totalVote = 0;
+      if (node.isNodeType("mix:votable")) {
+        if (node.hasProperty("exo:voteTotalOfLang"))
+            totalVote = new Integer(node.getProperty("exo:voteTotalOfLang").getString());
+      }
+      addon.setTotalVote(totalVote);
+      
+    } catch (Exception e) {
+      log.error("Can not get Addon node", e);
+      return null;
+    }
+    
+    return addon;
+  }
+  
 }
 

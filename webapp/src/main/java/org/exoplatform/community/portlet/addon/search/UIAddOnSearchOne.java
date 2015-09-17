@@ -22,7 +22,10 @@ import javax.jcr.Node;
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.exoplatform.addon.service.AddOnService;
+import org.exoplatform.addon.service.model.Addon;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.Util;
@@ -49,15 +52,30 @@ import org.exoplatform.webui.event.EventListener;
 			}	
 	)
 public class UIAddOnSearchOne extends UIContainer {
+  
+  private Addon addon;
 		
 	private String nodeId;
 	private Boolean canEdit = false;
 	public UIAddOnSearchOne() throws Exception{
 		
-			
-		
 	}
-	public void setNodeId(String id){
+	
+	
+	public Addon getAddon() {
+    return addon;
+  }
+
+
+  public void setAddon(Addon addon) {
+    this.addon = addon;
+  }
+  
+  public void loadData(){
+    setAddon(AddOnService.getAddonFromCache(this.getId()));
+  }
+
+  public void setNodeId(String id){
 		this.nodeId = id;
 	}
 	public String getNodeId(){
@@ -79,22 +97,22 @@ public class UIAddOnSearchOne extends UIContainer {
 
 	public String getImageCover() throws PathNotFoundException, RepositoryException{
 
-		return AddOnService.getImageCover(this.getNode());
+		return addon.getCoverImagePath();
 		
 	}
 	
-	public String getStrProperty(String propertyName) throws RepositoryException{
+/*	public String getStrProperty(String propertyName) throws RepositoryException{
 		
 		return AddOnService.getStrProperty(this.getNode(), propertyName);
 		
-	}	
+	}	*/
 	
 	public Boolean canEdit() throws RepositoryException{
 		if(getCanEdit()){
 		  return true;
 		}
 		String userId = Util.getPortalRequestContext().getRemoteUser();
-		String ownerid = this.getStrProperty("exo:owner");	
+		String ownerid = addon.getOwnerid();
 
 		if(userId != null && ownerid != null && userId.equals(ownerid)){
 			return true;	
@@ -103,7 +121,11 @@ public class UIAddOnSearchOne extends UIContainer {
 	}
 	
 	
-	public String getURL() throws Exception {	
+	public String getURL() throws Exception {
+	  if(StringUtils.isEmpty(addon.getSeeDetailUrl())==false){
+	    return addon.getSeeDetailUrl();
+	  }
+	  
 		Node node = this.getNode();
 		String repository = WCMCoreUtils.getRepository().getConfiguration().getName();
 		String workspace = node.getSession().getWorkspace().getName();
@@ -131,6 +153,7 @@ public class UIAddOnSearchOne extends UIContainer {
 		FriendlyService friendlyService = getApplicationComponent(FriendlyService.class);
 		String link = friendlyService.getFriendlyUri(nodeURL.toString());
 		
+		AddOnService.updateAddonDetailUrlToCache(this.getNodeId(), link);
 		return link;
 	}
 

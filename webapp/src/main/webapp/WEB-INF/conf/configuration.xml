@@ -28,5 +28,5 @@
   <import>war:/conf/wcm-templates.xml</import>
   <import>war:/conf/marketplace-extension/portal-configuration.xml</import>
   <import>war:/conf/friendly/configuration.xml</import>
-
+  <import>war:/conf/cache/cache-configuration.xml</import>
 </configuration>

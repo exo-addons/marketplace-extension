@@ -9,23 +9,17 @@
     
 %>
 <% 
-	def viewNode = uicomponent.getNode();
-	def itemName = uicomponent.getStrProperty("exo:title");
+	uicomponent.loadData();
+	def addon = uicomponent.getAddon();
+	def itemName = addon.getName();
 	def itemLink = uicomponent.getURL();
 	def imgSrc = uicomponent.getImageCover();	
-	def itemDownloadUrl = uicomponent.getStrProperty("exo:downloadUrl");		
-	def itemDescription = uicomponent.getStrProperty("exo:description");		
-	def itemEmail = uicomponent.getStrProperty("exo:email");
-	def itemEditLink = null;
+	def itemDownloadUrl = addon.getDownloadLink();
+	def itemDescription = addon.getDescription();
 	def canEdit = uicomponent.canEdit();
-	def itemAuthor = uicomponent.getStrProperty("exo:author");
+	def itemAuthor = addon.getAuthor();
 	  
-  Double voteRate=0.0;
-
-  if (viewNode.isNodeType("mix:votable")) {
-    if (viewNode.hasProperty("exo:votingRate"))
-        voteRate = new Double(viewNode.getProperty("exo:votingRate").getString());
-  }
+  Double voteRate= addon.getVoteRate();
   Double modul = voteRate % 1.0;
   Integer totalStar = 0;
   if(modul >= 0.5){
@@ -34,11 +28,7 @@
     totalStar = (Integer)(voteRate-modul);
   }
   
-  Integer totalVote = 0;
-  if (viewNode.isNodeType("mix:votable")) {
-    if (viewNode.hasProperty("exo:voteTotalOfLang"))
-        totalVote = new Double(viewNode.getProperty("exo:voteTotalOfLang").getString());
-  }
+  Integer totalVote = addon.getTotalVote();
 %>
 
 

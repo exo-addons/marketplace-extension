@@ -66,6 +66,8 @@ import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvide
 import org.exoplatform.social.core.manager.IdentityManager;
 import org.exoplatform.wcm.connector.BaseConnector;
 
+import sun.util.logging.resources.logging;
+
 /**
  * Created by The eXo Platform SAS
  * 20 Aug 2014  
@@ -168,6 +170,22 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
     }
     return Response.ok("Migrate failured" , MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
+  
+  @GET
+  @Path("/cleanAddonCacheById")
+  @Produces("application/json")
+  @RolesAllowed({"users"})
+  public Response cleanAddonCacheById(@QueryParam("addonNodeId") String addonNodeId){
+    LOG.info("Call rest to clean cache for addonNodeId: " + addonNodeId);
+    try {
+      AddOnService.cleanAddonCacheByUuid(addonNodeId);
+      return Response.ok("DONE" , MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
+    return Response.ok("NOT DONE" , MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+  }
+  
   @POST
   @Path("/edit-comment")
   @Produces("application/json")

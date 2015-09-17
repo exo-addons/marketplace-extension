@@ -641,6 +641,9 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
       try {
 
         currentNode = AddOnService.updateNode(titleAddon, nodeName, hosted, mapProperties, false);
+        
+        log.info("Clean addon cache after update addon");
+        AddOnService.cleanAddonCacheByUuid(uiAddOnSearchEdit.getNodeId());
       } catch (Exception e) {
         log.error(e.getMessage());
       }

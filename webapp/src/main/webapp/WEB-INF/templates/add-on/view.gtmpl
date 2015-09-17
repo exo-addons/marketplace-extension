@@ -265,6 +265,7 @@
   }
   
   def currentNode = uicomponent.getOriginalNode() ;
+  def currentNodeId = currentNode.getUUID();
   def title = getTitle(currentNode);
   def addonAvatarUrl = getAddonAvatarUrl(currentNode);
   def realNode = org.exoplatform.ecm.webui.utils.Utils.getNodeSymLink(currentNode);
@@ -586,6 +587,18 @@ void commentForm(Node post) {
         }else{
           jQuery('#VoteMessage-$uuid').html('<div class="alert alert-success voteMessageAlert"><p class="voteMessageAlertContent">Your Vote (' + voteValue + ' stars) has been posted.</p></div>').fadeIn(2000).fadeOut(2000);
         }
+        cleanAddonCacheById_$uuid();
+      }
+     });
+  }
+  
+  function cleanAddonCacheById_$uuid(){
+    var url = "/rest/private/addonservice/cleanAddonCacheById?addonNodeId=$currentNodeId";
+    jQuery.ajax({
+      type: "GET",
+      url: url,
+      success: function( data ) {
+        //do nothing
       }
      });
   }
