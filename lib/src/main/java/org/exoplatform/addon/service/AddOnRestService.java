@@ -172,6 +172,22 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
   }
   
   @GET
+  @Path("/cleanAllAddonCache")
+  @Produces("application/json")
+  @RolesAllowed({"administrators"})
+  public Response cleanAllAddonCache(@Context SecurityContext sc,
+                                     @Context UriInfo uriInfo){
+    LOG.info("Call rest to clean All addon cache");
+    try {
+      AddOnService.cleanAllAddonCache();
+      return Response.ok("DONE" , MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+    } catch (Exception e) {
+      LOG.error("Exceptions happen while clean add addon cache",e);
+    }
+    return Response.ok("NOT DONE" , MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
+  }
+  
+  @GET
   @Path("/cleanAddonCacheById")
   @Produces("application/json")
   @RolesAllowed({"users"})
@@ -181,7 +197,7 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
       AddOnService.cleanAddonCacheByUuid(addonNodeId);
       return Response.ok("DONE" , MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
     } catch (Exception e) {
-      // TODO: handle exception
+      LOG.error("Exceptions happen while clean add addon cache", e);
     }
     return Response.ok("NOT DONE" , MediaType.APPLICATION_JSON).cacheControl(cacheControl).build();
   }
