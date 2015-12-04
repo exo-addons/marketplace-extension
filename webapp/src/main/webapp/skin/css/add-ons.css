@@ -169,9 +169,11 @@
   top: 185px;
 }
 
+/* Comment to Use font Icon for .uiIconEdit
 .listAddonCenter .NormalNews .media .contentHover .uiIconEdit{
   background-image: url("/eXoResources/skin/images/Icons/uiIconsWhite.png");
 }
+*/
 
 .listAddonCenter .NormalNews .media .contentHover{
   background: white;
