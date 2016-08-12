@@ -70,20 +70,4 @@
   </div>
   <!--END VOTE-->
 
-</div>	
-
-<script type="text/javascript">
-     function loadCoverImage(){
-     
-        jQuery('.media').hover(function(){
-      
-          jQuery(this).find('img').hide();
-          jQuery(this).find('.contentHover').animate({top:'0px'},{queue:false,duration:300}).show();
-        },function(){
-          jQuery(this).find('img').show();
-          jQuery(this).find('.contentHover').animate({top:'185px'},{queue:false,duration:300});
-        }
-
-        );
-     }
-</script>
+</div>

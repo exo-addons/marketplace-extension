@@ -36,18 +36,18 @@
    %>
     
     <button type="button"  style="margin-left: 5px;"
-      onclick="window.open('https://codenvy.com/f?id=7nop24paia4u2okn', '_blank')" class="btn btn-primary pull-right">
+      onclick="window.open('https://codenvy.com/f?id=7nop24paia4u2okn', '_blank')" class="btn pull-right">
       <%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.codeNew')%>
     </button>
 
     <button type="button"
-      onclick="location.href='/portal/intranet/create-addon'" class="btn btn-primary pull-right">
+      onclick="location.href='/portal/intranet/create-addon'" class="btn pull-right">
       <%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.addNew')%>
     </button>
 
 
     <% if(uicomponent.getBtnBackToAddonsVisible()){ %>
-      <button type="button" onclick="<%=uicomponent.event("Sort","az")%>" class="btn btn-primary pull-right"><%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.backToList')%></button>   
+      <button type="button" onclick="<%=uicomponent.event("Sort","az")%>" class="btn pull-right"><%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.backToList')%></button>
     <% } %>
 
     <div class="pull-right">
