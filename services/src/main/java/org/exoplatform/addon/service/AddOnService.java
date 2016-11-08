@@ -18,23 +18,6 @@
  */
 package org.exoplatform.addon.service;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
-import javax.jcr.Property;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
 import org.exoplatform.addon.service.model.Addon;
 import org.exoplatform.addon.utils.ImageUtils;
 import org.exoplatform.commons.utils.CommonsUtils;
@@ -57,6 +40,12 @@ import org.exoplatform.services.mail.Message;
 import org.exoplatform.services.wcm.portal.LivePortalManagerService;
 import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.webui.Utils;
+
+import javax.jcr.*;
+import java.io.InputStream;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AddOnService {
   

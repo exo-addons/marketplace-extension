@@ -18,17 +18,6 @@
  */
 package org.exoplatform.community.portlet.addon.search;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryManager;
-import javax.jcr.query.QueryResult;
-
 import org.exoplatform.addon.service.AddOnService;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -51,6 +40,16 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @ComponentConfig(lifecycle = Lifecycle.class, template = "app:/templates/AddOnSearchPortlet/UIAddOnSearchResult.gtmpl", events = { @EventConfig(listeners = UIAddOnSearchResult.ShowMoreActionListener.class)
 

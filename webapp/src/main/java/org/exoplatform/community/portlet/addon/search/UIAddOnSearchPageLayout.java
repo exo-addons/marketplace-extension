@@ -19,7 +19,6 @@
 package org.exoplatform.community.portlet.addon.search;
 
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;

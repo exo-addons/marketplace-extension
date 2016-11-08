@@ -19,15 +19,7 @@
 package org.exoplatform.community.portlet.addon.search;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -36,6 +28,14 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIDropDownControl;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormStringInput;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 
 

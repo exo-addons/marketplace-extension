@@ -18,20 +18,9 @@
  */
 package org.exoplatform.community.portlet.addon;
 
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.jcr.Node;
-import javax.portlet.PortletRequest;
-import javax.servlet.http.HttpServletRequest;
-
-import org.exoplatform.community.portlet.addon.search.UIAddOnSearchEdit;
+import org.exoplatform.addon.service.AddOnService;
+import org.exoplatform.addon.utils.AddonUtils;
+import org.exoplatform.addon.utils.ImageUtils;
 import org.exoplatform.community.portlet.addon.search.UIAddOnSearchForm;
 import org.exoplatform.community.portlet.addon.search.UIAddOnSearchResult;
 import org.exoplatform.container.ExoContainerContext;
@@ -52,15 +41,19 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormRichtextInput;
 import org.exoplatform.webui.form.input.UICheckBoxInput;
 import org.exoplatform.webui.form.input.UIUploadInput;
-import org.exoplatform.webui.form.UIFormRichtextInput;
-import org.exoplatform.addon.service.AddOnService;
-import org.exoplatform.addon.utils.ImageUtils;
-import org.exoplatform.addon.utils.AddonUtils;
+
+import javax.jcr.Node;
+import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
 
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "app:/templates/AddOnPortlet/UIAddOnForm.gtmpl", events = {
     @EventConfig(listeners = UIAddOnForm.SubmitActionListener.class, phase = Phase.DECODE),

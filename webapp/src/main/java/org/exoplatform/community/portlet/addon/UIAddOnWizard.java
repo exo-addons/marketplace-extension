@@ -19,26 +19,24 @@
 package org.exoplatform.community.portlet.addon;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-
 import org.exoplatform.addon.service.AddOnService;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.form.UIFormRichtextInput;
 import org.exoplatform.wcm.webui.validator.MandatoryValidator;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.form.UIFormInputSet;
+import org.exoplatform.webui.form.UIFormRichtextInput;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.input.UICheckBoxInput;
 import org.exoplatform.webui.form.input.UIUploadInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
+
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import java.util.List;
 
 
 public class UIAddOnWizard extends UIFormInputSet{

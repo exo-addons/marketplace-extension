@@ -19,18 +19,14 @@
 package org.exoplatform.community.portlet.addon.search;
 
 
-import java.util.List;
-
+import org.exoplatform.addon.service.AddOnService;
+import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
-
-import org.exoplatform.addon.service.AddOnService;
-
-import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.EventConfig;
-
-import org.exoplatform.webui.core.lifecycle.Lifecycle;
+import java.util.List;
 
 
 @ComponentConfig(

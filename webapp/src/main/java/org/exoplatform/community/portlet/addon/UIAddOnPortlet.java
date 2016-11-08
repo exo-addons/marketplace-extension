@@ -18,15 +18,13 @@
  */
 package org.exoplatform.community.portlet.addon;
 
-import javax.portlet.PortletPreferences;
-
+import org.exoplatform.addon.service.AddOnService;
 import org.exoplatform.wcm.webui.Utils;
-
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
-import org.exoplatform.addon.service.AddOnService;
+
+import javax.portlet.PortletPreferences;
 
 
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/templates/AddOnPortlet/UIAddOnPortlet.gtmpl")

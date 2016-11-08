@@ -6,7 +6,7 @@
     <groupId>org.exoplatform.addons.marketplace</groupId>
     <version>1.0.x-SNAPSHOT</version>
   </parent>
-  <artifactId>marketplace-extension-lib</artifactId>
+  <artifactId>marketplace-extension-services</artifactId>
   <packaging>jar</packaging>
   <name>Marketplace-extension - Library</name>
   <description>Marketplace-extension - Extension Library providing all services</description>

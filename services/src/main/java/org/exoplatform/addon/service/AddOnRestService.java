@@ -16,34 +16,6 @@
  */
 package org.exoplatform.addon.service;
 
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URLDecoder;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.security.RolesAllowed;
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.CacheControl;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.ext.RuntimeDelegate;
-
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.configuration.ConfigurationManager;
@@ -66,7 +38,18 @@ import org.exoplatform.social.core.identity.provider.OrganizationIdentityProvide
 import org.exoplatform.social.core.manager.IdentityManager;
 import org.exoplatform.wcm.connector.BaseConnector;
 
-import sun.util.logging.resources.logging;
+import javax.annotation.security.RolesAllowed;
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import javax.ws.rs.ext.RuntimeDelegate;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URLDecoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by The eXo Platform SAS

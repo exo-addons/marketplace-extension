@@ -1,17 +1,15 @@
 package org.exoplatform.addon.utils;
 
+import org.exoplatform.commons.utils.MimeTypeResolver;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
+import org.imgscalr.Scalr;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-
-import javax.imageio.ImageIO;
-
-import org.imgscalr.Scalr;
-
-import org.exoplatform.commons.utils.MimeTypeResolver;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
 
 public class ImageUtils {
   public static final String KEY_SEPARATOR           = "_";

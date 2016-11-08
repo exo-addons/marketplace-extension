@@ -18,12 +18,7 @@
  */
 package org.exoplatform.community.portlet.addon.search;
 
-import javax.jcr.Node;
-import javax.jcr.PathNotFoundException;
-import javax.jcr.RepositoryException;
-
 import org.apache.commons.lang.StringUtils;
-
 import org.exoplatform.addon.service.AddOnService;
 import org.exoplatform.addon.service.model.Addon;
 import org.exoplatform.portal.mop.SiteType;
@@ -40,6 +35,10 @@ import org.exoplatform.webui.core.UIPopupContainer;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
+import javax.jcr.Node;
+import javax.jcr.PathNotFoundException;
+import javax.jcr.RepositoryException;
 
 
 @ComponentConfig(
