@@ -26,7 +26,7 @@
     <url>https://github.com/exo-addons/marketplace-extension.git</url>
   </scm>
   <properties>
-    <exoplatform.version>4.4.0-M22</exoplatform.version>
+    <exoplatform.version>4.4.0-M23</exoplatform.version>
   </properties>
   <dependencyManagement>
     <dependencies>

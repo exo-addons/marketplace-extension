@@ -11,12 +11,6 @@
   <name>Marketplace-extension - Library</name>
   <description>Marketplace-extension - Extension Library providing all services</description>
   <dependencies>
-
-    <dependency>
-      <groupId>org.exoplatform.ws</groupId>
-      <artifactId>exo.ws.rest.core</artifactId>
-      <scope>provided</scope>
-    </dependency>
     
     <dependency>
       <groupId>org.exoplatform.jcr</groupId>
