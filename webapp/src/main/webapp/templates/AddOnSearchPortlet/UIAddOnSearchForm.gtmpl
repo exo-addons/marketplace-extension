@@ -45,6 +45,11 @@
       <%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.addNew')%>
     </button>
 
+      <button type="button"
+              onclick="location.href='/portal/intranet/create-addon-category'" class="btn pull-right">
+          <%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.addNewCategory')%>
+      </button>
+
 
     <% if(uicomponent.getBtnBackToAddonsVisible()){ %>
       <button type="button" onclick="<%=uicomponent.event("Sort","az")%>" class="btn pull-right"><%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.backToList')%></button>
