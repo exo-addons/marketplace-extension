@@ -26,7 +26,15 @@
 	    <label>#{addon.navigation.detail.node}</label>
 	    <visibility>HIDDEN</visibility>
 	    <page-reference>portal::intranet::addon-detail</page-reference>
-    </node> 
+    </node>
+	  <node>
+		  <uri>create-addon-category</uri>
+		  <name>create-addon-category</name>
+		  <label>#{addon.navigation.detail.node}</label>
+		  <visibility>HIDDEN</visibility>
+		  <page-reference>portal::intranet::create-addon-category</page-reference>
+	  </node>
+
       
   </page-nodes>
 </node-navigation>
