@@ -27,6 +27,14 @@
   </scm>
   <properties>
     <exoplatform.version>4.4.0-M23</exoplatform.version>
+    <juzu.version>1.1.0</juzu.version>
+    <org.antlr.version>3.4</org.antlr.version>
+    <org.webjars.jquery.version>1.11.2</org.webjars.jquery.version>
+    <org.webjars.jquery-ui.version>1.11.4</org.webjars.jquery-ui.version>
+    <org.webjars.x-editable-bootstrap.version>1.4.6</org.webjars.x-editable-bootstrap.version>
+    <org.webjars.bootstrap-datepicker.version>1.4.0</org.webjars.bootstrap-datepicker.version>
+    <org.webjars.selectize.js.version>0.12.1</org.webjars.selectize.js.version>
+    <org.webjars.select2.version>3.5.2</org.webjars.select2.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -37,6 +45,52 @@
         <version>${exoplatform.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <!-- Juzu framework -->
+      <dependency>
+        <groupId>org.juzu</groupId>
+        <artifactId>juzu-parent</artifactId>
+        <version>${juzu.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!--juzu-plugins-less4j:1.1.0 requires less4j:1.4.0 which is not compatible with antlr 3.5-->
+      <dependency>
+        <groupId>org.antlr</groupId>
+        <artifactId>antlr-runtime</artifactId>
+        <version>${org.antlr.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <!-- JS libraries -->
+      <dependency>
+        <groupId>org.webjars</groupId>
+        <artifactId>jquery</artifactId>
+        <version>${org.webjars.jquery.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.webjars</groupId>
+        <artifactId>x-editable-bootstrap</artifactId>
+        <version>${org.webjars.x-editable-bootstrap.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.webjars</groupId>
+        <artifactId>bootstrap-datepicker</artifactId>
+        <version>${org.webjars.bootstrap-datepicker.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.webjars</groupId>
+        <artifactId>selectize.js</artifactId>
+        <version>${org.webjars.selectize.js.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.webjars</groupId>
+        <artifactId>select2</artifactId>
+        <version>${org.webjars.select2.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.webjars</groupId>
+        <artifactId>jquery-ui</artifactId>
+        <version>${org.webjars.jquery-ui.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

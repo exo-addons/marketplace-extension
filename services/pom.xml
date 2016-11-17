@@ -8,7 +8,7 @@
   </parent>
   <artifactId>marketplace-extension-services</artifactId>
   <packaging>jar</packaging>
-  <name>Marketplace-extension - Library</name>
+  <name>Marketplace-extension - Services</name>
   <description>Marketplace-extension - Extension Library providing all services</description>
   <dependencies>
     

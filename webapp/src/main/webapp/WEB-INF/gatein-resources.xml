@@ -77,5 +77,5 @@
     <depends>
       <module>wcm-utils</module>
     </depends>
-  </module>     
+  </module>
 </gatein-resources>

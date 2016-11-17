@@ -108,6 +108,24 @@
 	      <read-only>false</read-only>
       </preference>
     </portlet-preferences>    
-  </portlet>   
-  
+  </portlet>
+    <!-- add-on category portlet -->
+    <portlet>
+        <portlet-name>CategoryManagementApplication</portlet-name>
+        <display-name xml:lang="EN">Category Management Application</display-name>
+        <portlet-class>juzu.bridge.portlet.JuzuPortlet</portlet-class>
+        <init-param>
+            <name>juzu.app_name</name>
+            <value>org.exoplatform.addon.marketplace</value>
+        </init-param>
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        <resource-bundle>locale.portlet.categoryManagement</resource-bundle>
+        <portlet-info>
+            <title>Categories</title>
+        </portlet-info>
+    </portlet>
+
 </portlet-app>

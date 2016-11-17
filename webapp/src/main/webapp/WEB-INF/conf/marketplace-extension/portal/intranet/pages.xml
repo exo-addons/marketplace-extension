@@ -65,5 +65,22 @@
           <show-application-state>false</show-application-state>
           <show-application-mode>false</show-application-mode>
         </portlet-application>
-	  </page>			
+	  </page>
+    <page>
+        <name>manage-categories</name>
+        <title>Manage Categories</title>
+        <access-permissions>manager:/platform/administrators</access-permissions>
+        <edit-permission>*:/platform/administrators</edit-permission>
+        <show-max-window>false</show-max-window>
+        <portlet-application>
+            <portlet>
+                <application-ref>marketplace-extension-webapp</application-ref>
+                <portlet-ref>CategoryManagementApplication</portlet-ref>
+            </portlet>
+            <access-permissions>manager:/platform/administrators</access-permissions>
+            <show-info-bar>false</show-info-bar>
+            <show-application-state>false</show-application-state>
+            <show-application-mode>false</show-application-mode>
+        </portlet-application>
+    </page>
 </page-set>
