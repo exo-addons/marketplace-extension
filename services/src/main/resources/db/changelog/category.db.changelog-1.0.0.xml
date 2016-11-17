@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <!-- Managing both DB that use sequences and db that use auto increment -->
+    <property name="autoIncrement" value="true" dbms="mysql,mssql,h2,sybase,db2,hsqldb"/>
+    <property name="autoIncrement" value="false" dbms="oracle,postgresql"/>
+
+    <!-- Definition of CATEGORY_PROJECTS table -->
+
+    <changeSet author="market_place_addon" id="1.0.0-1">
+        <createTable tableName="ADDON_MARKETPLACE_CATEGORY">
+            <column name="MPLACE_CAT_ID" type="BIGINT" autoIncrement="${autoIncrement}" startWith="1">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_MPLACE_ADDON_CATEGORY_ID" />
+            </column>
+            <column name="MPLACE_CAT_NAME" type="NVARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MPLACE_CAT_DESCRIPTION" type="NVARCHAR(2000)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="PARENT_MPLACE_CAT_ID" type="BIGINT">
+                <constraints foreignKeyName="FK_ADDON_MARKETPLACE_CATEGORY_ADDON_MARKETPLACE_CATEGORY_01" references="ADDON_MARKETPLACE_CATEGORY(MPLACE_CAT_ID)" nullable="true"/>
+            </column>
+        </createTable>
+        <modifySql dbms="mysql">
+            <append value=" ENGINE=INNODB CHARSET=UTF8 COLLATE utf8_general_ci"/>
+        </modifySql>
+    </changeSet>
+
+
+</databaseChangeLog>

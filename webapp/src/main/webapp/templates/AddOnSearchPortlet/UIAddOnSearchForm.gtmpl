@@ -46,8 +46,8 @@
     </button>
 
       <button type="button"
-              onclick="location.href='/portal/intranet/create-addon-category'" class="btn pull-right">
-          <%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.addNewCategory')%>
+              onclick="location.href='/portal/intranet/manage-categories'" class="btn pull-right">
+          <%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.manageCategory')%>
       </button>
 
 
