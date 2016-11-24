@@ -18,6 +18,7 @@
  */
 package org.exoplatform.addon.service;
 
+import org.exoplatform.addon.marketplace.upgrade.UpgradeAddonNodeType;
 import org.exoplatform.addon.service.model.Addon;
 import org.exoplatform.addon.utils.ImageUtils;
 import org.exoplatform.commons.utils.CommonsUtils;
@@ -257,7 +258,7 @@ public class AddOnService {
 		return currentNode;
 	}
 		
-	public static Node storeNode(String title,String name,Boolean hosted, Map<String,String> map,Boolean isNew) throws Exception {
+	public static Node storeNode(String title,String name,Boolean hosted, String categoryMixin, Map<String,String> map,Boolean isNew) throws Exception {
 		String nodeType = "exo:addon";
 
 		//Node webRootNode = _livePortal.getLivePortal(sessionProvider, "website");
@@ -279,6 +280,8 @@ public class AddOnService {
 			jcrinputProperty.setValue(entry.getValue());
 			inputProperties.put("/node/" + entry.getKey(), jcrinputProperty);
 		}
+
+		//--- FIN
 		JcrInputProperty sendConfirmEmailProp = new JcrInputProperty();
 		sendConfirmEmailProp.setJcrPath("/node/exo:sendConfirmEmail");
 		sendConfirmEmailProp.setValue(false);
@@ -401,6 +404,18 @@ public class AddOnService {
 		//add mixin to allow comment and vote
 		currentNode.addMixin(MIX_COMMENTABLE_NODE_TYPE);
 		currentNode.addMixin(MIX_VOTEABLE_NODE_TYPE);
+
+		//--- Add category mixin
+		if (categoryMixin != null) {
+			if(!currentNode.isNodeType(UpgradeAddonNodeType.ADDON_MIXIN_CATEGORY)){
+				if(currentNode.canAddMixin(UpgradeAddonNodeType.ADDON_MIXIN_CATEGORY)) {
+					currentNode.addMixin(UpgradeAddonNodeType.ADDON_MIXIN_CATEGORY);
+					currentNode.setProperty(UpgradeAddonNodeType.ADDON_MIXIN_PROPPERTY_NAME, categoryMixin);
+					currentNode.save();
+				}
+			}
+		}
+		//--- FIN category mixin
 		
 		homeNode.getSession().save();
 
@@ -646,6 +661,14 @@ public class AddOnService {
       addon.setOwnerid(getStrProperty(node, "exo:owner"));
       addon.setCoverImagePath(getImageCover(node));
       addon.setAuthor(getStrProperty(node, "exo:author"));
+
+		//--- Manage categories
+		//--- Store category mixin
+		if(node.isNodeType(UpgradeAddonNodeType.ADDON_MIXIN_CATEGORY)){
+			addon.setCategory(node.getProperty(UpgradeAddonNodeType.ADDON_MIXIN_PROPPERTY_NAME).getString());
+
+		}
+
       
       Double voteRate=0.0;
       if (node.isNodeType("mix:votable")) {

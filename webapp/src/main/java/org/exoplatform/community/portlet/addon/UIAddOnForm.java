@@ -140,6 +140,9 @@ public class UIAddOnForm extends UIForm {
        
       mapProperties.put("exo:text", description);
 
+      //---Manage Categories
+      String categorySelected = uiAddOnWizard.getUIFormSelectBox(UIAddOnWizard.ADDON_CATEGORY).getValue();
+
       UICheckBoxInput hostedCb = (UICheckBoxInput) uiAddOnWizard.getUICheckBoxInput(UIAddOnWizard.ADDON_HOSTED);
       Boolean hosted = hostedCb.isChecked();
 
@@ -226,7 +229,7 @@ public class UIAddOnForm extends UIForm {
       String nameAddon = AddonUtils.cleanString(titleAddon);
       
       try {
-        currentNode = AddOnService.storeNode(titleAddon, nameAddon, hosted, mapProperties, true);
+        currentNode = AddOnService.storeNode(titleAddon, nameAddon, hosted, categorySelected, mapProperties, true);
       } catch (Exception e) {
         log.debug("Exceptions happen while storing data",e);
       }

@@ -18,6 +18,7 @@
 	def itemDescription = addon.getDescription();
 	def canEdit = uicomponent.canEdit();
 	def itemAuthor = addon.getAuthor();
+		def itemCategory = addon.getCategory();
 	  
   Double voteRate= addon.getVoteRate();
   Double modul = voteRate % 1.0;
@@ -51,22 +52,28 @@
 
 	</div>
 	<div class="content">
-		<h4><a class="TitleContentNormalNews" href="<%= itemLink%>"><%= itemName %></a></h4>
-		<p><%= itemAuthor%></p>
+		<div class="left">
+			<h4><a class="TitleContentNormalNews" href="<%= itemLink%>"><%= itemName %></a></h4>
+			<p><%= itemAuthor%></p>
+		</div>
+		<hr/>
 	</div>
 	
 	<!--BEGIN VOTE-->
   <div class="uiVote clearfix" rel="tooltip" data-toggle="tooltip" data-original-title="Avg. Rating: $voteRate  Votes: $totalVote" title="Avg. Rating: $voteRate  Votes: $totalVote">
-    <div class="avgRatingImages clearfix">
-      <% for(int i=1; i <= totalStar; i++){%>
-          <i rel="tooltip" class="voted"></i>
-      <%
-        }
-        for(int i=1; i <= 5-totalStar; i++){
-      %>
-          <i rel="tooltip" class="unvoted"></i>
-      <%}%>
-    </div>
+		<div class="avgRatingImages clearfix">
+		  <% for(int i=1; i <= totalStar; i++){%>
+			  <i rel="tooltip" class="voted"></i>
+		  <%
+			}
+			for(int i=1; i <= 5-totalStar; i++){
+		  %>
+			  <i rel="tooltip" class="unvoted"></i>
+		  <%}%>
+		</div>
+		<div class="right categoryLabel">
+			<h5><%= itemCategory%></h5>
+		</div>
   </div>
   <!--END VOTE-->
 
