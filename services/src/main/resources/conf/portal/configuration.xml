@@ -31,6 +31,10 @@
   </component>
 
   <component>
+    <type>org.exoplatform.addon.marketplace.upgrade.UpgradeAddonNodeType</type>
+  </component>
+
+  <component>
     <key>org.exoplatform.addon.marketplace.service.MarketPlaceService</key>
     <type>org.exoplatform.addon.marketplace.service.impl.MarketPlaceServiceImpl</type>
   </component>

@@ -14,132 +14,129 @@
           jsManager.require("SHARED/portalControl", "portalControl");
     
     
-        for(formInput in uicomponent.getChildren()) { 
+          for(formInput in uicomponent.getChildren()) { 
     
       %>
   
-        <div class="UITabContent FormContact form-horizontal" id="UITabContent" style="padding-left: 140px;">
+                <div class="UITabContent FormContact form-horizontal" id="UITabContent" style="padding-left: 140px;">
     
-        <%    
-          List children = formInput.getChildren() ;
-          def imageCount = 1;
-          for(component in children) {
+                      <%    
+                      List children = formInput.getChildren() ;
+                      def imageCount = 1;
+                      for(component in children) {
 
-            if(component.isRendered()){
-          %>
+                            if(component.isRendered()){
+                      %>
     
-          <% 
+                                  <% 
+                              
+                                    fieldName = component.getName(); 
+                                    String isTextArea = "";
+                                    if (fieldName.equals("description")) isTextArea = "textArea";
+                              
+                                  %>  
+                                  <div class="control-group $isTextArea">
+                                  <%if(component instanceof UIFormInputBase && !fieldName.equals(uicomponent.getId()) && !fieldName.equals("hosted")) { %>
       
-            fieldName = component.getName(); 
-            String isTextArea = "";
-            if (fieldName.equals("description")) isTextArea = "textArea";
-      
-          %>  
-          <div class="control-group $isTextArea">
-      
-            <%if(component instanceof UIFormInputBase && !fieldName.equals(uicomponent.getId()) && !fieldName.equals("hosted")) { %>
-      
-            <!-- start label div class="FieldLabel" -->                     
-            <label class="control-label" >
-              <%if(fieldName != null && fieldName.length() > 0) {%>
-              <%
+                                        <!-- start label div class="FieldLabel" -->                     
+                                        <label class="control-label" >
+                                              <%if(fieldName != null && fieldName.length() > 0) {%>
+                                              <%
           
-                def label = _ctx.appRes("UIAddOnPortlet.UIExtensionForm." + fieldName); 
-          
-                
-                if ( fieldName.startsWith("img")){
-                 label= _ctx.appRes('UIAddOnPortlet.UIExtensionForm.img_0') + " " + imageCount;
-                 imageCount++;
-                }
-              %> 
+                                                def label = _ctx.appRes("UIAddOnPortlet.UIExtensionForm." + fieldName); 
+                                          
+                                                
+                                                if ( fieldName.startsWith("img")){
+                                                 label= _ctx.appRes('UIAddOnPortlet.UIExtensionForm.img_0') + " " + imageCount;
+                                                 imageCount++;
+                                                }
+                                              %> 
         
-              $label 
+                                              $label 
         
-              <%}%>
+                                            <%}%>
         
-            </label>
-            <!-- fin label div class="FieldLabel" -->
+                                        </label>
+                                        <!-- fin label div class="FieldLabel" -->
       
-            <% if(component instanceof UIFormInputBase && component.isEditable()) { %>
+                                        <% if(component instanceof UIFormInputBase && component.isEditable()) { %>
+            
+                                              <div class="controls">
+                                                      <% uicomponent.renderField(component) %>
+                                                      <% if(fieldName == "img0") { %>
+                                                            <a class="actionIcon" href="<%=uicomponent.event("Add")%>"> 
+                                                                 <i class="uiIconPlus uiIconLightGray"></i>
+                                                            </a>
+                                                      <% } %>
+                                                
+                                                      <%  if (component instanceof UIUploadInput && fieldName != "img0" && fieldName != "avatar") { %>
+                                                            <a class="actionIcon" href="<%=uicomponent.event("Remove",component.getId())%>">
+                                                                <i class="uiIconMinus uiIconLightGray"></i>
+                                                            </a>
+                                                      <% } %>
+                                              </div>
+            
+                                        <% }else { %>
+            
+                                            <div class="NonEditableField">
+                                              <% uicomponent.renderField(component) %>
+                                            </div>
+            
+                                        <% } %>
       
-            <div class="controls">
-              <% uicomponent.renderField(component) %>
-              <% if(fieldName == "img0") { %>
-              <a class="actionIcon" href="<%=uicomponent.event("Add")%>"> 
-              <i class="uiIconPlus uiIconLightGray"></i>
-              </a>
-              <% } %>
-        
-              <%  if (component instanceof UIUploadInput && fieldName != "img0" && fieldName != "avatar") { %>
-              <a class="actionIcon" href="<%=uicomponent.event("Remove",component.getId())%>">
-              <i class="uiIconMinus uiIconLightGray"></i>
-              </a>
-              <% } %>
-            </div>
       
-            <% }else { %>
-      
-            <div class="NonEditableField">
-              <% uicomponent.renderField(component) %>
-            </div>
-      
-            <% } %>
-      
-      
-            <%} else if(fieldName.equals("hosted")){
-        
-              def label = _ctx.appRes("UIAddOnPortlet.UIExtensionForm." + fieldName); 
-            %>
+                                    <%} else if(fieldName.equals("hosted")){
+                                
+                                      def label = _ctx.appRes("UIAddOnPortlet.UIExtensionForm." + fieldName); 
+                                    %>
                   
-            <div class="controls"> <!-- class hide -->
-              <label class="checkbox">
-                <% uicomponent.renderField(component) %> $label
-              </label>
-            </div>
+                                          <div class="controls"> <!-- class hide -->
+                                            <label class="checkbox">
+                                              <% uicomponent.renderField(component) %> $label
+                                            </label>
+                                          </div>
       
-            <% } else { %>
+                                    <% } else { %>
+                              
+                                          <div class="FieldComponent 0" colspan="2">
+                                               <% uicomponent.renderChild(component) ; %> 
+                                          </div>
+                              
+                                    <%}%>
+                                    <!-- end if input --> 
       
-                  <div class="FieldComponent 0" colspan="2">
-              <% uicomponent.renderChild(component) ; %> 
-            </div>
-      
-            <%}%>
-            <!-- end if input --> 
-      
-          </div>
-          <%    
-            }
-          } // end loop for child 
-        %>
+                                    </div>
+                            <%    
+                              }} // end loop for child 
+                            %>
 
-      </div>
+              </div>
     
-    <%  } // end loop for child %>
+          <%} // end loop for child %>
 
         <%uiform.end()%>
       </div>
 
       <div class="uiAction uiActionBorder">
-    <% for(action in uicomponent.getActions()) {
+              <% for(action in uicomponent.getActions()) {
             
-                String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
-                if (!actionLabel.equals("Add") && !actionLabel.equals("Remove")){ 
-                String link = uicomponent.event(action);
-                String typeAction= "btn btn-primary btn-large";
-                if (actionLabel.equals("Cancel")){ 
-                typeAction = "btn btn-large";
-                link="javascript:history.go(-1);";
-                }
+                  String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+                  if (!actionLabel.equals("Add") && !actionLabel.equals("Remove")){ 
+                        String link = uicomponent.event(action);
+                        String typeAction= "btn btn-primary btn-large";
+                        if (actionLabel.equals("Cancel")){ 
+                            typeAction = "btn btn-large";
+                            link="javascript:history.go(-1);";
+                        }
               %>
           
               <div onclick="$link" class="$typeAction" style="margin-right: 5px;">
                 $actionLabel
               </div>
               <%}}%>
+      </div>
+
   </div>
-
-    </div>
-
 </div>
 
 <script type='text/javascript'>

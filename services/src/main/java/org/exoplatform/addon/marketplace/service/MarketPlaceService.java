@@ -1,8 +1,10 @@
 package org.exoplatform.addon.marketplace.service;
 
-import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.addon.marketplace.bo.Category;
 import org.exoplatform.addon.marketplace.exception.MarketPlaceException;
+import org.exoplatform.commons.utils.ListAccess;
+
+import java.util.List;
 
 /**
  * Created by kmenzli on 11/11/2016.
@@ -70,4 +72,10 @@ public interface MarketPlaceService {
      * @return
      */
     long count () ;
+
+    /**
+     * Return all categories registered in the DB
+     * @return
+     */
+    List<Category> findAllCategories () throws MarketPlaceException;
 }

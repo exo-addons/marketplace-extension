@@ -10,6 +10,7 @@ import org.exoplatform.services.log.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.List;
 
 /**
  * Created by kmenzli on 12/11/2016.
@@ -107,5 +108,10 @@ public class MarketPlaceServiceImpl implements MarketPlaceService {
     @Override
     public long count() {
         return categoryDAO.count();
+    }
+
+    @Override
+    public List<Category> findAllCategories() {
+        return categoryDAO.findAll();
     }
 }

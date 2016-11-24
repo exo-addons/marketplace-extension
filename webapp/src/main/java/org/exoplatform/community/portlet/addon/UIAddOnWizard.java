@@ -19,6 +19,8 @@
 package org.exoplatform.community.portlet.addon;
 
 
+import org.exoplatform.addon.marketplace.bo.Category;
+import org.exoplatform.addon.marketplace.service.MarketPlaceService;
 import org.exoplatform.addon.service.AddOnService;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
@@ -27,8 +29,10 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.wcm.webui.validator.MandatoryValidator;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormRichtextInput;
+import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.input.UICheckBoxInput;
 import org.exoplatform.webui.form.input.UIUploadInput;
@@ -36,6 +40,7 @@ import org.exoplatform.webui.form.validator.EmailAddressValidator;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -57,8 +62,11 @@ public class UIAddOnWizard extends UIFormInputSet{
 	public static String ADDON_DEMO_URL = "demoUrl"; 
 	public static String ADDON_INSTALL_COMMAND = "installCommand"; 
 	public static String ADDON_AVATAR = "avatar";
+	public static String ADDON_CATEGORY = "category";
+	MarketPlaceService marketPlaceService = null;
 	
 	public UIAddOnWizard(String id) throws Exception{
+		marketPlaceService = getApplicationComponent(MarketPlaceService.class);
 		setId(id) ;
 		setComponentConfig(getClass(), null);
 		reset();	
@@ -118,10 +126,25 @@ public class UIAddOnWizard extends UIFormInputSet{
 	    UIUploadInput avatarUploadInput = new UIUploadInput(ADDON_AVATAR, "");
 	    
 	    UIUploadInput imgUploadInput = new UIUploadInput(ADDON_IMG_0, "img0");
+
+		//---Build categories
+		//--- Add DropDown to display categories
+		List<Category> categories = marketPlaceService.findAllCategories();
+
+		//--- Init tje list each time the combobox is displayed
+		List<SelectItemOption<String>> categoriesOptions = new ArrayList<SelectItemOption<String>>();
+
+		//--- Fill categories
+		for (Category category : categories) {
+			categoriesOptions.add(new SelectItemOption<String>(category.getName(),category.getName()));
+		}
+
+		UIFormSelectBox categorySelectBox = new UIFormSelectBox(ADDON_CATEGORY, ADDON_CATEGORY, categoriesOptions);
       
 	    addChild(titleInput);
 	    addChild(descriptionRichTextInput);
 	    addChild(versionInput);
+		addChild(categorySelectBox);
 	    
 	    addChild(licenseInput);
 	    addChild(compatibilityInput);
@@ -138,9 +161,7 @@ public class UIAddOnWizard extends UIFormInputSet{
 	    
 	    addChild(hostedCbInput);
 	    addChild(avatarUploadInput);  
-	    addChild(imgUploadInput);	
-
-		
+	    addChild(imgUploadInput);
 	}
 	
 	public void initVals(Node aNode){

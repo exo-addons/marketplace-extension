@@ -51,6 +51,7 @@
 	      <img>Image</img>
 	      <hosted>I wish my add-on to be hosted on the eXo Add-on repository on Github</hosted>
 	      <backToList>Back to Add-ons</backToList>
+		   <category>Select Category</category>
 	   </UIExtensionForm>
 		 <msg>
 				<save-successful>Your add-on has been successfully submited.</save-successful>

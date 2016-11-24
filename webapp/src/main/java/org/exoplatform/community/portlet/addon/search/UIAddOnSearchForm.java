@@ -19,7 +19,19 @@
 package org.exoplatform.community.portlet.addon.search;
 
 
+import org.exoplatform.addon.marketplace.Constants;
+import org.exoplatform.addon.marketplace.bo.Category;
+import org.exoplatform.addon.marketplace.service.MarketPlaceService;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.RootContainer;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
+import org.exoplatform.services.wcm.utils.WCMCoreUtils;
+import org.exoplatform.wcm.connector.collaboration.RenameConnector;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -54,30 +66,32 @@ import java.util.ResourceBundle;
     events = {
       @EventConfig(listeners = UIAddOnSearchForm.ChangeOptionActionListener.class)
     }
-  )
+  ),
+        @ComponentConfig(
+                type = UIDropDownControl.class,
+                id = "CategoryNameDropDown",
+                template = "system:/groovy/webui/core/UIDropDownControl.gtmpl",
+                events = {
+                        @EventConfig(listeners = UIAddOnSearchForm.ChangeCategoryActionListener.class)
+                }
+        )
 })
-public class UIAddOnSearchForm extends UIForm {
+public class UIAddOnSearchForm extends UIForm implements Constants {
 
-	/** The Constant KEYWORD_INPUT. */
-	public static final String KEYWORD_INPUT = "keywordInput";
-	
-	/** The Constant MESSAGE_NOT_SUPPORT_KEYWORD. */
-	public static final String MESSAGE_NOT_SUPPORT_KEYWORD     = "UISearchForm.message.keyword-not-support";
-	
-	  /** The Constant MESSAGE_NOT_EMPTY_KEYWORD. */
-	public static final String MESSAGE_NOT_EMPTY_KEYWORD       = "UISearchForm.message.keyword-not-empty";
-	
-	private static final String FILTER_POPULAR="popular";
-	private static final String FILTER_AZ="az";
-	private static final String FILTER_ZA="za";
-	private static final String FILTER_LATEST="latest";
-	private static final String FILTER_MY_ADDONS="myaddons";
+    private static final Log LOG                      = ExoLogger.getLogger(UIAddOnSearchForm.class.getName());
 
 	public static String filterSelected = "";
 	public static Boolean REFRESH = true;
 	private Boolean btnBackToAddonsVisible = false;
-	
-	public UIAddOnSearchForm() throws Exception {
+
+    //--- Categories dropbox
+    UIDropDownControl categoryNameDropDown = null;
+    List<SelectItemOption<String>> categoriesList = null;
+    MarketPlaceService marketPlaceService = null;
+
+    public UIAddOnSearchForm() throws Exception {
+
+        marketPlaceService = getApplicationComponent(MarketPlaceService.class);
 
 		UIFormStringInput uiKeywordInput = new UIFormStringInput(KEYWORD_INPUT,KEYWORD_INPUT, null);
 		uiKeywordInput.setHTMLAttribute("placeholder","Search");
@@ -86,23 +100,45 @@ public class UIAddOnSearchForm extends UIForm {
 		ResourceBundle resourceBundle =  WebuiRequestContext.getCurrentInstance().getApplicationResourceBundle();
 		
 		List<SelectItemOption<String>> displayModes = new ArrayList<SelectItemOption<String>>(4);
-    displayModes.add(new SelectItemOption<String>(resourceBundle.getString("UIAddOnSearchPortlet.label.sort-" + FILTER_POPULAR), FILTER_POPULAR));
-    displayModes.add(new SelectItemOption<String>(resourceBundle.getString("UIAddOnSearchPortlet.label.sort-" + FILTER_AZ), FILTER_AZ));
-    displayModes.add(new SelectItemOption<String>(resourceBundle.getString("UIAddOnSearchPortlet.label.sort-" + FILTER_ZA), FILTER_ZA));
-    displayModes.add(new SelectItemOption<String>(resourceBundle.getString("UIAddOnSearchPortlet.label.sort-" + FILTER_LATEST), FILTER_LATEST));
+
+        displayModes.add(new SelectItemOption<String>(resourceBundle.getString("UIAddOnSearchPortlet.label.sort-" + FILTER_POPULAR), FILTER_POPULAR));
+        displayModes.add(new SelectItemOption<String>(resourceBundle.getString("UIAddOnSearchPortlet.label.sort-" + FILTER_AZ), FILTER_AZ));
+        displayModes.add(new SelectItemOption<String>(resourceBundle.getString("UIAddOnSearchPortlet.label.sort-" + FILTER_ZA), FILTER_ZA));
+        displayModes.add(new SelectItemOption<String>(resourceBundle.getString("UIAddOnSearchPortlet.label.sort-" + FILTER_LATEST), FILTER_LATEST));
     
-    UIDropDownControl uiDropDownControl = addChild(UIDropDownControl.class, "DisplayModesDropDown", null);
-    uiDropDownControl.setOptions(displayModes);
+        UIDropDownControl uiDropDownControl = addChild(UIDropDownControl.class, "DisplayModesDropDown", null);
+        uiDropDownControl.setOptions(displayModes);
     
-    setSelectedMode(uiDropDownControl);
+        setSelectedMode(uiDropDownControl);
+
+        //--- Add DropDown to display categories
+        categoryNameDropDown = addChild(UIDropDownControl.class, "CategoryNameDropDown", null);
+
     
     //addChild(uiDropDownControl);
 	
 	}
   public void processRender(WebuiRequestContext context) throws Exception {
-    if (REFRESH)
-      filterSelected = "";
-    super.processRender(context);
+      if (REFRESH)
+          filterSelected = "";
+
+      //--- Add DropDown to display categories
+      List<Category> categories = marketPlaceService.findAllCategories();
+
+      //--- Init tje list each time the combobox is displayed
+      categoriesList = new ArrayList<SelectItemOption<String>>();
+
+      //--- Add «EMPTY» value each time the combo-box
+      categoriesList.add(new SelectItemOption<String>("EMPTY","EMPTY"));
+
+      //--- Fill categories
+      for (Category category : categories) {
+          categoriesList.add(new SelectItemOption<String>(category.getName(),category.getName()));
+      }
+      categoryNameDropDown.setOptions(categoriesList);
+      //--- FIN categories box management
+
+      super.processRender(context);
   }
 	
   private void setSelectedMode(UIDropDownControl uiDropDownControl) {
@@ -120,6 +156,14 @@ public class UIAddOnSearchForm extends UIForm {
 		
 		return false;
 	}
+    /**
+     *
+     * @return true if current user is administrative user; false if current user is normal user
+     */
+    public Boolean isAdminUser(){
+        UserACL userACL = getService(UserACL.class);
+        return userACL.isUserInGroup(userACL.getAdminGroups());
+    }
 	public String getStyleFilterSelected(String strIn){
 		
 		if(UIAddOnSearchForm.filterSelected.equals(strIn))
@@ -297,5 +341,65 @@ public class UIAddOnSearchForm extends UIForm {
       portletRequestContext.addUIComponentToUpdateByAjax(uiAddonsSearchPageContainer);  
     }
 	}
+
+
+    public static class ChangeCategoryActionListener extends EventListener<UIDropDownControl> {
+
+        public void execute(Event<UIDropDownControl> event) throws Exception {
+
+            UIAddOnSearchForm.REFRESH=false;
+            UIDropDownControl categoryNameDropDown = event.getSource();
+            UIAddOnSearchForm uiAddOnSearchForm = (UIAddOnSearchForm)categoryNameDropDown.getParent();
+
+            WebuiRequestContext requestContext = event.getRequestContext();
+
+            //--- Get selected category
+            String categoryName = requestContext.getRequestParameter(OBJECTID);
+
+            PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
+            UIAddOnSearchPageLayout uiAddonsSearchPageContainer = (UIAddOnSearchPageLayout)uiAddOnSearchForm.getParent();
+            UIAddOnSearchResult uiAddOnSearchResult = uiAddonsSearchPageContainer.getChildById(UIAddOnSearchPageLayout.SEARCH_RESULT);
+
+            //--- Launch JCR request to get addons by category
+            uiAddOnSearchResult.showAddonsByCategory(categoryName);
+            //--- END request
+            categoryNameDropDown.setValue(categoryName);
+
+            uiAddonsSearchPageContainer.manageView(UIAddOnSearchPageLayout.SEARCH_RESULT);
+            portletRequestContext.addUIComponentToUpdateByAjax(uiAddonsSearchPageContainer);
+        }
+    }
+
+   /**
+     * Gets the service.
+     *
+     * @param clazz the clazz
+     *
+     * @return the service
+     */
+    public static <T> T getService(Class<T> clazz) {
+        return getService(clazz, null);
+    }
+
+    /**
+     * Gets the service.
+     *
+     * @param clazz the class
+     * @param containerName the container's name
+     *
+     * @return the service
+     */
+    public static <T> T getService(Class<T> clazz, String containerName) {
+        ExoContainer container = ExoContainerContext.getCurrentContainer();
+        if (containerName != null) {
+            container = RootContainer.getInstance().getPortalContainer(containerName);
+        }
+        if (container.getComponentInstanceOfType(clazz)==null) {
+            containerName = PortalContainer.getCurrentPortalContainerName();
+            container = RootContainer.getInstance().getPortalContainer(containerName);
+        }
+        return clazz.cast(container.getComponentInstanceOfType(clazz));
+    }
+
 	
 }

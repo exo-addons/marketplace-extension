@@ -262,6 +262,47 @@ public class UIAddOnSearchResult extends UIContainer {
       log.error("ERR show my addons");
     }
   }
+
+  /**
+   * Return addons based on category name selected by end users
+   * @param categoryName
+   */
+  public void showAddonsByCategory (String categoryName) {
+      UIAddOnSearchResult.REFRESH = false;
+      StringBuffer sqlQuery = null;
+      try {
+          this.clearResult();
+          sqlQuery = new StringBuffer("SELECT * FROM exo:addon WHERE jcr:path like '" +
+                                        addonHomePath +
+                                        "%' AND NOT jcr:path LIKE '" + addonHomePath + "%/%'" +
+                                        " AND publication:currentState='published' AND NOT (jcr:mixinTypes = 'exo:restoreLocation') " +
+                                        " AND mix:mpkaceAddonCatName = '"+categoryName+"' " );
+
+          QueryResult result = this.excSQL(sqlQuery.toString(), true);
+          NodeIterator it = result.getNodes();
+          while (it.hasNext()) {
+                Node findedNode = it.nextNode();
+
+                if (super.getChildById(findedNode.getUUID()) == null) {
+                  UIAddOnSearchOne uiAddOnSearchOne = addChild(UIAddOnSearchOne.class, null, findedNode.getUUID());
+                  uiAddOnSearchOne.setNodeId(findedNode.getUUID());
+                  uiAddOnSearchOne.setCanEdit(this.getCanEdit());
+                }
+
+                this.data.add(findedNode);
+          }
+
+      } catch (RepositoryException re) {
+          log.error("Error to load addons within the category called "+categoryName);
+      } catch (Exception e) {
+          log.error("Error to load addons within the category called "+categoryName);
+      }
+
+  }
+
+
+
+
   public void SortAddons(String sort){
 
     UIAddOnSearchResult.REFRESH = false;

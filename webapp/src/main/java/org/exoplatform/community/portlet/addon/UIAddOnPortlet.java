@@ -18,6 +18,7 @@
  */
 package org.exoplatform.community.portlet.addon;
 
+import org.exoplatform.addon.marketplace.Constants;
 import org.exoplatform.addon.service.AddOnService;
 import org.exoplatform.wcm.webui.Utils;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -28,31 +29,12 @@ import javax.portlet.PortletPreferences;
 
 
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/templates/AddOnPortlet/UIAddOnPortlet.gtmpl")
-public class UIAddOnPortlet extends UIPortletApplication {
-	/** The Constant PREFERENCE_RECEIVER. */
-	public static final String PREFERENCE_RECEIVER = "adminEmail";
-
-	/** The Constant PREFERENCE_RECEIVER. */
-	public static final String PREFERENCE_FROM = "fromEmail";
-	
-	/** The Constant PREFERENCE_RECEIVER. */
-	public static final String PREFERENCE_FROM_NAME = "fromName";
-	
-	/** The Constant PREFERENCE_EMAIL_SUBJECT. */
-	public static final String PREFERENCE_EMAIL_SUBJECT = "emailsubject";
-	
-	/** The Constant PREFERENCE_ITEM_PATH. */
-	public final static String PREFERENCE_ITEM_PATH  = "folderPath";
-	/** The Constant PREFERENCE_ITEM_PATH. */
-	public final static String PREFERENCE_SITE    = "siteName";
-	
-
+public class UIAddOnPortlet extends UIPortletApplication implements Constants {
 
 	public UIAddOnPortlet() throws Exception {
 			
 	  AddOnService.createCommunityFolder();
 		addChild(UIAddOnForm.class,null,null);
-	
 		
 	}
 

@@ -12,6 +12,7 @@ public class Addon {
   private Integer totalVote;
   private String coverImagePath;
   private String ownerid;
+  private String category;
   
   public String getUuid() {
     return uuid;
@@ -81,4 +82,11 @@ public class Addon {
     this.seeDetailUrl = seeDetailUrl;
   }
 
+  public String getCategory() {
+    return category;
+  }
+
+  public void setCategory(String category) {
+    this.category = category;
+  }
 }
