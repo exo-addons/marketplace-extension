@@ -1,10 +1,28 @@
 @import "_mixins.less";
 @sansFontFamily:        "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-/* Reset*/
-body {
-  .editable-click, a.editable-click, a.editable-click:hover{
-    border:  1px solid transparent;
-  }
+.mpLoadingBar {
+  background: url("/marketplace-extension-webapp/skin/images/loading-16x16.gif") no-repeat scroll left center rgba(0, 0, 0, 0);
+  background-size: 25px;
+  padding: 10px 0px 10px 20px;
+  margin: 0 auto;
+  width: 80px;
+  height: 100px;
+}
 
+.mpAddon {
+  padding: 20px 30px;
+}
+
+.form-horizontal {
+  .control-group-inline {
+    display: inline-block;
+    label {
+      width: 80px;
+    }
+
+    .controls {
+      margin-left: 90px;
+    }
+  }
 }

@@ -16,30 +16,30 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
 @Application(defaultController = CategoryManagement.class)
 @Portlet
 @Bindings({
     @Binding(value = MarketPlaceService.class)
 })
-@WebJars({
-    @WebJar("x-editable-bootstrap"),
-    @WebJar("selectize.js"),
-    @WebJar("select2"),
-    @WebJar("jquery-ui")
-})
-@Scripts({
 
-    @Script(id = "marketplace-category-common-js", value = "javascript/marketplace-category-common-js.js"),
-        @Script(id = "marketplace-category-add-js", value = "javascript/marketplace-category-add-js.js",
-                depends = {"marketplace-category-common-js"}),
-    @Script(id = "marketplace-category-js", value = "javascript/marketplace-category.js",
-            depends = {"marketplace-category-common-js", "marketplace-category-add-js"})
+@WebJars({
+        //@WebJar("jquery-ui")
+})
+
+@Scripts({
+    @Script(id = "angularjs", value = "javascript/framework/angular.min.js"),
+    @Script(id = "xeditableJS", value = "javascript/framework/xeditable.js", depends = "angularjs"),
+    @Script(id = "ngSanitize", value = "javascript/framework/angular-sanitize.js", depends = "angularjs"),
+        // services and controllers js are AMD modules, required by controllers.js
+    @Script(id = "controllers", value = "javascript/controllers.js", depends = { "angularjs" }),
+    @Script(id = "marketplace", value = "javascript/marketplace-addon.js", depends = { "controllers" })
+
 })
 @Less({
     @Stylesheet(id = "marketplace-category", value = "less/marketplace-category.less")
 })
 @Stylesheets({
+    @Stylesheet(id = "xeditableCSS", value = "css/fwk/xeditable.css"),
     @Stylesheet(id = "marketplace-category.css", value = "less/marketplace-category.css"),
     @Stylesheet(id = "marketplace-common", value = "css/marketplace-common.css")
 })

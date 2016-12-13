@@ -1,0 +1,48 @@
+<div id="mpLoadingBar" class="mpLoadingBar"></div>
+<div id="mpAddon" class="mpAddon" style="visibility: hidden;">
+    <div ng-controller="mpCtrl" id="mpCtrl">
+        <div id="resultMessage" ng-show="(resultMessage.length > 0)" class="result-message alert {{resultMessageClass}}">
+            <i class="{{resultMessageClassExt}}"></i>
+            {{resultMessage}}
+        </div>
+        <h3>{{i18n.title}}</h3>
+        <div class="form-horizontal">
+            <table class="table table-bordered table-hover table-condensed">
+                <tr style="font-weight: bold">
+                    <td style="width:15%">{{i18n.name}}</td>
+                    <td style="width:25%">{{i18n.description}}</td>
+                    <td style="width:10%">{{i18n.edit}}</td>
+                </tr>
+                <tr ng-repeat="category in categories">
+                    <td>
+                            <span editable-text="category.name" e-name="name" e-form="rowform" e-required>
+                              {{ category.name || i18n.empty }}
+                            </span>
+                    </td>
+                    <td>
+                            <span editable-text="category.description" e-name="description" e-form="rowform" e-required>
+                              {{ category.description || i18n.empty }}
+                            </span>
+                    </td>
+                    <td style="white-space: nowrap">
+                        <form editable-form name="rowform" onbeforesave="saveCategory($data,category.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == category">
+                            <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+                                {{i18n.save}}
+                            </button>
+                            <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+                                {{i18n.cancel}}
+                            </button>
+                        </form>
+                        <div class="buttons" ng-show="!rowform.$visible">
+                            <button class="btn btn-primary" ng-click="rowform.$show()">{{i18n.edit}}</button>
+                            <button class="btn btn-danger" ng-click="removeCategory($index)">{{i18n.delete}}</button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <button class="btn btn-default" ng-click="addCategory()">{{i18n.add}}</button>
+        </div>
+
+
+    </div>
+</div>
