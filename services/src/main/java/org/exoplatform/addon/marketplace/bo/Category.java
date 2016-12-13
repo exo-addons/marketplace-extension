@@ -26,7 +26,6 @@ import java.util.*;
                 query = "SELECT count(c.id) FROM MPCategoryEntity c")
 })
 public class Category implements Serializable {
-    public static final String PREFIX_CLONE = "Copy of ";
 
     @Id
     @Column(name = "MPLACE_CAT_ID")

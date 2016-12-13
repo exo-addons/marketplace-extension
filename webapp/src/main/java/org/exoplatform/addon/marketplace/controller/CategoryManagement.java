@@ -2,7 +2,9 @@ package org.exoplatform.addon.marketplace.controller;
 
 import juzu.*;
 import juzu.impl.common.Tools;
+import juzu.plugin.jackson.Jackson;
 import juzu.request.SecurityContext;
+import org.exoplatform.addon.marketplace.GenericController;
 import org.exoplatform.addon.marketplace.bo.Category;
 import org.exoplatform.addon.marketplace.exception.MarketPlaceException;
 import org.exoplatform.addon.marketplace.service.MarketPlaceService;
@@ -13,31 +15,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.inject.Inject;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Created by kmenzli on 12/11/2016.
  */
-public class CategoryManagement {
+@SessionScoped
+public class CategoryManagement extends GenericController {
 
     private static final Log LOG = ExoLogger.getExoLogger(CategoryManagement.class);
-
-    public static enum MSG_TYPE {
-        INFO, WARNING, ERROR
-    }
 
     @Inject
     MarketPlaceService marketPlaceService;
 
     @Inject
-    @Path("index.gtmpl")
-    org.exoplatform.addon.marketplace.templates.index index;
+    @Path("master.gtmpl")
+    org.exoplatform.addon.marketplace.templates.master master;
     @Inject
     @Path("messageDialog.gtmpl")
     org.exoplatform.addon.marketplace.templates.messageDialog messageDialog;
-
-    @Inject
-    ResourceBundle bundle;
 
 
     @View
@@ -56,56 +52,66 @@ public class CategoryManagement {
         } catch (Exception e) {
 
         }
-        String errorMessage = "";
-        String depthOfCategories = "2";
 
-        return index.with()
-                .errorMessage(errorMessage)
-                .depthOfCategories(depthOfCategories)
-                .ok().withCharset(Tools.UTF_8);
+        return master.ok().withCharset(Tools.UTF_8);
+    }
+
+    @Ajax
+    @Resource(method = HttpMethod.POST)
+    @MimeType.JSON
+    @Jackson
+    public Category saveCategory(@Jackson Category category) throws Exception {
+        Category createdCat = null;
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Save new category with [name = "+category.getName()+"]");
+        }
+        try {
+            createdCat = marketPlaceService.createCategory(category);
+        } catch (Exception ex) {
+            LOG.error("Exception raised when storing category ["+category.getName()+"]", ex);
+        }
+        return createdCat;
+    }
+
+    @Ajax
+    @Resource(method = HttpMethod.POST)
+    @MimeType.JSON
+    @Jackson
+    public void deleteCategory(@Jackson Category category) throws Exception {
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Delete the category with [name = "+category.getName()+"]");
+        }
+        try {
+            marketPlaceService.removeCategory(category.getId(),false);
+        } catch (Exception ex) {
+            LOG.error("Exception raised when storing category ["+category.getName()+"]", ex);
+        }
+
+    }
+
+
+    @Override
+    public Log getLogger() {
+        return LOG;
     }
 
     @Resource
     @Ajax
     @MimeType.JSON
-    public Response addCategory(String name, String description, SecurityContext securityContext) throws MarketPlaceException, JSONException {
-
-        String currentUser = securityContext.getRemoteUser();
-        if(currentUser == null) {
-            return Response.status(401).body("You must login to create new category");
-        }
-
-        if(name == null || name.isEmpty()) {
-            return Response.status(412).body("Name of category is required");
-        }
-
-        Category cat = new Category(name,description);
-
-        Category catCtxPersistance = marketPlaceService.createCategory(cat);
-
-        JSONObject result = new JSONObject();
-        result.put("id", catCtxPersistance.getId());//Can throw JSONException (same for all #json.put methods below)
-        result.put("name", catCtxPersistance.getName());
-        result.put("description", catCtxPersistance.getDescription());
-
-        return Response.ok(result.toString()).withCharset(Tools.UTF_8);
+    @Jackson
+    public List<Category> getCategories() throws Exception {
+        List<Category> categories = new ArrayList<Category>();
+        categories.addAll(marketPlaceService.findAllCategories());
+        return categories;
     }
 
-    @Resource
     @Ajax
-    @MimeType.HTML
-    public Response openWarningDialog(String msg) {
-        return buildMessage(msg, MSG_TYPE.WARNING);
+    @juzu.Resource
+    @MimeType.JSON
+    @Jackson
+    public Response getBundle(String locale) {
+        return super.getBundle(new Locale(locale));
     }
-
-    public Response buildMessage(String message, MSG_TYPE msgType) {
-        return messageDialog
-                .with()
-                .msg(message)
-                .type(msgType)
-                .ok().withCharset(Tools.UTF_8);
-    }
-
 
 
 }
