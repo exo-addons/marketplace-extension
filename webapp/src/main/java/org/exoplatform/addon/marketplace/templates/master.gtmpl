@@ -1,6 +1,14 @@
 <div id="mpLoadingBar" class="mpLoadingBar"></div>
 <div id="mpAddon" class="mpAddon" style="visibility: hidden;">
     <div ng-controller="mpCtrl" id="mpCtrl">
+        <!--Addon navigation-->
+        <div class="addonSearchToolbar">
+            <div class="uiGrayLightBox">
+                <div class="clearfix"><button class="btn btn-primary pull-left" onclick="location.href='/portal/intranet/add-ons'" type="button">{{i18n.back}}</button></div>
+            </div>
+        </div>
+        <div class="clean"></div>
+        <!--END Addon navigation-->
         <div id="resultMessage" ng-show="(resultMessage.length > 0)" class="result-message alert {{resultMessageClass}}">
             <i class="{{resultMessageClassExt}}"></i>
             {{resultMessage}}
@@ -42,7 +50,5 @@
             </table>
             <button class="btn btn-default" ng-click="addCategory()">{{i18n.add}}</button>
         </div>
-
-
     </div>
 </div>
