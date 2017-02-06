@@ -11,11 +11,11 @@ import org.exoplatform.addon.marketplace.service.MarketPlaceService;
 import org.exoplatform.commons.juzu.ajax.Ajax;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by kmenzli on 12/11/2016.
@@ -61,12 +61,15 @@ public class CategoryManagement extends GenericController {
     @MimeType.JSON
     @Jackson
     public Category saveCategory(@Jackson Category category) throws Exception {
-        Category createdCat = null;
+        //--- Init Category with parameters sent from client layer
+        //--- xeditable fwk send also the id based on order in the matrix, thus I need to set only usefull data such as «name» and «description»
+        Category createdCat = new Category(category.getName(),category.getDescription());
         if (LOG.isInfoEnabled()) {
             LOG.info("Save new category with [name = "+category.getName()+"]");
         }
+
         try {
-            createdCat = marketPlaceService.createCategory(category);
+            createdCat = marketPlaceService.createCategory(createdCat);
         } catch (Exception ex) {
             LOG.error("Exception raised when storing category ["+category.getName()+"]", ex);
         }
