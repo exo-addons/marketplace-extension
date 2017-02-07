@@ -48,6 +48,7 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -85,11 +86,17 @@ public class UIAddOnSearchResult extends UIContainer {
   //private final static String ADDONS_FOLDER  = "/Contributions/";
   
   public void processRender(WebuiRequestContext context) throws Exception {
+
     if (REFRESH){
       init();
       SortAddons("popular", "EMPTY");
     }
-    
+    //--- Get the paramter from url, this parameter is used to fetch categories by name
+    HttpServletRequest request = Util.getPortalRequestContext().getRequest();
+    if (request.getParameter("category") != null) {
+      log.debug("MarketPlace Addon, Load addons based on parameter passed through URL {} ", request.getParameter("category"));
+      SortAddons("popular", request.getParameter("category"));
+    }
     super.processRender(context);
   }
 
