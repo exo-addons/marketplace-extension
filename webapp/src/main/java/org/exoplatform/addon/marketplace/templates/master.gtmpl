@@ -4,10 +4,12 @@
         <!--Addon navigation-->
         <div class="addonSearchToolbar">
             <div class="uiGrayLightBox">
-                <div class="clearfix"><button class="btn btn-primary pull-left" onclick="location.href='/portal/intranet/add-ons'" type="button">{{i18n.back}}</button></div>
+                <div class="clearfix">
+                    <button class="btn btn-primary pull-left" ng-click="location.href='/portal/intranet/add-ons'" type="button">{{i18n.back}}</button>
+                </div>
             </div>
         </div>
-        <div class="clean"></div>
+        <div class="clearfix"></div>
         <!--END Addon navigation-->
         <div id="resultMessage" ng-show="(resultMessage.length > 0)" class="result-message alert {{resultMessageClass}}">
             <i class="{{resultMessageClassExt}}"></i>

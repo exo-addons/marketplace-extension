@@ -5,6 +5,12 @@ package org.exoplatform.addon.marketplace;
  */
 public interface Constants {
 
+    /** The Constant Categories List Empty Item */
+    public static final String HTTP_PARAMETER_CATEGORY_NAME    =   "category";
+
+    /** The Constant Categories List Empty Item */
+    public static final String CATEGORY_ITEM_EMPTY_VALUE    = "EMPTY";
+
     /** The Constant KEYWORD_INPUT. */
     public static final String KEYWORD_INPUT = "keywordInput";
 

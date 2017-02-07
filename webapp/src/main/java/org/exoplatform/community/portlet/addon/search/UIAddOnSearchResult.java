@@ -18,6 +18,7 @@
  */
 package org.exoplatform.community.portlet.addon.search;
 
+import org.exoplatform.addon.marketplace.Constants;
 import org.exoplatform.addon.service.AddOnService;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -89,11 +90,11 @@ public class UIAddOnSearchResult extends UIContainer {
 
     if (REFRESH){
       init();
-      SortAddons("popular", "EMPTY");
+      SortAddons("popular", Constants.CATEGORY_ITEM_EMPTY_VALUE);
     }
     //--- Get the paramter from url, this parameter is used to fetch categories by name
     HttpServletRequest request = Util.getPortalRequestContext().getRequest();
-    if (request.getParameter("category") != null) {
+    if (request.getParameter(Constants.HTTP_PARAMETER_CATEGORY_NAME) != null) {
       log.debug("MarketPlace Addon, Load addons based on parameter passed through URL {} ", request.getParameter("category"));
       SortAddons("popular", request.getParameter("category"));
     }
@@ -320,7 +321,7 @@ public class UIAddOnSearchResult extends UIContainer {
     try {
       this.clearResult();
       if(sort.equals("za")){
-        if (!selectedCat.equalsIgnoreCase("EMPTY")) {
+        if (!selectedCat.equalsIgnoreCase(Constants.CATEGORY_ITEM_EMPTY_VALUE)) {
           this.setSQLOrder( " AND mix:mpkaceAddonCatName = '"+selectedCat+"' ORDER BY exo:title DESC " );
 
         } else {
