@@ -81,6 +81,7 @@ public class UIAddOnSearchForm extends UIForm implements Constants {
     private static final Log LOG                      = ExoLogger.getLogger(UIAddOnSearchForm.class.getName());
 
 	public static String filterSelected = "";
+    public static String categorySelected = "";
 	public static Boolean REFRESH = true;
 	private Boolean btnBackToAddonsVisible = false;
 
@@ -185,7 +186,7 @@ public class UIAddOnSearchForm extends UIForm implements Constants {
 		public void execute(Event<UIAddOnSearchForm> event) throws Exception {
 
 			UIAddOnSearchForm uiAddOnSearchForm = event.getSource();
-      UIAddOnSearchForm.REFRESH=true;
+            UIAddOnSearchForm.REFRESH=true;
 			UIAddOnSearchResult.REFRESH = false;
 			UIAddOnSearchPageLayout uiAddonsSearchPageContainer = (UIAddOnSearchPageLayout)uiAddOnSearchForm.getParent();
 			UIAddOnSearchResult uiAddOnSearchResult = uiAddonsSearchPageContainer.getChildById(UIAddOnSearchPageLayout.SEARCH_RESULT);
@@ -205,35 +206,41 @@ public class UIAddOnSearchForm extends UIForm implements Constants {
 			uiAddOnSearchResult.setKeyword(keyword);
 			
 			//DisplayModesDropDown
-			UIDropDownControl uiDropDownControl = uiAddOnSearchForm.getChild(UIDropDownControl.class);
-			String strSortOrder = uiDropDownControl.getOptions().get(uiDropDownControl.getSelectedIndex()).getValue();
+			UIDropDownControl uiDisplayModesDropDown = uiAddOnSearchForm.getChildById("DisplayModesDropDown");
+			String strSortOrder = uiDisplayModesDropDown.getOptions().get(uiDisplayModesDropDown.getSelectedIndex()).getValue();
 			//uiAddOnSearchResult.set
-			
-			if(strSortOrder.equals("myaddons")){
-        if(UIAddOnSearchForm.filterSelected.equals("myaddons")){
-          uiAddOnSearchResult.SortAddons("popular");
-          UIAddOnSearchForm.filterSelected="popular";
-        }else{
-          UIAddOnSearchForm.filterSelected="myaddons";  
-          uiAddOnSearchResult.showMyAddons();
-        }
-          
-      }else if(strSortOrder.equals("za")){
-        uiAddOnSearchResult.SortAddons("za");
-        UIAddOnSearchForm.filterSelected="za";          
-      }else if(strSortOrder.equals("az")){
-        uiAddOnSearchResult.SortAddons("az");
-        UIAddOnSearchForm.filterSelected="az";        
-      }else if(strSortOrder.equals("latest")){
-        uiAddOnSearchResult.SortAddons("latest");
-        UIAddOnSearchForm.filterSelected="latest";        
-      }else{
-        //Sort by vote
-        uiAddOnSearchResult.SortAddons("popular");
-        UIAddOnSearchForm.filterSelected="popular";     
-      }
-			
 
+            //--- Get CategoryName to complete the search criteria
+            UIDropDownControl uiCategoryNameDropDown = uiAddOnSearchForm.getChildById("CategoryNameDropDown");
+            String categorySelected = uiCategoryNameDropDown.getOptions().get(uiCategoryNameDropDown.getSelectedIndex()).getValue();
+            //--- Fin category selection
+
+			if(strSortOrder.equals("myaddons")){
+                if(UIAddOnSearchForm.filterSelected.equals("myaddons")){
+                  uiAddOnSearchResult.SortAddons("popular",categorySelected);
+                  UIAddOnSearchForm.filterSelected="popular";
+                } else{
+                  UIAddOnSearchForm.filterSelected="myaddons";
+                  uiAddOnSearchResult.showMyAddons();
+                }
+          
+            } else if(strSortOrder.equals("za")){
+                uiAddOnSearchResult.SortAddons("za",categorySelected);
+                UIAddOnSearchForm.filterSelected="za";
+            } else if(strSortOrder.equals("az")){
+                uiAddOnSearchResult.SortAddons("az",categorySelected);
+                UIAddOnSearchForm.filterSelected="az";
+            } else if(strSortOrder.equals("latest")){
+                uiAddOnSearchResult.SortAddons("latest",categorySelected);
+                UIAddOnSearchForm.filterSelected="latest";
+            } else{
+                //Sort by vote
+                uiAddOnSearchResult.SortAddons("popular",categorySelected);
+                UIAddOnSearchForm.filterSelected="popular";
+            }
+
+              //--- Add a class variable to hold the status of selected category
+            UIAddOnSearchForm.categorySelected = categorySelected;
 			//uiAddOnSearchResult.doSearch();
 			
 			uiAddonsSearchPageContainer.manageView(UIAddOnSearchPageLayout.SEARCH_RESULT);
@@ -245,101 +252,111 @@ public class UIAddOnSearchForm extends UIForm implements Constants {
 	}
 	public static class SortActionListener extends EventListener<UIAddOnSearchForm> {
 
-		@Override
-		public void execute(Event<UIAddOnSearchForm> event) throws Exception {
-      UIAddOnSearchForm.REFRESH=false;
-			UIAddOnSearchForm uiAddOnSearchForm = event.getSource();
-			String strSortOrder = event.getRequestContext().getRequestParameter(OBJECTID);
-			
-			PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();			
-			UIAddOnSearchPageLayout uiAddonsSearchPageContainer = (UIAddOnSearchPageLayout)uiAddOnSearchForm.getParent();
-			UIAddOnSearchResult uiAddOnSearchResult = uiAddonsSearchPageContainer.getChildById(UIAddOnSearchPageLayout.SEARCH_RESULT);		
-			
-			//BEGIN get and set keyword for keep search
-			UIFormStringInput uiKeywordInput = uiAddOnSearchForm.getUIStringInput(UIAddOnSearchForm.KEYWORD_INPUT);        
-      String keyword = uiKeywordInput.getValue();
-      if(keyword != null){
-        
-        keyword = keyword.replace('-', ' ').toLowerCase(portletRequestContext.getLocale());
-          keyword = keyword.replaceAll("'","''");       
-      
-      }else
-        keyword = "";
-      uiAddOnSearchResult.clearResult();
-      uiAddOnSearchResult.setKeyword(keyword);
-      //END get and set keyword for keep search
+          @Override
+          public void execute(Event<UIAddOnSearchForm> event) throws Exception {
+                UIAddOnSearchForm.REFRESH=false;
+                UIAddOnSearchForm uiAddOnSearchForm = event.getSource();
+                String strSortOrder = event.getRequestContext().getRequestParameter(OBJECTID);
 
-			if(strSortOrder.equals("myaddons")){
-				if(UIAddOnSearchForm.filterSelected.equals("myaddons")){
-				  uiAddOnSearchResult.SortAddons("popular");
-	        UIAddOnSearchForm.filterSelected="popular";
-				}else{
-  				UIAddOnSearchForm.filterSelected="myaddons";	
-  				uiAddOnSearchResult.showMyAddons();
-				}
-					
-			}else if(strSortOrder.equals("za")){
-				uiAddOnSearchResult.SortAddons("za");
-				UIAddOnSearchForm.filterSelected="za";					
-			}else if(strSortOrder.equals("az")){
-        uiAddOnSearchResult.SortAddons("az");
-				UIAddOnSearchForm.filterSelected="az";				
-			}else if(strSortOrder.equals("latest")){
-        uiAddOnSearchResult.SortAddons("latest");
-        UIAddOnSearchForm.filterSelected="latest";        
-      }else{
-        //Sort by vote
-        uiAddOnSearchResult.SortAddons("popular");
-        UIAddOnSearchForm.filterSelected="popular";     
-      }
-			uiAddonsSearchPageContainer.manageView(UIAddOnSearchPageLayout.SEARCH_RESULT);	
-			portletRequestContext.addUIComponentToUpdateByAjax(uiAddonsSearchPageContainer);	
-			
-		}
+                PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
+                UIAddOnSearchPageLayout uiAddonsSearchPageContainer = (UIAddOnSearchPageLayout)uiAddOnSearchForm.getParent();
+                UIAddOnSearchResult uiAddOnSearchResult = uiAddonsSearchPageContainer.getChildById(UIAddOnSearchPageLayout.SEARCH_RESULT);
+
+                //BEGIN get and set keyword for keep search
+                UIFormStringInput uiKeywordInput = uiAddOnSearchForm.getUIStringInput(UIAddOnSearchForm.KEYWORD_INPUT);
+                String keyword = uiKeywordInput.getValue();
+                if(keyword != null){
+
+                    keyword = keyword.replace('-', ' ').toLowerCase(portletRequestContext.getLocale());
+                    keyword = keyword.replaceAll("'","''");
+
+                }   else {
+                    keyword = "";
+                }
+
+                uiAddOnSearchResult.clearResult();
+                uiAddOnSearchResult.setKeyword(keyword);
+                //END get and set keyword for keep search
+
+                if(strSortOrder.equals("myaddons")){
+
+                    if(UIAddOnSearchForm.filterSelected.equals("myaddons")){
+                        uiAddOnSearchResult.SortAddons("popular","EMPTY");
+                        UIAddOnSearchForm.filterSelected="popular";
+                    } else{
+                        UIAddOnSearchForm.filterSelected="myaddons";
+                        uiAddOnSearchResult.showMyAddons();
+                    }
+
+                } else if(strSortOrder.equals("za")){
+                    uiAddOnSearchResult.SortAddons("za","EMPTY");
+                    UIAddOnSearchForm.filterSelected="za";
+                } else if(strSortOrder.equals("az")){
+                    uiAddOnSearchResult.SortAddons("az","EMPTY");
+                    UIAddOnSearchForm.filterSelected="az";
+                } else if(strSortOrder.equals("latest")){
+                    uiAddOnSearchResult.SortAddons("latest","EMPTY");
+                    UIAddOnSearchForm.filterSelected="latest";
+                } else {
+                    //Sort by vote
+                    uiAddOnSearchResult.SortAddons("popular","EMPTY");
+                    UIAddOnSearchForm.filterSelected="popular";
+                }
+                uiAddonsSearchPageContainer.manageView(UIAddOnSearchPageLayout.SEARCH_RESULT);
+                portletRequestContext.addUIComponentToUpdateByAjax(uiAddonsSearchPageContainer);
+
+            }
 	}
 	
 	public static class ChangeOptionActionListener extends EventListener<UIDropDownControl> {
 
-    public void execute(Event<UIDropDownControl> event) throws Exception {
-      UIAddOnSearchForm.REFRESH=false;
-      UIDropDownControl uiDropDownControl = event.getSource();
-      UIAddOnSearchForm uiAddOnSearchForm = (UIAddOnSearchForm)uiDropDownControl.getParent();
-      
-      WebuiRequestContext requestContext = event.getRequestContext();
-      String strSortOrder = requestContext.getRequestParameter(OBJECTID);
-      
-      PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();      
-      UIAddOnSearchPageLayout uiAddonsSearchPageContainer = (UIAddOnSearchPageLayout)uiAddOnSearchForm.getParent();
-      UIAddOnSearchResult uiAddOnSearchResult = uiAddonsSearchPageContainer.getChildById(UIAddOnSearchPageLayout.SEARCH_RESULT);      
+        public void execute(Event<UIDropDownControl> event) throws Exception {
+            UIAddOnSearchForm.REFRESH=false;
+            UIDropDownControl uiDropDownControl = event.getSource();
+            UIAddOnSearchForm uiAddOnSearchForm = (UIAddOnSearchForm)uiDropDownControl.getParent();
 
-      if(strSortOrder.equals("myaddons")){
-        if(UIAddOnSearchForm.filterSelected.equals("myaddons")){
-          uiAddOnSearchResult.SortAddons("popular");
-          UIAddOnSearchForm.filterSelected="popular";
-        }else{
-          UIAddOnSearchForm.filterSelected="myaddons";  
-          uiAddOnSearchResult.showMyAddons();
+            //--- Get categories dropdown component
+            UIDropDownControl uiCategoryNameDropDown = (UIDropDownControl) uiAddOnSearchForm.getChildById("CategoryNameDropDown");
+            //-- Get selected category
+            String selectedCategory = uiCategoryNameDropDown.getOptions().get(uiCategoryNameDropDown.getSelectedIndex()).getValue();
+
+            WebuiRequestContext requestContext = event.getRequestContext();
+            String strSortOrder = requestContext.getRequestParameter(OBJECTID);
+
+            PortletRequestContext portletRequestContext = (PortletRequestContext) event.getRequestContext();
+            UIAddOnSearchPageLayout uiAddonsSearchPageContainer = (UIAddOnSearchPageLayout)uiAddOnSearchForm.getParent();
+            UIAddOnSearchResult uiAddOnSearchResult = uiAddonsSearchPageContainer.getChildById(UIAddOnSearchPageLayout.SEARCH_RESULT);
+
+            if(strSortOrder.equals("myaddons")){
+                if(UIAddOnSearchForm.filterSelected.equals("myaddons")){
+                  uiAddOnSearchResult.SortAddons("popular", selectedCategory);
+                  UIAddOnSearchForm.filterSelected="popular";
+                } else{
+                  UIAddOnSearchForm.filterSelected="myaddons";
+                  uiAddOnSearchResult.showMyAddons();
+                }
+
+            } else if(strSortOrder.equals("za")){
+                uiAddOnSearchResult.SortAddons("za", selectedCategory);
+                UIAddOnSearchForm.filterSelected="za";
+            } else if(strSortOrder.equals("az")){
+                uiAddOnSearchResult.SortAddons("az", selectedCategory);
+                UIAddOnSearchForm.filterSelected="az";
+            } else if(strSortOrder.equals("latest")){
+                uiAddOnSearchResult.SortAddons("latest",selectedCategory);
+                UIAddOnSearchForm.filterSelected="latest";
+            } else {
+                //Sort by vote
+                uiAddOnSearchResult.SortAddons("popular", selectedCategory);
+                UIAddOnSearchForm.filterSelected="popular";
+            }
+            //--- set select category
+            UIAddOnSearchForm.categorySelected = selectedCategory;
+            uiDropDownControl.setValue(strSortOrder);
+
+            uiAddonsSearchPageContainer.manageView(UIAddOnSearchPageLayout.SEARCH_RESULT);
+            portletRequestContext.addUIComponentToUpdateByAjax(uiAddonsSearchPageContainer);
         }
-          
-      }else if(strSortOrder.equals("za")){
-        uiAddOnSearchResult.SortAddons("za");
-        UIAddOnSearchForm.filterSelected="za";          
-      }else if(strSortOrder.equals("az")){
-        uiAddOnSearchResult.SortAddons("az");
-        UIAddOnSearchForm.filterSelected="az";        
-      }else if(strSortOrder.equals("latest")){
-        uiAddOnSearchResult.SortAddons("latest");
-        UIAddOnSearchForm.filterSelected="latest";        
-      }else{
-        //Sort by vote
-        uiAddOnSearchResult.SortAddons("popular");
-        UIAddOnSearchForm.filterSelected="popular";     
-      }
-      uiDropDownControl.setValue(strSortOrder);
-      
-      uiAddonsSearchPageContainer.manageView(UIAddOnSearchPageLayout.SEARCH_RESULT);  
-      portletRequestContext.addUIComponentToUpdateByAjax(uiAddonsSearchPageContainer);  
-    }
 	}
 
 
