@@ -87,7 +87,7 @@ public class UIAddOnSearchResult extends UIContainer {
   public void processRender(WebuiRequestContext context) throws Exception {
     if (REFRESH){
       init();
-      SortAddons("popular");
+      SortAddons("popular", "EMPTY");
     }
     
     super.processRender(context);
@@ -275,8 +275,11 @@ public class UIAddOnSearchResult extends UIContainer {
           sqlQuery = new StringBuffer("SELECT * FROM exo:addon WHERE jcr:path like '" +
                                         addonHomePath +
                                         "%' AND NOT jcr:path LIKE '" + addonHomePath + "%/%'" +
-                                        " AND publication:currentState='published' AND NOT (jcr:mixinTypes = 'exo:restoreLocation') " +
-                                        " AND mix:mpkaceAddonCatName = '"+categoryName+"' " );
+                                        " AND publication:currentState='published' AND NOT (jcr:mixinTypes = 'exo:restoreLocation') ");
+          if (!categoryName.equalsIgnoreCase("EMPTY")) {
+            sqlQuery.append( " AND mix:mpkaceAddonCatName = '"+categoryName+"' " );
+
+          }
 
           QueryResult result = this.excSQL(sqlQuery.toString(), true);
           NodeIterator it = result.getNodes();
@@ -303,25 +306,50 @@ public class UIAddOnSearchResult extends UIContainer {
 
 
 
-  public void SortAddons(String sort){
+  public void SortAddons(String sort, String selectedCat){
 
     UIAddOnSearchResult.REFRESH = false;
     
     try {
       this.clearResult();
       if(sort.equals("za")){
-        
-        this.setSQLOrder(" ORDER BY exo:title DESC ");
+        if (!selectedCat.equalsIgnoreCase("EMPTY")) {
+          this.setSQLOrder( " AND mix:mpkaceAddonCatName = '"+selectedCat+"' ORDER BY exo:title DESC " );
+
+        } else {
+          this.setSQLOrder(" ORDER BY exo:title DESC ");
+        }
+
       }
       else if(sort.equals("az")){
-        this.setSQLOrder(" ORDER BY exo:title ASC ");
+        if (!selectedCat.equalsIgnoreCase("EMPTY")) {
+          this.setSQLOrder( " AND mix:mpkaceAddonCatName = '"+selectedCat+"' ORDER BY exo:title ASC " );
+
+        } else {
+          this.setSQLOrder(" ORDER BY exo:title ASC ");
+        }
+
+
       }else if(sort.equals("latest")){
-        //Oder by latest created
-        this.setSQLOrder(" ORDER BY exo:dateModified DESC ");
+
+        if (!selectedCat.equalsIgnoreCase("EMPTY")) {
+          this.setSQLOrder( " AND mix:mpkaceAddonCatName = '"+selectedCat+"' ORDER BY exo:dateModified DESC " );
+
+        } else {
+          //Oder by latest created
+          this.setSQLOrder(" ORDER BY exo:dateModified DESC ");
+        }
+
       }
       else{
-        // oder by vote
-        this.setSQLOrder(" ORDER BY exo:voteTotal DESC, exo:votingRate DESC ");
+        if (!selectedCat.equalsIgnoreCase("EMPTY")) {
+          this.setSQLOrder( " AND mix:mpkaceAddonCatName = '"+selectedCat+"' ORDER BY exo:voteTotal DESC, exo:votingRate DESC " );
+
+        } else {
+          // oder by vote
+          this.setSQLOrder(" ORDER BY exo:voteTotal DESC, exo:votingRate DESC ");
+        }
+
       }
       this.doSearch();
     } catch (RepositoryException e) {
