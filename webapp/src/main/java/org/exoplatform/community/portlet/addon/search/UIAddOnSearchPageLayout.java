@@ -45,12 +45,12 @@ public class UIAddOnSearchPageLayout extends UIContainer{
 	
 	public UIAddOnSearchPageLayout() throws Exception{
 
-	  UIAddOnSearchForm.REFRESH = true;
+		UIAddOnSearchForm.REFRESH = true;
 		addChild(UIAddOnSearchForm.class,null,UIAddOnSearchPageLayout.SEARCH_FORM);
 		UIAddOnDetail uiAddOnDetail = addChild(UIAddOnDetail.class, null, UIAddOnSearchPageLayout.ADDON_DETAIL);
 		uiAddOnDetail.setRendered(false);
-	  UIAddOnSearchResult.REFRESH = true;
-	  addChild(UIAddOnSearchResult.class,null,UIAddOnSearchPageLayout.SEARCH_RESULT);
+		UIAddOnSearchResult.REFRESH = true;
+		addChild(UIAddOnSearchResult.class,null,UIAddOnSearchPageLayout.SEARCH_RESULT);
 		addChild(UIPopupContainer.class, null, POPUP_Window_ID);
 		
 			
