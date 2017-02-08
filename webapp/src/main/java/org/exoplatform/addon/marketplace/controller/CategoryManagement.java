@@ -43,7 +43,7 @@ public class CategoryManagement extends GenericController {
         try {
             if(marketPlaceService.count() == 0) {
 
-                Category defaultCat = new Category("default","Default category to hold eXo addons");
+                Category defaultCat = new Category("Default","Default category to hold eXo addons");
 
                 marketPlaceService.createCategory(defaultCat);
 

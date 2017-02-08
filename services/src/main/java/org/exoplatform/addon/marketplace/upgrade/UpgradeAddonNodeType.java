@@ -77,7 +77,7 @@ public class UpgradeAddonNodeType implements Startable, Constants {
             //--- Add clause
             statement.append(" AND ");
             //--- Second constraint : jcr path
-            statement.append("jcr:path LIKE '" + addonPath + "/%'");
+            statement.append("jcr:path LIKE '" + addonPath + "%'");
             //--- Set order
             statement.append(" ORDER BY exo:dateCreated DESC ");
             //--- Create JCR query
