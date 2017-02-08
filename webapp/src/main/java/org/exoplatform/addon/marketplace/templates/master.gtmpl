@@ -5,7 +5,7 @@
         <div class="addonSearchToolbar">
             <div class="uiGrayLightBox">
                 <div class="clearfix">
-                    <button class="btn btn-primary pull-left" ng-click="location.href='/portal/intranet/add-ons'" type="button">{{i18n.back}}</button>
+                    <button class="btn btn-primary pull-left" onclick="location.href='/portal/intranet/add-ons'" type="button">{{i18n.back}}</button>
                 </div>
             </div>
         </div>
