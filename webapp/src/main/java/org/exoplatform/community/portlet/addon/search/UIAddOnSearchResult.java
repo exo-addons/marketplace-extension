@@ -90,7 +90,7 @@ public class UIAddOnSearchResult extends UIContainer {
 
     if (REFRESH){
       init();
-      SortAddons("popular", Constants.CATEGORY_ITEM_EMPTY_VALUE);
+      SortAddons("popular", Constants.CATEGORY_ITEM_ALL_VALUE);
     }
     //--- Get the paramter from url, this parameter is used to fetch categories by name
     HttpServletRequest request = Util.getPortalRequestContext().getRequest();
@@ -284,7 +284,7 @@ public class UIAddOnSearchResult extends UIContainer {
                                         addonHomePath +
                                         "%' AND NOT jcr:path LIKE '" + addonHomePath + "%/%'" +
                                         " AND publication:currentState='published' AND NOT (jcr:mixinTypes = 'exo:restoreLocation') ");
-          if (!categoryName.equalsIgnoreCase("EMPTY")) {
+          if (!categoryName.equalsIgnoreCase(Constants.CATEGORY_ITEM_ALL_VALUE)) {
             sqlQuery.append( " AND mix:mpkaceAddonCatName = '"+categoryName+"' " );
 
           }
@@ -321,7 +321,7 @@ public class UIAddOnSearchResult extends UIContainer {
     try {
       this.clearResult();
       if(sort.equals("za")){
-        if (!selectedCat.equalsIgnoreCase(Constants.CATEGORY_ITEM_EMPTY_VALUE)) {
+        if (!selectedCat.equalsIgnoreCase(Constants.CATEGORY_ITEM_ALL_VALUE)) {
           this.setSQLOrder( " AND mix:mpkaceAddonCatName = '"+selectedCat+"' ORDER BY exo:title DESC " );
 
         } else {
@@ -330,7 +330,7 @@ public class UIAddOnSearchResult extends UIContainer {
 
       }
       else if(sort.equals("az")){
-        if (!selectedCat.equalsIgnoreCase("EMPTY")) {
+        if (!selectedCat.equalsIgnoreCase(Constants.CATEGORY_ITEM_ALL_VALUE)) {
           this.setSQLOrder( " AND mix:mpkaceAddonCatName = '"+selectedCat+"' ORDER BY exo:title ASC " );
 
         } else {
@@ -340,7 +340,7 @@ public class UIAddOnSearchResult extends UIContainer {
 
       }else if(sort.equals("latest")){
 
-        if (!selectedCat.equalsIgnoreCase("EMPTY")) {
+        if (!selectedCat.equalsIgnoreCase(Constants.CATEGORY_ITEM_ALL_VALUE)) {
           this.setSQLOrder( " AND mix:mpkaceAddonCatName = '"+selectedCat+"' ORDER BY exo:dateModified DESC " );
 
         } else {
@@ -350,7 +350,7 @@ public class UIAddOnSearchResult extends UIContainer {
 
       }
       else{
-        if (!selectedCat.equalsIgnoreCase("EMPTY")) {
+        if (!selectedCat.equalsIgnoreCase(Constants.CATEGORY_ITEM_ALL_VALUE)) {
           this.setSQLOrder( " AND mix:mpkaceAddonCatName = '"+selectedCat+"' ORDER BY exo:voteTotal DESC, exo:votingRate DESC " );
 
         } else {

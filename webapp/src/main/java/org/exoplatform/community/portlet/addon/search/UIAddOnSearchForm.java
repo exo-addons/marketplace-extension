@@ -129,8 +129,8 @@ public class UIAddOnSearchForm extends UIForm implements Constants {
       //--- Init tje list each time the combobox is displayed
       categoriesList = new ArrayList<SelectItemOption<String>>();
 
-      //--- Add «EMPTY» value each time the combo-box
-      categoriesList.add(new SelectItemOption<String>("EMPTY","EMPTY"));
+      //--- Add «ALL» value each time the combo-box
+      categoriesList.add(new SelectItemOption<String>(Constants.CATEGORY_ITEM_ALL_VALUE,Constants.CATEGORY_ITEM_ALL_VALUE));
 
       //--- Fill categories
       for (Category category : categories) {
@@ -281,7 +281,7 @@ public class UIAddOnSearchForm extends UIForm implements Constants {
                 if(strSortOrder.equals("myaddons")){
 
                     if(UIAddOnSearchForm.filterSelected.equals("myaddons")){
-                        uiAddOnSearchResult.SortAddons("popular","EMPTY");
+                        uiAddOnSearchResult.SortAddons("popular",Constants.CATEGORY_ITEM_ALL_VALUE);
                         UIAddOnSearchForm.filterSelected="popular";
                     } else{
                         UIAddOnSearchForm.filterSelected="myaddons";
@@ -289,17 +289,17 @@ public class UIAddOnSearchForm extends UIForm implements Constants {
                     }
 
                 } else if(strSortOrder.equals("za")){
-                    uiAddOnSearchResult.SortAddons("za","EMPTY");
+                    uiAddOnSearchResult.SortAddons("za",Constants.CATEGORY_ITEM_ALL_VALUE);
                     UIAddOnSearchForm.filterSelected="za";
                 } else if(strSortOrder.equals("az")){
-                    uiAddOnSearchResult.SortAddons("az","EMPTY");
+                    uiAddOnSearchResult.SortAddons("az",Constants.CATEGORY_ITEM_ALL_VALUE);
                     UIAddOnSearchForm.filterSelected="az";
                 } else if(strSortOrder.equals("latest")){
-                    uiAddOnSearchResult.SortAddons("latest","EMPTY");
+                    uiAddOnSearchResult.SortAddons("latest",Constants.CATEGORY_ITEM_ALL_VALUE);
                     UIAddOnSearchForm.filterSelected="latest";
                 } else {
                     //Sort by vote
-                    uiAddOnSearchResult.SortAddons("popular","EMPTY");
+                    uiAddOnSearchResult.SortAddons("popular",Constants.CATEGORY_ITEM_ALL_VALUE);
                     UIAddOnSearchForm.filterSelected="popular";
                 }
                 uiAddonsSearchPageContainer.manageView(UIAddOnSearchPageLayout.SEARCH_RESULT);

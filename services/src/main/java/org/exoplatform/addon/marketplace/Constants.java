@@ -9,7 +9,7 @@ public interface Constants {
     public static final String HTTP_PARAMETER_CATEGORY_NAME    =   "category";
 
     /** The Constant Categories List Empty Item */
-    public static final String CATEGORY_ITEM_EMPTY_VALUE    = "EMPTY";
+    public static final String CATEGORY_ITEM_ALL_VALUE    = "ALL";
 
     /** The Constant KEYWORD_INPUT. */
     public static final String KEYWORD_INPUT = "keywordInput";
