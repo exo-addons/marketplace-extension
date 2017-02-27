@@ -19,6 +19,7 @@
 package org.exoplatform.community.portlet.addon;
 
 
+import org.exoplatform.addon.marketplace.Constants;
 import org.exoplatform.addon.marketplace.bo.Category;
 import org.exoplatform.addon.marketplace.service.MarketPlaceService;
 import org.exoplatform.addon.service.AddOnService;
@@ -165,51 +166,56 @@ public class UIAddOnWizard extends UIFormInputSet{
 	}
 	
 	public void initVals(Node aNode){
-		if(null != aNode){
+
+		if(null != aNode) {
+
 			String propertyName = null;
 			String txt = null;
-			String[] properties= {ADDON_TITLE,ADDON_DESCRIPTION,ADDON_DOWNLOAD_URL,ADDON_CODE_URL,ADDON_DEMO_URL,ADDON_INSTALL_COMMAND,ADDON_DOCUMENT_URL,ADDON_SOURCE_URL,ADDON_COMPABILITY,ADDON_LICENSE,ADDON_VERSION,ADDON_AUTHOR,ADDON_EMAIL};
-			for(int i =0; i < properties.length; i++)
-		  {
+			String[] properties= {ADDON_TITLE,ADDON_DESCRIPTION,ADDON_DOWNLOAD_URL,ADDON_CODE_URL,ADDON_DEMO_URL,ADDON_INSTALL_COMMAND,ADDON_DOCUMENT_URL,ADDON_SOURCE_URL,ADDON_COMPABILITY,ADDON_LICENSE,ADDON_VERSION,ADDON_AUTHOR,ADDON_EMAIL,ADDON_CATEGORY};
+			for(int i =0; i < properties.length; i++) {
 				propertyName = properties[i];
 				
 				try {
-					txt = AddOnService.getStrProperty(aNode,"exo:"+propertyName);
-					if(null != txt){
-						if(ADDON_DESCRIPTION.equals(propertyName)){
-							((UIFormRichtextInput)this.getChildById(propertyName)).setValue(txt);
-						}else{
-							this.getUIStringInput(propertyName).setValue(txt);
-						}						
+					//--- Manage Category : set selected category
+					if (propertyName.equalsIgnoreCase(ADDON_CATEGORY)) {
+						txt = AddOnService.getStrProperty(aNode, Constants.ADDON_MIXIN_PROPPERTY_NAME);
+						((UIFormSelectBox)this.getUIFormSelectBox(propertyName)).setValue(txt);
+					} else {
+						txt = AddOnService.getStrProperty(aNode,"exo:"+propertyName);
+						if(null != txt){
+							if(ADDON_DESCRIPTION.equals(propertyName)){
+								((UIFormRichtextInput)this.getChildById(propertyName)).setValue(txt);
+							}else{
+								this.getUIStringInput(propertyName).setValue(txt);
+							}
+						}
 					}
+
 				} catch (RepositoryException e) {
 					log.error("ERR init vals for edit addon "+propertyName);
 				}
-
-		  }
-			
+			}
 			//check to display avatar image and uploadAvatar component
 			try {
-        String avatarImageUrl = AddOnService.getAvatarNode(aNode);
-        UIComponent uploadAvatar = null;
-        List<UIComponent> listChildren = this.getChildren();
-        for (UIComponent child : listChildren) {
-          if(child instanceof UIUploadInput && child.getName().equals(ADDON_AVATAR)){
-            uploadAvatar = child;
-          }
-        }
-        if(null!=avatarImageUrl && avatarImageUrl.length()>0){
-          uploadAvatar.setRendered(false);
-        }else{
-          uploadAvatar.setRendered(true);
-        }
-      } catch (Exception e) {
-        log.error("ERR init vals for edit addon avatar",e);
-      }
+				String avatarImageUrl = AddOnService.getAvatarNode(aNode);
+        		UIComponent uploadAvatar = null;
+				List<UIComponent> listChildren = this.getChildren();
+				for (UIComponent child : listChildren) {
+				  if(child instanceof UIUploadInput && child.getName().equals(ADDON_AVATAR)){
+					uploadAvatar = child;
+				  }
+				}
+
+				if(null!=avatarImageUrl && avatarImageUrl.length()>0) {
+				  uploadAvatar.setRendered(false);
+				} else {
+				  uploadAvatar.setRendered(true);
+				}
+      		} catch (Exception e) {
+				log.error("ERR init vals for edit addon avatar",e);
+      		}
 			
 		}
-
-		
 		
 	}
 }
