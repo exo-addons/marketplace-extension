@@ -536,6 +536,10 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
       String titleAddon = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_TITLE).getValue();
       mapProperties.put("exo:" + UIAddOnWizard.ADDON_TITLE, titleAddon);
 
+      //--- Manage Categories : Edit category value
+      String categoryName = uiAddOnWizard.getUIFormSelectBox(UIAddOnWizard.ADDON_CATEGORY).getValue();
+      //--- END
+
       // Validate fields
       if (email == null || titleAddon == null || description == null || downloadUrl == null) {
         uiApp.addMessage(new ApplicationMessage("UIAddOnSearchPortlet.msg.invalid",
@@ -624,7 +628,7 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
 
       try {
 
-        currentNode = AddOnService.updateNode(titleAddon, nodeName, hosted, mapProperties, false);
+        currentNode = AddOnService.updateNode(titleAddon, nodeName, hosted,categoryName, mapProperties, false);
         
         log.info("Clean addon cache after update addon");
         AddOnService.cleanAddonCacheByUuid(uiAddOnSearchEdit.getNodeId());

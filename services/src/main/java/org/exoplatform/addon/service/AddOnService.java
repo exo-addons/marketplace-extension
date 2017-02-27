@@ -18,6 +18,7 @@
  */
 package org.exoplatform.addon.service;
 
+import org.exoplatform.addon.marketplace.Constants;
 import org.exoplatform.addon.marketplace.upgrade.UpgradeAddonNodeType;
 import org.exoplatform.addon.service.model.Addon;
 import org.exoplatform.addon.utils.ImageUtils;
@@ -210,7 +211,7 @@ public class AddOnService {
     return null;
 	}
 		
-	public static Node updateNode(String title,String name,Boolean hosted, Map<String,String> map,Boolean isNew) throws Exception {
+	public static Node updateNode(String title,String name,Boolean hosted, String categoryName, Map<String,String> map,Boolean isNew) throws Exception {
 
 		String nodeType = "exo:addon";
 
@@ -253,6 +254,11 @@ public class AddOnService {
 		String[] temp = nodePath.split("/");
 		String currentNodeName = temp[temp.length - 1];
 		Node currentNode = homeNode.getNode(currentNodeName);
+		//--- Manage Categories : update category name
+		if (categoryName != null) {
+			currentNode.addMixin(Constants.ADDON_MIXIN_CATEGORY);
+			currentNode.setProperty(Constants.ADDON_MIXIN_PROPPERTY_NAME,categoryName);
+		}
 		homeNode.getSession().save();
 		
 		return currentNode;
