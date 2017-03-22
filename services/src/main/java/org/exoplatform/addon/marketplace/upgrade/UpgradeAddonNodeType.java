@@ -18,9 +18,12 @@ import org.picocontainer.Startable;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kmenzli on 18/11/2016.
@@ -50,6 +53,8 @@ public class UpgradeAddonNodeType implements Startable, Constants {
         StringBuilder statement = null;
         Query query = null;
         QueryResult queryResult = null;
+        //--- Mixin Table
+        List<Value> defaultMixinList = null;
         try {
 
             //--- GEt session
@@ -84,14 +89,20 @@ public class UpgradeAddonNodeType implements Startable, Constants {
             query = queryManager.createQuery(statement.toString(), Query.SQL);
             //--- Launch query
             queryResult = query.execute();
+            //--- Prepare Mixin Table
+            defaultMixinList = new ArrayList<>();
+            defaultMixinList.add(session.getValueFactory().createValue(ADDON_DEFAULT_MIXIN_VALUE));
             //--- Iterate then add the mixin
-
             for(NodeIterator iter = queryResult.getNodes(); iter.hasNext();) {
+
                 Node addon = iter.nextNode();
                 if(!addon.isNodeType(ADDON_MIXIN_CATEGORY)){
                     if(addon.canAddMixin(ADDON_MIXIN_CATEGORY)) {
+                        List<Value> newValues = new ArrayList<>();
+                        Value[] values;
+
                         addon.addMixin(ADDON_MIXIN_CATEGORY);
-                        addon.setProperty(ADDON_MIXIN_PROPPERTY_NAME, ADDON_DEFAULT_MIXIN_VALUE);
+                        addon.setProperty(ADDON_MIXIN_PROPPERTY_NAME, defaultMixinList.toArray(new Value[defaultMixinList.size()]));
                         addon.save();
                     }
                 }

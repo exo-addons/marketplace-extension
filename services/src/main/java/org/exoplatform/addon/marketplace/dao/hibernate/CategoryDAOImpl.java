@@ -20,7 +20,7 @@ public class CategoryDAOImpl extends GenericDAOJPAImpl<Category, Long>  implemen
 
     @Override
     public Category update(Category entity) {
-        return null;
+        return super.update(entity);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CategoryDAOImpl extends GenericDAOJPAImpl<Category, Long>  implemen
     }
 
     @Override
-    public Category getCategoryByName(String name) {
+    public Category findCategoryByName(String name) {
         TypedQuery<Category> query = getEntityManager().createNamedQuery("category.findCategoryByName", Category.class);
         query.setParameter("name", name);
 

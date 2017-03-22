@@ -22,6 +22,7 @@ package org.exoplatform.community.portlet.addon;
 import org.exoplatform.addon.marketplace.Constants;
 import org.exoplatform.addon.marketplace.bo.Category;
 import org.exoplatform.addon.marketplace.service.MarketPlaceService;
+import org.exoplatform.addon.marketplace.upgrade.UpgradeAddonNodeType;
 import org.exoplatform.addon.service.AddOnService;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.log.ExoLogger;
@@ -42,6 +43,7 @@ import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -131,21 +133,16 @@ public class UIAddOnWizard extends UIFormInputSet{
 		//---Build categories
 		//--- Add DropDown to display categories
 		List<Category> categories = marketPlaceService.findAllCategories();
-
-		//--- Init tje list each time the combobox is displayed
-		List<SelectItemOption<String>> categoriesOptions = new ArrayList<SelectItemOption<String>>();
-
-		//--- Fill categories
-		for (Category category : categories) {
-			categoriesOptions.add(new SelectItemOption<String>(category.getName(),category.getName()));
-		}
-
-		UIFormSelectBox categorySelectBox = new UIFormSelectBox(ADDON_CATEGORY, ADDON_CATEGORY, categoriesOptions);
       
 	    addChild(titleInput);
 	    addChild(descriptionRichTextInput);
 	    addChild(versionInput);
-		addChild(categorySelectBox);
+
+        //--- Add checkbox to the form
+        for (Category category : categories) {
+			addChild(new UICheckBoxInput(category.getName(), null, false)) ;
+        }
+        //--- End
 	    
 	    addChild(licenseInput);
 	    addChild(compatibilityInput);
@@ -171,29 +168,41 @@ public class UIAddOnWizard extends UIFormInputSet{
 
 			String propertyName = null;
 			String txt = null;
-			String[] properties= {ADDON_TITLE,ADDON_DESCRIPTION,ADDON_DOWNLOAD_URL,ADDON_CODE_URL,ADDON_DEMO_URL,ADDON_INSTALL_COMMAND,ADDON_DOCUMENT_URL,ADDON_SOURCE_URL,ADDON_COMPABILITY,ADDON_LICENSE,ADDON_VERSION,ADDON_AUTHOR,ADDON_EMAIL,ADDON_CATEGORY};
+			String[] properties= {ADDON_TITLE,ADDON_DESCRIPTION,ADDON_DOWNLOAD_URL,ADDON_CODE_URL,ADDON_DEMO_URL,ADDON_INSTALL_COMMAND,ADDON_DOCUMENT_URL,ADDON_SOURCE_URL,ADDON_COMPABILITY,ADDON_LICENSE,ADDON_VERSION,ADDON_AUTHOR,ADDON_EMAIL};
 			for(int i =0; i < properties.length; i++) {
 				propertyName = properties[i];
 				
 				try {
-					//--- Manage Category : set selected category
-					if (propertyName.equalsIgnoreCase(ADDON_CATEGORY)) {
-						txt = AddOnService.getStrProperty(aNode, Constants.ADDON_MIXIN_PROPPERTY_NAME);
-						((UIFormSelectBox)this.getUIFormSelectBox(propertyName)).setValue(txt);
-					} else {
-						txt = AddOnService.getStrProperty(aNode,"exo:"+propertyName);
-						if(null != txt){
-							if(ADDON_DESCRIPTION.equals(propertyName)){
-								((UIFormRichtextInput)this.getChildById(propertyName)).setValue(txt);
-							}else{
-								this.getUIStringInput(propertyName).setValue(txt);
-							}
+					txt = AddOnService.getStrProperty(aNode,"exo:"+propertyName);
+					if(null != txt){
+						if(ADDON_DESCRIPTION.equals(propertyName)){
+							((UIFormRichtextInput)this.getChildById(propertyName)).setValue(txt);
+						} else {
+							this.getUIStringInput(propertyName).setValue(txt);
 						}
 					}
+
 
 				} catch (RepositoryException e) {
 					log.error("ERR init vals for edit addon "+propertyName);
 				}
+			}
+			//--- Manage Category
+			try {
+				List<UIComponent> listChildren = this.getChildren();
+				String categories = "";
+				List<String> catList;
+				for (UIComponent child : listChildren) {
+					if((child instanceof UICheckBoxInput) && (!child.getName().equals(ADDON_HOSTED))){
+						categories = AddOnService.getMixinProperty(aNode, UpgradeAddonNodeType.ADDON_MIXIN_CATEGORY , UpgradeAddonNodeType.ADDON_MIXIN_PROPPERTY_NAME);
+						catList = Arrays.asList(categories.split(" - "));
+						if (catList.contains(child.getName())) {
+							this.getUICheckBoxInput(child.getName()).setValue(true);
+						}
+					}
+				}
+			} catch (Exception e) {
+				log.error("ERR init vals for addon categories",e);
 			}
 			//check to display avatar image and uploadAvatar component
 			try {
@@ -201,7 +210,7 @@ public class UIAddOnWizard extends UIFormInputSet{
         		UIComponent uploadAvatar = null;
 				List<UIComponent> listChildren = this.getChildren();
 				for (UIComponent child : listChildren) {
-				  if(child instanceof UIUploadInput && child.getName().equals(ADDON_AVATAR)){
+				  if(child instanceof UICheckBoxInput && child.getName().equals(ADDON_AVATAR)){
 					uploadAvatar = child;
 				  }
 				}

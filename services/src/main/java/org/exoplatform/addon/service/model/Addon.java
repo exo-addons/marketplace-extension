@@ -1,5 +1,7 @@
 package org.exoplatform.addon.service.model;
 
+import javax.jcr.Value;
+
 public class Addon {
   private String uuid;
   private String jcrNodePath;

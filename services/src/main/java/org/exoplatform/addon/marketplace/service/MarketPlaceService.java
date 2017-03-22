@@ -78,4 +78,12 @@ public interface MarketPlaceService {
      * @return
      */
     List<Category> findAllCategories () throws MarketPlaceException;
+
+    /**
+     *
+     * @param categoryName
+     * @return Category object with same name as in the input of the method
+     * @throws MarketPlaceException
+     */
+    Category findCategoryByName (String categoryName) throws MarketPlaceException;
 }

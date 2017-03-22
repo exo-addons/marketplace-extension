@@ -480,6 +480,9 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
       Node currentNode = null;
 
       Map<String, String> mapProperties = new HashMap<String, String>();
+      //--- Manage Categories : Hold all checked categories
+      List<String> checkedCategories = new ArrayList<String>();
+      //--- END
 
       String email = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_EMAIL).getValue();  
 
@@ -537,7 +540,17 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
       mapProperties.put("exo:" + UIAddOnWizard.ADDON_TITLE, titleAddon);
 
       //--- Manage Categories : Edit category value
-      String categoryName = uiAddOnWizard.getUIFormSelectBox(UIAddOnWizard.ADDON_CATEGORY).getValue();
+      //---Manage Categories
+      for (UIComponent child : uiAddOnWizard.getChildren()) {
+        if ((child instanceof UICheckBoxInput) && (!child.getName().equals(UIAddOnWizard.ADDON_HOSTED))) {
+          child = (UICheckBoxInput) child;
+          if (((UICheckBoxInput) child).isChecked()) {
+            checkedCategories.add(child.getName());
+
+          }
+
+        }
+      }
       //--- END
 
       // Validate fields
@@ -628,7 +641,7 @@ public class UIAddOnSearchEdit extends UIForm implements UIPopupComponent {
 
       try {
 
-        currentNode = AddOnService.updateNode(titleAddon, nodeName, hosted,categoryName, mapProperties, false);
+        currentNode = AddOnService.updateNode(titleAddon, nodeName, hosted, checkedCategories, mapProperties, false);
         
         log.info("Clean addon cache after update addon");
         AddOnService.cleanAddonCacheByUuid(uiAddOnSearchEdit.getNodeId());

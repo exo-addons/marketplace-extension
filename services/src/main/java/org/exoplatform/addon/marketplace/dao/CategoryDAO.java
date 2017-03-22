@@ -10,9 +10,9 @@ public interface CategoryDAO extends GenericDAO<Category, Long> {
 
     Category removeCategory(long categoryId, boolean deleteChild);
 
-    Category getCategoryByName (String name);
-
     ListAccess<Category> findSubCategory(Category category);
 
     ListAccess<Category> findCategories(String query);
+
+    Category findCategoryByName (String categoryName);
 }

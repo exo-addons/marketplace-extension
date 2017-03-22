@@ -43,13 +43,13 @@
                                               <%if(fieldName != null && fieldName.length() > 0) {%>
                                               <%
           
-                                                def label = _ctx.appRes("UIAddOnPortlet.UIExtensionForm." + fieldName); 
-                                          
-                                                
-                                                if ( fieldName.startsWith("img")){
-                                                 label= _ctx.appRes('UIAddOnPortlet.UIExtensionForm.img_0') + " " + imageCount;
-                                                 imageCount++;
-                                                }
+                                                    def label = _ctx.appRes("UIAddOnPortlet.UIExtensionForm." + fieldName);
+
+
+                                                    if ( fieldName.startsWith("img")){
+                                                         label= _ctx.appRes('UIAddOnPortlet.UIExtensionForm.img_0') + " " + imageCount;
+                                                         imageCount++;
+                                                    }
                                               %> 
         
                                               $label 
@@ -85,7 +85,7 @@
                                         <% } %>
       
       
-                                    <%} else if(fieldName.equals("hosted")){
+                                  <%} else if(fieldName.equals("hosted")){
                                 
                                       def label = _ctx.appRes("UIAddOnPortlet.UIExtensionForm." + fieldName); 
                                     %>
