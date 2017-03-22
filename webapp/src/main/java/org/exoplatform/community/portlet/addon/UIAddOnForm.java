@@ -89,6 +89,9 @@ public class UIAddOnForm extends UIForm {
       Node currentNode = null;
 
       Map<String, String> mapProperties = new HashMap<String, String>();
+      //--- Manage Categories : Hold all checked categories
+      List<String> checkedCategories = new ArrayList<String>();
+      //--- END
 
       String email = uiAddOnWizard.getUIStringInput(UIAddOnWizard.ADDON_EMAIL).getValue();
       mapProperties.put("exo:" + UIAddOnWizard.ADDON_EMAIL, email);
@@ -141,7 +144,18 @@ public class UIAddOnForm extends UIForm {
       mapProperties.put("exo:text", description);
 
       //---Manage Categories
-      String categorySelected = uiAddOnWizard.getUIFormSelectBox(UIAddOnWizard.ADDON_CATEGORY).getValue();
+      for (UIComponent child : uiAddOnWizard.getChildren()) {
+        if (child instanceof UICheckBoxInput) {
+          child = (UICheckBoxInput) child;
+          if (((UICheckBoxInput) child).isChecked()) {
+            checkedCategories.add(child.getName());
+
+          }
+
+        }
+      }
+
+      //---END
 
       UICheckBoxInput hostedCb = (UICheckBoxInput) uiAddOnWizard.getUICheckBoxInput(UIAddOnWizard.ADDON_HOSTED);
       Boolean hosted = hostedCb.isChecked();
@@ -229,7 +243,7 @@ public class UIAddOnForm extends UIForm {
       String nameAddon = AddonUtils.cleanString(titleAddon);
       
       try {
-        currentNode = AddOnService.storeNode(titleAddon, nameAddon, hosted, categorySelected, mapProperties, true);
+        currentNode = AddOnService.storeNode(titleAddon, nameAddon, hosted, checkedCategories, mapProperties, true);
       } catch (Exception e) {
         log.debug("Exceptions happen while storing data",e);
       }

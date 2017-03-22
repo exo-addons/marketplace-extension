@@ -125,7 +125,7 @@
   <nodeType name="mix:mpkaceAddonCat" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
     <propertyDefinitions>
       <propertyDefinition name="mix:mpkaceAddonCatName" requiredType="String" autoCreated="true" mandatory="false"
-                          onParentVersion="COPY" protected="false" multiple="false">
+                          onParentVersion="COPY" protected="false" multiple="true">
         <valueConstraints/>
       </propertyDefinition>
     </propertyDefinitions>

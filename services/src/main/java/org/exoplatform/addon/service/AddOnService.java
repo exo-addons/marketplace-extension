@@ -44,10 +44,15 @@ import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.webui.Utils;
 
 import javax.jcr.*;
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import java.io.InputStream;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class AddOnService {
   
@@ -102,6 +107,26 @@ public class AddOnService {
 		}
 		
 		return null;
+	}
+	public static String getMixinProperty(Node node,String mixinType, String mixinProperty) throws RepositoryException{
+		StringBuffer sb;
+
+		//--- Manage categories
+		//--- Store category mixin
+		if(node.isNodeType(mixinType)){
+			sb = new StringBuffer();
+			Value[] categories = node.getProperty(mixinProperty).getValues();
+			Arrays.stream(categories).forEach(val -> {
+				try {
+					sb.append(val.getString()+" - ");
+				} catch (RepositoryException re) {
+					log.error("Error to compute category property from JCR node ["+ node+"]",re);
+				}
+			});
+			return sb != null ? sb.substring(0, sb.length()-3).toString():"";
+
+		}
+		return "";
 	}
 	public static Node createAddonThumbnailImageCover(Node node) throws Exception{
     //find first node in screenshot
@@ -211,7 +236,7 @@ public class AddOnService {
     return null;
 	}
 		
-	public static Node updateNode(String title,String name,Boolean hosted, String categoryName, Map<String,String> map,Boolean isNew) throws Exception {
+	public static Node updateNode(String title,String name,Boolean hosted, List<String> categoriesMixinList, Map<String,String> map,Boolean isNew) throws Exception {
 
 		String nodeType = "exo:addon";
 
@@ -255,16 +280,29 @@ public class AddOnService {
 		String currentNodeName = temp[temp.length - 1];
 		Node currentNode = homeNode.getNode(currentNodeName);
 		//--- Manage Categories : update category name
-		if (categoryName != null) {
-			currentNode.addMixin(Constants.ADDON_MIXIN_CATEGORY);
-			currentNode.setProperty(Constants.ADDON_MIXIN_PROPPERTY_NAME,categoryName);
+		//--- Add category mixin
+		if (categoriesMixinList != null) {
+
+			List<Value> tempMix = new ArrayList<Value>();
+			for (String str : categoriesMixinList) {
+				tempMix.add(currentNode.getSession().getValueFactory().createValue(str));
+			}
+
+			if(currentNode.canAddMixin(UpgradeAddonNodeType.ADDON_MIXIN_CATEGORY)) {
+				currentNode.addMixin(UpgradeAddonNodeType.ADDON_MIXIN_CATEGORY);
+
+			}
+			//--- method «setProperty» should be outside the test block, because «canAddMixin» return «true» only when the mixin doesn't already exist
+			currentNode.setProperty(UpgradeAddonNodeType.ADDON_MIXIN_PROPPERTY_NAME, tempMix.toArray(new Value[tempMix.size()]));
+			currentNode.save();
 		}
+		//--- FIN category mixin
 		homeNode.getSession().save();
 		
 		return currentNode;
 	}
 		
-	public static Node storeNode(String title,String name,Boolean hosted, String categoryMixin, Map<String,String> map,Boolean isNew) throws Exception {
+	public static Node storeNode(String title,String name,Boolean hosted, List<String> categoriesMixinList, Map<String,String> map,Boolean isNew) throws Exception {
 		String nodeType = "exo:addon";
 
 		//Node webRootNode = _livePortal.getLivePortal(sessionProvider, "website");
@@ -411,12 +449,18 @@ public class AddOnService {
 		currentNode.addMixin(MIX_COMMENTABLE_NODE_TYPE);
 		currentNode.addMixin(MIX_VOTEABLE_NODE_TYPE);
 
+
 		//--- Add category mixin
-		if (categoryMixin != null) {
+		if (categoriesMixinList != null) {
+
+			List<Value> tempMix = new ArrayList<Value>();
+			for (String str : categoriesMixinList) {
+				tempMix.add(currentNode.getSession().getValueFactory().createValue(str));
+			}
 			if(!currentNode.isNodeType(UpgradeAddonNodeType.ADDON_MIXIN_CATEGORY)){
 				if(currentNode.canAddMixin(UpgradeAddonNodeType.ADDON_MIXIN_CATEGORY)) {
 					currentNode.addMixin(UpgradeAddonNodeType.ADDON_MIXIN_CATEGORY);
-					currentNode.setProperty(UpgradeAddonNodeType.ADDON_MIXIN_PROPPERTY_NAME, categoryMixin);
+					currentNode.setProperty(UpgradeAddonNodeType.ADDON_MIXIN_PROPPERTY_NAME, tempMix.toArray(new Value[tempMix.size()]));
 					currentNode.save();
 				}
 			}
@@ -667,15 +711,9 @@ public class AddOnService {
       addon.setOwnerid(getStrProperty(node, "exo:owner"));
       addon.setCoverImagePath(getImageCover(node));
       addon.setAuthor(getStrProperty(node, "exo:author"));
+	  // --- Manage categories (store category mixin within the jcr node)
+	  addon.setCategory(getMixinProperty(node,UpgradeAddonNodeType.ADDON_MIXIN_CATEGORY , UpgradeAddonNodeType.ADDON_MIXIN_PROPPERTY_NAME));
 
-		//--- Manage categories
-		//--- Store category mixin
-		if(node.isNodeType(UpgradeAddonNodeType.ADDON_MIXIN_CATEGORY)){
-			addon.setCategory(node.getProperty(UpgradeAddonNodeType.ADDON_MIXIN_PROPPERTY_NAME).getString());
-
-		}
-
-      
       Double voteRate=0.0;
       if (node.isNodeType("mix:votable")) {
         if (node.hasProperty("exo:votingRate"))

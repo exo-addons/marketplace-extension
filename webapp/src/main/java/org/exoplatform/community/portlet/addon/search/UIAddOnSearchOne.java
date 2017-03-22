@@ -19,6 +19,7 @@
 package org.exoplatform.community.portlet.addon.search;
 
 import org.apache.commons.lang.StringUtils;
+import org.exoplatform.addon.marketplace.Constants;
 import org.exoplatform.addon.service.AddOnService;
 import org.exoplatform.addon.service.model.Addon;
 import org.exoplatform.portal.mop.SiteType;
@@ -180,7 +181,7 @@ public class UIAddOnSearchOne extends UIContainer {
 
 			UIAddOnSearchOne uiAddOnSearchOne = event.getSource();
 			UIAddOnSearchPageLayout uiAddOnSearchPageLayout = uiAddOnSearchOne.getAncestorOfType(UIAddOnSearchPageLayout.class);
-			UIAddOnSearchForm.filterSelected = "default";
+			UIAddOnSearchForm.filterSelected = Constants.CATEGORY_ITEM_ALL_VALUE;
 			UIAddOnDetail uiAddOnDetail =  uiAddOnSearchPageLayout.getChildById(UIAddOnSearchPageLayout.ADDON_DETAIL);
 			uiAddOnDetail.setNodeId(uiAddOnSearchOne.getNodeId());
 			uiAddOnSearchPageLayout.manageView(UIAddOnSearchPageLayout.ADDON_DETAIL);

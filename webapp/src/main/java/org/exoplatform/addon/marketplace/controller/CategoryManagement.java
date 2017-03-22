@@ -39,20 +39,7 @@ public class CategoryManagement extends GenericController {
     @View
     public Response index(SecurityContext securityContext) throws MarketPlaceException {
 
-        //--- check the else add a default category to hold all unclassifed addons
-        try {
-            if(marketPlaceService.count() == 0) {
-
-                Category defaultCat = new Category("Default","Default category to hold eXo addons");
-
-                marketPlaceService.createCategory(defaultCat);
-
-            }
-
-        } catch (Exception e) {
-
-        }
-
+        //--- Display categories page
         return master.ok().withCharset(Tools.UTF_8);
     }
 
@@ -63,16 +50,33 @@ public class CategoryManagement extends GenericController {
     public Category saveCategory(@Jackson Category category) throws Exception {
         //--- Init Category with parameters sent from client layer
         //--- xeditable fwk send also the id based on order in the matrix, thus I need to set only usefull data such as «name» and «description»
-        Category createdCat = new Category(category.getName(),category.getDescription());
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Save new category with [name = "+category.getName()+"]");
-        }
+       //--- Category holder
+        Category createdCat = null;
 
         try {
-            createdCat = marketPlaceService.createCategory(createdCat);
-        } catch (Exception ex) {
-            LOG.error("Exception raised when storing category ["+category.getName()+"]", ex);
+            //--- Get category from DB
+            Category cat =  marketPlaceService.getCategory(category.getId());
+            //--- If the category with the ID exists then do an update
+            if (cat != null ) {
+                LOG.info("Update the category {}",category.getName());
+                cat.setName(category.getName());
+                cat.setDescription(category.getDescription());
+                createdCat = marketPlaceService.updateCategory(cat);
+            }
+            //--- Else create a new category
+            else {
+                LOG.info("Save a new category {}",category.getName());
+                //--- Create a new category
+                createdCat = new Category(category.getName(),category.getDescription());
+                //--- Create a new category
+                createdCat = marketPlaceService.createCategory(createdCat);
+
+            }
+
+        } catch (Exception e) {
+            LOG.error("Exception raised when persisting category {}",category.getName(), e);
         }
+
         return createdCat;
     }
 

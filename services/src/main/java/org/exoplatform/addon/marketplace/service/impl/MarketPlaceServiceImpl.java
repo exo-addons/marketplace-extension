@@ -73,10 +73,7 @@ public class MarketPlaceServiceImpl implements MarketPlaceService {
     @Override
     public Category getCategory(Long id) throws MarketPlaceException {
 
-        Category project = categoryDAO.find(id);
-        if (project == null) throw new MarketPlaceException(id, Category.class);
-
-        return project;
+        return categoryDAO.find(id);
 
     }
 
@@ -113,5 +110,10 @@ public class MarketPlaceServiceImpl implements MarketPlaceService {
     @Override
     public List<Category> findAllCategories() {
         return categoryDAO.findAll();
+    }
+
+    @Override
+    public Category findCategoryByName(String categoryName) throws MarketPlaceException {
+        return categoryDAO.findCategoryByName(categoryName);
     }
 }
