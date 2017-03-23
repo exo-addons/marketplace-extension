@@ -8,6 +8,7 @@ import org.exoplatform.addon.marketplace.GenericController;
 import org.exoplatform.addon.marketplace.bo.Category;
 import org.exoplatform.addon.marketplace.exception.MarketPlaceException;
 import org.exoplatform.addon.marketplace.service.MarketPlaceService;
+import org.exoplatform.addon.service.AddOnService;
 import org.exoplatform.commons.juzu.ajax.Ajax;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -52,6 +53,8 @@ public class CategoryManagement extends GenericController {
         //--- xeditable fwk send also the id based on order in the matrix, thus I need to set only usefull data such as «name» and «description»
        //--- Category holder
         Category createdCat = null;
+        //--- Hold temp categName
+        String oldCategoryName = null;
 
         try {
             //--- Get category from DB
@@ -59,9 +62,13 @@ public class CategoryManagement extends GenericController {
             //--- If the category with the ID exists then do an update
             if (cat != null ) {
                 LOG.info("Update the category {}",category.getName());
+                oldCategoryName = cat.getName();
                 cat.setName(category.getName());
                 cat.setDescription(category.getDescription());
                 createdCat = marketPlaceService.updateCategory(cat);
+                //---Update addons categories impacted
+                AddOnService.updateAddonsCategoriesInBulk(oldCategoryName,category.getName(),"update");
+
             }
             //--- Else create a new category
             else {
@@ -90,6 +97,8 @@ public class CategoryManagement extends GenericController {
         }
         try {
             marketPlaceService.removeCategory(category.getId(),false);
+            //---Update addons categories impacted
+            AddOnService.updateAddonsCategoriesInBulk(category.getName(),null,"drop");
         } catch (Exception ex) {
             LOG.error("Exception raised when storing category ["+category.getName()+"]", ex);
         }

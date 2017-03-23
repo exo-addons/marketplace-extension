@@ -35,6 +35,7 @@ import org.exoplatform.services.cms.JcrInputProperty;
 import org.exoplatform.services.jcr.access.PermissionType;
 import org.exoplatform.services.jcr.core.ExtendedNode;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
+import org.exoplatform.services.jcr.impl.core.query.QueryImpl;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.mail.MailService;
@@ -44,15 +45,13 @@ import org.exoplatform.services.wcm.utils.WCMCoreUtils;
 import org.exoplatform.wcm.webui.Utils;
 
 import javax.jcr.*;
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
 import java.io.InputStream;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class AddOnService {
   
@@ -735,6 +734,173 @@ public class AddOnService {
     
     return addon;
   }
-  
+
+  public static void updateAddonsCategoriesInBulk (String oldCategory, String newCategory, String event) {
+
+	  //--- JCR path to addons
+	  String addonsHomePath;
+	  //--- JCR Session ;
+	  Session session = null;
+	  //--- Addons query
+	  String addonsQuery = null;
+	  //--- Query results
+	  //--- JCR Query REsult Obj
+	  QueryResult addonsResult = null;
+	  try {
+
+		  //--- Get session JCR
+		  session = getJCRSession();
+		  //--- Get Addon JCR Home Path
+		  addonsHomePath = getAddonHomePath (Constants.ADDON_ITEM_PATH,Constants.ADDON_SITE_NAME);
+		  //--- Compute the addon query to get addons by categories
+		  addonsQuery = buildJCRQuery(addonsHomePath,oldCategory);
+		  //--- Execute JCR Query
+		  addonsResult = executeJCRQuery(session,addonsQuery);
+		  //--- Update performed
+		  updateAddonsCategoriesList(session, addonsResult,oldCategory,newCategory,event);
+
+	  } catch (Exception e) {
+		  log.error("Error when method updateAddonsCategoriesInBulk is called ",e);
+
+	  }
+  }
+
+	/**
+	 * Create and return a JCR Session
+	 * @return JCR Session
+	 */
+	public static Session getJCRSession () {
+		//--- JCR Session
+		Session session = null;
+		try {
+			SessionProvider sessionProvider = WCMCoreUtils.getUserSessionProvider();
+			session = sessionProvider.getSession(WCMCoreUtils.getRepository().getConfiguration().getDefaultWorkspaceName(),WCMCoreUtils.getRepository());
+
+		} catch (Exception e) {
+			log.error("Fail to create JCR session",e.getMessage(),e);
+		}
+		return session;
+
+	}
+
+	/**
+	 *
+	 * @param addonsHomePath
+	 * @param oldCategory
+	 * @return
+	 */
+	public static String buildJCRQuery (String addonsHomePath, String oldCategory) {
+
+		//--- Query to load addons
+		StringBuffer query;
+		//--- Build select
+		query = new StringBuffer("SELECT * FROM exo:addon ");
+		//--- Build query constreintsto search all addons with oldCategory
+		query.append("WHERE jcr:path like '"+addonsHomePath+"%' AND NOT jcr:path LIKE '" + addonsHomePath + "%/%'");
+		//--- Build query constreintsto search all addons with oldCategory
+		query.append(" AND publication:currentState='published' AND  NOT (jcr:mixinTypes = 'exo:restoreLocation') ");
+		//--- Build query : add category name constreint
+		query.append(" AND mix:mpkaceAddonCatName = '"+oldCategory+"' ORDER BY exo:voteTotal DESC, exo:votingRate DESC ");
+		return query.toString();
+	}
+	public static QueryResult executeJCRQuery (Session session, String theQuery) {
+		//--- JCR Query REsult Obj
+		QueryResult addonsResult = null;
+		//--- Quary Manager Ins
+		QueryManager queryManager = null;
+		//--- Query IMPL Ins
+		QueryImpl jcrQ = null;
+		try {
+			//--- make SQL query/*
+			queryManager = session.getWorkspace().getQueryManager();
+			jcrQ = (QueryImpl) queryManager.createQuery(theQuery, Query.SQL);
+			// execute query and fetch result*/
+			addonsResult = jcrQ.execute();
+
+		} catch (Exception e) {
+			log.error("Fail to execude JCR query [{}]",theQuery,e);
+
+		}
+
+		return addonsResult;
+	}
+
+	/**
+	 * Get JCR path to Addons path
+	 * @param defaultAddonRootPath
+	 * @return
+	 */
+	public static String getAddonHomePath (String addonRootPath, String siteName) {
+		//--- Addon JCR Homepath
+		String addonPath = null;
+		//--- SessionProfider Obj
+		SessionProvider sessionProvider = null;
+		try {
+			//--- GEt sessionProvider
+			sessionProvider = SessionProvider.createSystemProvider();
+
+			//--- Fetch addon items path
+			LivePortalManagerService livePortalManagerService = WCMCoreUtils.getService(LivePortalManagerService.class);
+			//TODO : Get site node should be dynamic, think to a way to remove ad-hoc code to get to «intranet» site node
+			Node siteNode = livePortalManagerService.getLivePortal(sessionProvider, siteName);
+			addonPath = siteNode.getPath() + "/" + addonRootPath + "/";
+
+		} catch (Exception e) {
+			log.error("Fail to get Addons JCR Hmepath ",e);
+		}
+
+		return addonPath;
+
+	}
+
+	/**
+	 * Update categories list for each addon
+	 * @param results
+	 */
+	public static void updateAddonsCategoriesList (Session session, QueryResult results, String oldCategory, String newCategory, String event) {
+		try {
+			//--- Transform results
+			NodeIterator it = results.getNodes();
+			//--- Temp list to hold addon's categories
+			List<String> tempCat = null;
+			//--- Mixin List
+			List<Value> updatedMixinList = null;
+			while (it.hasNext()) {
+				Node addon = it.nextNode();
+				log.info("Start updating addons categories in bulk");
+				tempCat = new ArrayList<String>();
+
+				//--- Get mixin values : categories within an addon
+				for (Value value : addon.getProperty(UpgradeAddonNodeType.ADDON_MIXIN_PROPPERTY_NAME).getValues()) {
+					tempCat.add(value.getString());
+				}
+				//--- Remove oldCategory
+				tempCat.removeIf(p -> p.equalsIgnoreCase(oldCategory));
+
+				if (event.equalsIgnoreCase("update")) {
+					log.info("Drop category [{}] from all addons ",oldCategory);
+					//--- Add the new category
+					tempCat.add(newCategory);
+				}
+				updatedMixinList = new ArrayList<Value>();
+				for (String category : tempCat) {
+
+					updatedMixinList.add(session.getValueFactory().createValue(category));
+				}
+
+
+				//--- method «setProperty» should be outside the test block, because «canAddMixin» return «true» only when the mixin doesn't already exist
+				addon.setProperty(UpgradeAddonNodeType.ADDON_MIXIN_PROPPERTY_NAME, updatedMixinList.toArray(new Value[updatedMixinList.size()]));
+				addon.save();
+
+			}
+
+
+		} catch (Exception e) {
+			log.error("Fail to update categories list for Addon",e);
+
+		}
+
+	}
 }
 
