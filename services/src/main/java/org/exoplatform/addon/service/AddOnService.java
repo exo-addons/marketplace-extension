@@ -892,6 +892,8 @@ public class AddOnService {
 				//--- method «setProperty» should be outside the test block, because «canAddMixin» return «true» only when the mixin doesn't already exist
 				addon.setProperty(UpgradeAddonNodeType.ADDON_MIXIN_PROPPERTY_NAME, updatedMixinList.toArray(new Value[updatedMixinList.size()]));
 				addon.save();
+				//--- Remove updated addon from the cache
+				cleanAddonCacheByUuid(addon.getUUID());
 
 			}
 
