@@ -210,7 +210,7 @@ public class UIAddOnWizard extends UIFormInputSet{
         		UIComponent uploadAvatar = null;
 				List<UIComponent> listChildren = this.getChildren();
 				for (UIComponent child : listChildren) {
-				  if(child instanceof UICheckBoxInput && child.getName().equals(ADDON_AVATAR)){
+				  if(child instanceof UIUploadInput && child.getName().equals(ADDON_AVATAR)){
 					uploadAvatar = child;
 				  }
 				}
