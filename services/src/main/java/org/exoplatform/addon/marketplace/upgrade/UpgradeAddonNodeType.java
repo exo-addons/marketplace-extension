@@ -91,7 +91,7 @@ public class UpgradeAddonNodeType implements Startable, Constants {
             queryResult = query.execute();
             //--- Prepare Mixin Table
             defaultMixinList = new ArrayList<>();
-            defaultMixinList.add(session.getValueFactory().createValue(ADDON_DEFAULT_MIXIN_VALUE));
+            defaultMixinList.add(session.getValueFactory().createValue(ADDON_UNCLASSIFIED_MIXIN_VALUE));
             //--- Iterate then add the mixin
             for(NodeIterator iter = queryResult.getNodes(); iter.hasNext();) {
 

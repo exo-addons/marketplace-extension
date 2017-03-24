@@ -96,7 +96,7 @@ public class UIAddOnSearchResult extends UIContainer {
     HttpServletRequest request = Util.getPortalRequestContext().getRequest();
     if (request.getParameter(Constants.HTTP_PARAMETER_CATEGORY_NAME) != null) {
       log.debug("MarketPlace Addon, Load addons based on parameter passed through URL {} ", request.getParameter("category"));
-      SortAddons("popular", request.getParameter("category"));
+      SortAddons("popular", request.getParameter(Constants.HTTP_PARAMETER_CATEGORY_NAME));
     }
     super.processRender(context);
   }

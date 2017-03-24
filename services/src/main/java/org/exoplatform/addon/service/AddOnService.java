@@ -887,6 +887,10 @@ public class AddOnService {
 
 					updatedMixinList.add(session.getValueFactory().createValue(category));
 				}
+				if (updatedMixinList.size() == 0) {
+					//--- If there is no category attached to addon : unclassified
+					updatedMixinList.add(session.getValueFactory().createValue(Constants.ADDON_UNCLASSIFIED_MIXIN_VALUE));
+				}
 
 
 				//--- method «setProperty» should be outside the test block, because «canAddMixin» return «true» only when the mixin doesn't already exist
