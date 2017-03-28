@@ -22,6 +22,8 @@ import javax.jcr.Value;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +49,7 @@ public class UpgradeAddonNodeType implements Startable, Constants {
         if (LOG.isInfoEnabled()) {
             LOG.info("Start " + this.getClass().getName() + ".............");
         }
+        Instant startExec = Instant.now();
         SessionProvider sessionProvider = null;
         Session session = null;
         QueryManager queryManager = null;
@@ -120,9 +123,10 @@ public class UpgradeAddonNodeType implements Startable, Constants {
             if (sessionProvider != null) {
                 sessionProvider.close();
             }
-            if (LOG.isInfoEnabled()) {
-                LOG.info("Update of nodetype EXO:ADDON has been finished ");
-            }
+            Instant endExec = Instant.now();
+            Duration upgradeElapsed = Duration.between(startExec, endExec);
+            LOG.info("Update Addons has been finished in {} ( milliseconds )", upgradeElapsed.toMillis());
+
         }
     }
 
