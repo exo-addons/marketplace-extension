@@ -125,7 +125,7 @@ public class UpgradeAddonNodeType implements Startable, Constants {
             }
             Instant endExec = Instant.now();
             Duration upgradeElapsed = Duration.between(startExec, endExec);
-            LOG.info("Update Addons has been finished in {} ( milliseconds )", upgradeElapsed.toMillis());
+            LOG.info("Addons upgrade has been finished in {} ( milliseconds )", upgradeElapsed.toMillis());
 
         }
     }
