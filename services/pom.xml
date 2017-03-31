@@ -4,7 +4,7 @@
   <parent>
     <artifactId>marketplace-extension</artifactId>
     <groupId>org.exoplatform.addons.marketplace</groupId>
-    <version>1.0.x-SNAPSHOT</version>
+    <version>1.1.x-SNAPSHOT</version>
   </parent>
   <artifactId>marketplace-extension-services</artifactId>
   <packaging>jar</packaging>
