@@ -117,12 +117,17 @@ public class AddOnService {
 			Value[] categories = node.getProperty(mixinProperty).getValues();
 			Arrays.stream(categories).forEach(val -> {
 				try {
+					if ((val.getString() != null) && (val.getString().length() == 0) ) {
+						return;
+					}
 					sb.append(val.getString()+" - ");
+
 				} catch (RepositoryException re) {
 					log.error("Error to compute category property from JCR node ["+ node+"]",re);
 				}
 			});
-			return sb != null ? sb.substring(0, sb.length()-3).toString():"";
+			//TODO : I hate the way to test, must think to a better way more fiable to check this condition
+			return sb.toString().length()>0  ? sb.substring(0, sb.length()-3).toString():"";
 
 		}
 		return "";
@@ -826,9 +831,10 @@ public class AddOnService {
 	}
 
 	/**
-	 * Get JCR path to Addons path
-	 * @param defaultAddonRootPath
-	 * @return
+	 *
+	 * @param addonRootPath
+	 * @param siteName
+	 * @return String
 	 */
 	public static String getAddonHomePath (String addonRootPath, String siteName) {
 		//--- Addon JCR Homepath
@@ -889,7 +895,7 @@ public class AddOnService {
 				}
 				if (updatedMixinList.size() == 0) {
 					//--- If there is no category attached to addon : unclassified
-					updatedMixinList.add(session.getValueFactory().createValue(Constants.ADDON_UNCLASSIFIED_MIXIN_VALUE));
+					updatedMixinList.add(session.getValueFactory().createValue(Constants.ADDON_EMPTY_MIXIN_VALUE));
 				}
 
 

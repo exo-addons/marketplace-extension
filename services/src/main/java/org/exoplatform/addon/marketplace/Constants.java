@@ -46,7 +46,7 @@ public interface Constants {
     public final static String ADDON_MIXIN_CATEGORY  = "mix:mpkaceAddonCat";
 
     /** The Constant ADDON_MIXIN_CATEGORY */
-    public final static String ADDON_UNCLASSIFIED_MIXIN_VALUE  = "Unclassified";
+    public final static String ADDON_EMPTY_MIXIN_VALUE  = "";
 
     /** The Constant PREFERENCE_RECEIVER. */
     public static final String PREFERENCE_RECEIVER = "adminEmail";
