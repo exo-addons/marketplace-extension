@@ -499,7 +499,7 @@ void commentForm(Node post) {
 <link href="/marketplace-extension-webapp/skin/css/jquery.fancybox-1.3.4.css" rel="stylesheet">
 <script src="/marketplace-extension-webapp/javascript/exo/add-on/jquery.fancybox-1.3.4.pack.js">
 </script>
-<script src="/CommonsResources/ckeditor/ckeditor.js"></script>
+<script src="/commons-extension/ckeditor/ckeditor.js"></script>
 <link href="/marketplace-extension-webapp/skin/css/add-ons.css" rel="stylesheet">
 <!--Stylesheep for image slider-->
 <link href="/marketplace-extension-webapp/skin/css/CircularContentCarouselStyle.css" rel="stylesheet">
