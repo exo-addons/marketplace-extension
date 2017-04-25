@@ -4,7 +4,7 @@
   <parent>
     <artifactId>marketplace-extension</artifactId>
     <groupId>org.exoplatform.addons.marketplace</groupId>
-    <version>1.1.x-SNAPSHOT</version>
+    <version>1.2.x-SNAPSHOT</version>
   </parent>
   <artifactId>marketplace-extension-webapp</artifactId>
   <packaging>war</packaging>
@@ -12,7 +12,7 @@
   <description>Add-on center - A portlet or any webapp</description>
   <dependencies>
     <dependency>
-      <groupId>org.gatein.portal</groupId>
+      <groupId>org.exoplatform.gatein.portal</groupId>
       <artifactId>exo.portal.webui.portal</artifactId>
       <scope>provided</scope>
     </dependency>

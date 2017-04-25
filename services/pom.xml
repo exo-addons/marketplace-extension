@@ -4,7 +4,7 @@
   <parent>
     <artifactId>marketplace-extension</artifactId>
     <groupId>org.exoplatform.addons.marketplace</groupId>
-    <version>1.1.x-SNAPSHOT</version>
+    <version>1.2.x-SNAPSHOT</version>
   </parent>
   <artifactId>marketplace-extension-services</artifactId>
   <packaging>jar</packaging>
@@ -25,7 +25,7 @@
     </dependency>
     
     <dependency>
-      <groupId>org.gatein.portal</groupId>
+      <groupId>org.exoplatform.gatein.portal</groupId>
       <artifactId>exo.portal.webui.portal</artifactId>
       <scope>provided</scope>
     </dependency>
