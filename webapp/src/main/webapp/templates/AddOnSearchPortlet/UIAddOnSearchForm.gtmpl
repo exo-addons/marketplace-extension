@@ -34,11 +34,6 @@
      <% } // end if
     } // end for
    %>
-    
-    <button type="button"  style="margin-left: 5px;"
-      onclick="window.open('https://codenvy.com/f?id=7nop24paia4u2okn', '_blank')" class="btn pull-right">
-      <%=_ctx.appRes('UIAddOnSearchPortlet.UIExtensionForm.codeNew')%>
-    </button>
 
     <button type="button"
       onclick="location.href='/portal/intranet/create-addon'" class="btn pull-right">
