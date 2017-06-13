@@ -514,7 +514,8 @@ word-wrap: break-word;
     float: left;
 }
 .commmentLeft +   .commentRight {
-     margin-left: 68px;
+    margin-left: 22px;
+    width: 100%;
 }
 .commentList .commentItem .commentInputBox .commentInput {
     margin-right: 112px;
@@ -524,7 +525,8 @@ word-wrap: break-word;
 margin-top:10px;
 }
 .listComment .commentBox {
-    margin-left: 68px;
+    width : 100%;
+    margin-left: 22px;
     padding: 10px 20px;
     position: relative;
 }
@@ -570,5 +572,16 @@ margin-top:10px;
 .categoryLabel {
     float: right;
     color: darkgoldenrod;
+}
+
+.inputContainer .commentItem a.avatarMedium, .listComment .commentContainer .avatarBox a.avatarMedium{
+    width: 50px;
+    display: block;
+    text-align: center;
+}
+.UISingleContentViewerPortlet .UIPresentationContainer .UIPluginTemplateOneScr h5.title {
+    color: #333;
+    font-weight: bold;
+    font-size: 18px;
 }
 /*END style for comment*/
