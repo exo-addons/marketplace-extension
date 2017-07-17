@@ -22,6 +22,7 @@ package org.exoplatform.community.portlet.addon.search;
 import org.exoplatform.addon.marketplace.Constants;
 import org.exoplatform.addon.marketplace.bo.Category;
 import org.exoplatform.addon.marketplace.service.MarketPlaceService;
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
@@ -79,8 +80,11 @@ import java.util.ResourceBundle;
 public class UIAddOnSearchForm extends UIForm implements Constants {
 
     private static final Log LOG                      = ExoLogger.getLogger(UIAddOnSearchForm.class.getName());
+    private String featuredCategory = "";
+    private static final String EXO_MARKETPLACE_FEATUED_CATEGORY_NAME = "exo.addon.marketplace.featured.category.name";
 
-	public static String filterSelected = "";
+
+    public static String filterSelected = "";
     public static String categorySelected = "";
 	public static Boolean REFRESH = true;
 	private Boolean btnBackToAddonsVisible = false;
@@ -115,6 +119,10 @@ public class UIAddOnSearchForm extends UIForm implements Constants {
         //--- Add DropDown to display categories
         categoryNameDropDown = addChild(UIDropDownControl.class, "CategoryNameDropDown", null);
 
+        //--- Get the default featured category
+        //--- Get tribe manager name
+        featuredCategory = PropertyManager.getProperty(EXO_MARKETPLACE_FEATUED_CATEGORY_NAME).trim();
+
     
     //addChild(uiDropDownControl);
 	
@@ -132,9 +140,14 @@ public class UIAddOnSearchForm extends UIForm implements Constants {
       //--- Add «ALL» value each time the combo-box
       categoriesList.add(new SelectItemOption<String>(Constants.CATEGORY_ITEM_ALL_VALUE,Constants.CATEGORY_ITEM_ALL_VALUE));
 
+      //-- Add «Featured» value each time to the dropdown menu
+      categoriesList.add(new SelectItemOption<String>(featuredCategory,featuredCategory));
+
       //--- Fill categories
       for (Category category : categories) {
-          categoriesList.add(new SelectItemOption<String>(category.getName(),category.getName()));
+          if (!category.getName().equalsIgnoreCase(featuredCategory)) {
+              categoriesList.add(new SelectItemOption<String>(category.getName(),category.getName()));
+          }
       }
       categoryNameDropDown.setOptions(categoriesList);
       //--- FIN categories box management
@@ -378,7 +391,7 @@ public class UIAddOnSearchForm extends UIForm implements Constants {
             UIAddOnSearchResult uiAddOnSearchResult = uiAddonsSearchPageContainer.getChildById(UIAddOnSearchPageLayout.SEARCH_RESULT);
 
             //--- Launch JCR request to get addons by category
-            uiAddOnSearchResult.showAddonsByCategory(categoryName);
+            uiAddOnSearchResult.showAddonsByCategory(categoryName.toUpperCase());
             //--- END request
             categoryNameDropDown.setValue(categoryName);
 

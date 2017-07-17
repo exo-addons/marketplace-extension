@@ -285,7 +285,7 @@ public class UIAddOnSearchResult extends UIContainer {
                                         "%' AND NOT jcr:path LIKE '" + addonHomePath + "%/%'" +
                                         " AND publication:currentState='published' AND NOT (jcr:mixinTypes = 'exo:restoreLocation') ");
           if (!categoryName.equalsIgnoreCase(Constants.CATEGORY_ITEM_ALL_VALUE)) {
-            sqlQuery.append( " AND mix:mpkaceAddonCatName = '"+categoryName+"' " );
+            sqlQuery.append( " AND UPPER (mix:mpkaceAddonCatName) = '"+categoryName+"' " );
 
           }
 
