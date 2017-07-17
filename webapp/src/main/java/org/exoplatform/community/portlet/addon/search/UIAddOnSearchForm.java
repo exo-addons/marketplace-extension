@@ -141,7 +141,10 @@ public class UIAddOnSearchForm extends UIForm implements Constants {
       categoriesList.add(new SelectItemOption<String>(Constants.CATEGORY_ITEM_ALL_VALUE,Constants.CATEGORY_ITEM_ALL_VALUE));
 
       //-- Add «Featured» value each time to the dropdown menu
-      categoriesList.add(new SelectItemOption<String>(featuredCategory,featuredCategory));
+      if (featuredCategory != null && featuredCategory.length() > 0) {
+          categoriesList.add(new SelectItemOption<String>(featuredCategory,featuredCategory));
+
+      }
 
       //--- Fill categories
       for (Category category : categories) {
