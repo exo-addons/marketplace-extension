@@ -4,7 +4,7 @@
   <parent>
     <artifactId>marketplace-extension</artifactId>
     <groupId>org.exoplatform.addons.marketplace</groupId>
-    <version>1.2.x-SNAPSHOT</version>
+    <version>1.2.0-M06</version>
   </parent>
   <artifactId>marketplace-extension-webapp</artifactId>
   <packaging>war</packaging>

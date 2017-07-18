@@ -10,7 +10,7 @@
   </parent>
   <groupId>org.exoplatform.addons.marketplace</groupId>
   <artifactId>marketplace-extension</artifactId>
-  <version>1.2.x-SNAPSHOT</version>
+  <version>1.2.0-M06</version>
   <packaging>pom</packaging>
   <name>Marketplace extension</name>
   <description>Marketplace extension to manage add-on</description>
@@ -22,7 +22,7 @@
   <scm>
     <connection>scm:git:git://github.com/exo-addons/marketplace-extension.git</connection>
     <developerConnection>scm:git:git@github.com:exo-addons/marketplace-extension.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>1.2.0-M06</tag>
     <url>https://github.com/exo-addons/marketplace-extension.git</url>
   </scm>
   <properties>
