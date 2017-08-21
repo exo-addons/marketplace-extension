@@ -525,9 +525,9 @@ word-wrap: break-word;
 margin-top:10px;
 }
 .listComment .commentBox {
-    width : 100%;
-    margin-left: 22px;
-    padding: 10px 20px;
+    width: auto;
+    margin-left: 60px;
+    padding: 15px 15px;
     position: relative;
 }
 .listComment .commentBox  .arrowLeft {
