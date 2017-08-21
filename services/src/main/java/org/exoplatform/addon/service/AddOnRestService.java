@@ -312,8 +312,10 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
             commentMessage.setCommentCreatedDate(comment.getProperty("exo:dateCreated").getDate().getTime());
           }
           Profile userProfile = getSocialProfile(commentMessage.getCommentorUsername());
-          commentMessage.setCommentorAvataUrl(userProfile.getAvatarUrl());
-          commentMessage.setCommentorFullname(userProfile.getFullName());
+          if (userProfile != null) {
+            commentMessage.setCommentorAvataUrl(userProfile.getAvatarUrl());
+            commentMessage.setCommentorFullname(userProfile.getFullName());
+          }
           if(null!=viewUsername && (viewUsername.equals(commentMessage.getCommentorUsername()) || viewerIsAdmin)){
             commentMessage.setCanDelete(true);
           }else{
@@ -353,6 +355,7 @@ public class AddOnRestService extends BaseConnector implements ResourceContainer
       
       return userProfile;
     } catch (Exception e) {
+      LOG.error("Conot load social profile of user {}",username,e);
       return null;
     }
   }
