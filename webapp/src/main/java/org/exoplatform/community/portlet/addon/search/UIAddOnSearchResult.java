@@ -20,6 +20,7 @@ package org.exoplatform.community.portlet.addon.search;
 
 import org.exoplatform.addon.marketplace.Constants;
 import org.exoplatform.addon.service.AddOnService;
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
@@ -56,7 +57,7 @@ import java.util.Collection;
 @ComponentConfig(lifecycle = Lifecycle.class, template = "app:/templates/AddOnSearchPortlet/UIAddOnSearchResult.gtmpl", events = { @EventConfig(listeners = UIAddOnSearchResult.ShowMoreActionListener.class)
 
 })
-public class UIAddOnSearchResult extends UIContainer {
+public class UIAddOnSearchResult extends UIContainer implements Constants {
 
   private static final Log    log            = ExoLogger.getLogger(UIAddOnSearchResult.class);
 
@@ -90,13 +91,13 @@ public class UIAddOnSearchResult extends UIContainer {
 
     if (REFRESH){
       init();
-      SortAddons("popular", Constants.CATEGORY_ITEM_ALL_VALUE);
+      SortAddons("popular", PropertyManager.getProperty(EXO_MARKETPLACE_FEATUED_CATEGORY_NAME).trim().toUpperCase());
     }
     //--- Get the paramter from url, this parameter is used to fetch categories by name
     HttpServletRequest request = Util.getPortalRequestContext().getRequest();
     if (request.getParameter(Constants.HTTP_PARAMETER_CATEGORY_NAME) != null) {
       log.debug("MarketPlace Addon, Load addons based on parameter passed through URL {} ", request.getParameter("category"));
-      SortAddons("popular", request.getParameter(Constants.HTTP_PARAMETER_CATEGORY_NAME));
+      SortAddons("popular", request.getParameter(Constants.HTTP_PARAMETER_CATEGORY_NAME).toUpperCase());
     }
     super.processRender(context);
   }
@@ -322,7 +323,7 @@ public class UIAddOnSearchResult extends UIContainer {
       this.clearResult();
       if(sort.equals("za")){
         if (!selectedCat.equalsIgnoreCase(Constants.CATEGORY_ITEM_ALL_VALUE)) {
-          this.setSQLOrder( " AND mix:mpkaceAddonCatName = '"+selectedCat+"' ORDER BY exo:title DESC " );
+          this.setSQLOrder( " AND UPPER (mix:mpkaceAddonCatName) = '"+selectedCat+"' ORDER BY exo:title DESC " );
 
         } else {
           this.setSQLOrder(" ORDER BY exo:title DESC ");
@@ -331,7 +332,7 @@ public class UIAddOnSearchResult extends UIContainer {
       }
       else if(sort.equals("az")){
         if (!selectedCat.equalsIgnoreCase(Constants.CATEGORY_ITEM_ALL_VALUE)) {
-          this.setSQLOrder( " AND mix:mpkaceAddonCatName = '"+selectedCat+"' ORDER BY exo:title ASC " );
+          this.setSQLOrder( " AND UPPER (mix:mpkaceAddonCatName) = '"+selectedCat+"' ORDER BY exo:title ASC " );
 
         } else {
           this.setSQLOrder(" ORDER BY exo:title ASC ");
@@ -341,7 +342,7 @@ public class UIAddOnSearchResult extends UIContainer {
       }else if(sort.equals("latest")){
 
         if (!selectedCat.equalsIgnoreCase(Constants.CATEGORY_ITEM_ALL_VALUE)) {
-          this.setSQLOrder( " AND mix:mpkaceAddonCatName = '"+selectedCat+"' ORDER BY exo:dateModified DESC " );
+          this.setSQLOrder( " AND UPPER (mix:mpkaceAddonCatName) = '"+selectedCat+"' ORDER BY exo:dateModified DESC " );
 
         } else {
           //Oder by latest created
@@ -351,7 +352,7 @@ public class UIAddOnSearchResult extends UIContainer {
       }
       else{
         if (!selectedCat.equalsIgnoreCase(Constants.CATEGORY_ITEM_ALL_VALUE)) {
-          this.setSQLOrder( " AND mix:mpkaceAddonCatName = '"+selectedCat+"' ORDER BY exo:voteTotal DESC, exo:votingRate DESC " );
+          this.setSQLOrder( " AND UPPER (mix:mpkaceAddonCatName) = '"+selectedCat+"' ORDER BY exo:voteTotal DESC, exo:votingRate DESC " );
 
         } else {
           // oder by vote

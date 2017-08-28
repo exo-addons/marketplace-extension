@@ -8,6 +8,9 @@ public interface Constants {
     /** The Constant Categories List Empty Item */
     public static final String HTTP_PARAMETER_CATEGORY_NAME    =   "category";
 
+    /** The Constant Of Featured Category */
+    public static final String EXO_MARKETPLACE_FEATUED_CATEGORY_NAME = "exo.addon.marketplace.featured.category.name";
+
     /** The Constant Categories List Empty Item */
     public static final String CATEGORY_ITEM_ALL_VALUE    = "ALL";
 

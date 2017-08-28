@@ -81,9 +81,6 @@ public class UIAddOnSearchForm extends UIForm implements Constants {
 
     private static final Log LOG                      = ExoLogger.getLogger(UIAddOnSearchForm.class.getName());
     private String featuredCategory = "";
-    private static final String EXO_MARKETPLACE_FEATUED_CATEGORY_NAME = "exo.addon.marketplace.featured.category.name";
-
-
     public static String filterSelected = "";
     public static String categorySelected = "";
 	public static Boolean REFRESH = true;
@@ -123,9 +120,6 @@ public class UIAddOnSearchForm extends UIForm implements Constants {
         //--- Get tribe manager name
         featuredCategory = PropertyManager.getProperty(EXO_MARKETPLACE_FEATUED_CATEGORY_NAME).trim();
 
-    
-    //addChild(uiDropDownControl);
-	
 	}
   public void processRender(WebuiRequestContext context) throws Exception {
       if (REFRESH)
@@ -137,14 +131,14 @@ public class UIAddOnSearchForm extends UIForm implements Constants {
       //--- Init tje list each time the combobox is displayed
       categoriesList = new ArrayList<SelectItemOption<String>>();
 
-      //--- Add «ALL» value each time the combo-box
-      categoriesList.add(new SelectItemOption<String>(Constants.CATEGORY_ITEM_ALL_VALUE,Constants.CATEGORY_ITEM_ALL_VALUE));
-
       //-- Add «Featured» value each time to the dropdown menu
       if (featuredCategory != null && featuredCategory.length() > 0) {
           categoriesList.add(new SelectItemOption<String>(featuredCategory,featuredCategory));
 
       }
+      //--- Add «ALL» value each time the combo-box
+      categoriesList.add(new SelectItemOption<String>(Constants.CATEGORY_ITEM_ALL_VALUE,Constants.CATEGORY_ITEM_ALL_VALUE));
+
 
       //--- Fill categories
       for (Category category : categories) {
