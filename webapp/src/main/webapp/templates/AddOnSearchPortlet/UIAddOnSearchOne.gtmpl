@@ -18,8 +18,10 @@
 	def itemDescription = addon.getDescription();
 	def canEdit = uicomponent.canEdit();
 	def itemAuthor = addon.getAuthor();
-		def itemCategory = addon.getCategory();
-	  
+	def itemCategory = addon.getCategory();
+
+	String[] categories = itemCategory.split("-");
+
   Double voteRate= addon.getVoteRate();
   Double modul = voteRate % 1.0;
   Integer totalStar = 0;
@@ -72,7 +74,13 @@
 		  <%}%>
 		</div>
 		<div class="right categoryLabel">
-			<h5><%= itemCategory%></h5>
+			<h5>
+			<%
+			categories.each {
+				println "<span class='uiMention'>${it}</span>"
+			}
+			%>
+			</h5>
 		</div>
   </div>
   <!--END VOTE-->
