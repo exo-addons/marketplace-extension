@@ -213,7 +213,7 @@
 }
 
 .uiVote .avgRatingImages {
-  float: left;
+  float: none;
   margin-top: 5px;
 }
 
@@ -573,7 +573,7 @@ margin-top:10px;
     float: right;
     color: darkgoldenrod;
 }
-
+.categoryLabel > h5 > .uiMention{float: right}
 .inputContainer .commentItem a.avatarMedium, .listComment .commentContainer .avatarBox a.avatarMedium{
     width: 50px;
     display: block;
