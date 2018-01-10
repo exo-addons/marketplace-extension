@@ -508,8 +508,11 @@ void commentForm(Node post) {
 <script type="text/javascript" 
   src="/marketplace-extension-webapp/javascript/exo/add-on/CircularContentCarousel/jquery.easing.1.3.js"></script>
 
+<!-- jQuery 1.6.2 required by ContentCarousel -->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
 <!-- the jScrollPane script for image slider-->
-<script type="text/javascript" 
+<script type="text/javascript"
   src="/marketplace-extension-webapp/javascript/exo/add-on/CircularContentCarousel/jquery.contentcarousel.js"></script>
 
 <!--JS Description Read more-->
